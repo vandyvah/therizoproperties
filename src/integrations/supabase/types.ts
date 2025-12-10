@@ -14,16 +14,737 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      activity_log: {
+        Row: {
+          action: string
+          created_at: string
+          description: string | null
+          entity_id: string
+          entity_type: Database["public"]["Enums"]["activity_entity_type"]
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          description?: string | null
+          entity_id: string
+          entity_type: Database["public"]["Enums"]["activity_entity_type"]
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          description?: string | null
+          entity_id?: string
+          entity_type?: Database["public"]["Enums"]["activity_entity_type"]
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_log_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      clients: {
+        Row: {
+          assigned_consultant_id: string | null
+          client_type: Database["public"]["Enums"]["client_type"]
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          notes: string | null
+          phone: string | null
+          source: Database["public"]["Enums"]["client_source"]
+        }
+        Insert: {
+          assigned_consultant_id?: string | null
+          client_type: Database["public"]["Enums"]["client_type"]
+          created_at?: string
+          email?: string | null
+          full_name: string
+          id?: string
+          notes?: string | null
+          phone?: string | null
+          source?: Database["public"]["Enums"]["client_source"]
+        }
+        Update: {
+          assigned_consultant_id?: string | null
+          client_type?: Database["public"]["Enums"]["client_type"]
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          notes?: string | null
+          phone?: string | null
+          source?: Database["public"]["Enums"]["client_source"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clients_assigned_consultant_id_fkey"
+            columns: ["assigned_consultant_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      deal_consultant_shares: {
+        Row: {
+          amount_ngn: number
+          consultant_id: string
+          created_at: string
+          deal_id: string
+          id: string
+          role_type: Database["public"]["Enums"]["consultant_role_type"]
+          share_percentage_of_net: number
+        }
+        Insert: {
+          amount_ngn?: number
+          consultant_id: string
+          created_at?: string
+          deal_id: string
+          id?: string
+          role_type: Database["public"]["Enums"]["consultant_role_type"]
+          share_percentage_of_net?: number
+        }
+        Update: {
+          amount_ngn?: number
+          consultant_id?: string
+          created_at?: string
+          deal_id?: string
+          id?: string
+          role_type?: Database["public"]["Enums"]["consultant_role_type"]
+          share_percentage_of_net?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deal_consultant_shares_consultant_id_fkey"
+            columns: ["consultant_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deal_consultant_shares_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      deals: {
+        Row: {
+          buyer_client_id: string | null
+          closing_date: string | null
+          created_at: string
+          direct_deal_costs_ngn: number
+          gross_commission_amount_ngn: number
+          gross_commission_rate: number
+          id: string
+          lead_id: string | null
+          net_company_commission_ngn: number
+          notes: string | null
+          property_id: string
+          sale_price_ngn: number
+          seller_client_id: string | null
+          status: Database["public"]["Enums"]["deal_status"]
+          updated_at: string
+        }
+        Insert: {
+          buyer_client_id?: string | null
+          closing_date?: string | null
+          created_at?: string
+          direct_deal_costs_ngn?: number
+          gross_commission_amount_ngn?: number
+          gross_commission_rate?: number
+          id?: string
+          lead_id?: string | null
+          net_company_commission_ngn?: number
+          notes?: string | null
+          property_id: string
+          sale_price_ngn?: number
+          seller_client_id?: string | null
+          status?: Database["public"]["Enums"]["deal_status"]
+          updated_at?: string
+        }
+        Update: {
+          buyer_client_id?: string | null
+          closing_date?: string | null
+          created_at?: string
+          direct_deal_costs_ngn?: number
+          gross_commission_amount_ngn?: number
+          gross_commission_rate?: number
+          id?: string
+          lead_id?: string | null
+          net_company_commission_ngn?: number
+          notes?: string | null
+          property_id?: string
+          sale_price_ngn?: number
+          seller_client_id?: string | null
+          status?: Database["public"]["Enums"]["deal_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deals_buyer_client_id_fkey"
+            columns: ["buyer_client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_seller_client_id_fkey"
+            columns: ["seller_client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      due_diligence_checks: {
+        Row: {
+          check_type: Database["public"]["Enums"]["check_type"]
+          checked_at: string | null
+          checked_by_id: string | null
+          created_at: string
+          id: string
+          notes: string | null
+          property_id: string
+          status: Database["public"]["Enums"]["check_status"]
+        }
+        Insert: {
+          check_type: Database["public"]["Enums"]["check_type"]
+          checked_at?: string | null
+          checked_by_id?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          property_id: string
+          status?: Database["public"]["Enums"]["check_status"]
+        }
+        Update: {
+          check_type?: Database["public"]["Enums"]["check_type"]
+          checked_at?: string | null
+          checked_by_id?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          property_id?: string
+          status?: Database["public"]["Enums"]["check_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "due_diligence_checks_checked_by_id_fkey"
+            columns: ["checked_by_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "due_diligence_checks_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      leads: {
+        Row: {
+          assigned_consultant_id: string | null
+          budget_max_ngn: number | null
+          budget_min_ngn: number | null
+          client_id: string
+          created_at: string
+          created_by_id: string | null
+          id: string
+          lost_reason: string | null
+          preferred_city: string | null
+          preferred_neighbourhoods: string | null
+          property_id: string | null
+          stage: Database["public"]["Enums"]["lead_stage"]
+          updated_at: string
+        }
+        Insert: {
+          assigned_consultant_id?: string | null
+          budget_max_ngn?: number | null
+          budget_min_ngn?: number | null
+          client_id: string
+          created_at?: string
+          created_by_id?: string | null
+          id?: string
+          lost_reason?: string | null
+          preferred_city?: string | null
+          preferred_neighbourhoods?: string | null
+          property_id?: string | null
+          stage?: Database["public"]["Enums"]["lead_stage"]
+          updated_at?: string
+        }
+        Update: {
+          assigned_consultant_id?: string | null
+          budget_max_ngn?: number | null
+          budget_min_ngn?: number | null
+          client_id?: string
+          created_at?: string
+          created_by_id?: string | null
+          id?: string
+          lost_reason?: string | null
+          preferred_city?: string | null
+          preferred_neighbourhoods?: string | null
+          property_id?: string | null
+          stage?: Database["public"]["Enums"]["lead_stage"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_assigned_consultant_id_fkey"
+            columns: ["assigned_consultant_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leads_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leads_created_by_id_fkey"
+            columns: ["created_by_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leads_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          active: boolean
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      properties: {
+        Row: {
+          airbnb_potential_nightly_ngn: number | null
+          area: string | null
+          asking_price_ngn: number
+          assigned_consultant_id: string | null
+          city: string
+          created_at: string
+          created_by_id: string | null
+          description: string | null
+          id: string
+          min_price_ngn: number | null
+          owner_contact: string | null
+          owner_name: string | null
+          property_type: string
+          rental_potential_monthly_ngn: number | null
+          risk_rating: Database["public"]["Enums"]["risk_rating"]
+          status: Database["public"]["Enums"]["property_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          airbnb_potential_nightly_ngn?: number | null
+          area?: string | null
+          asking_price_ngn?: number
+          assigned_consultant_id?: string | null
+          city: string
+          created_at?: string
+          created_by_id?: string | null
+          description?: string | null
+          id?: string
+          min_price_ngn?: number | null
+          owner_contact?: string | null
+          owner_name?: string | null
+          property_type: string
+          rental_potential_monthly_ngn?: number | null
+          risk_rating?: Database["public"]["Enums"]["risk_rating"]
+          status?: Database["public"]["Enums"]["property_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          airbnb_potential_nightly_ngn?: number | null
+          area?: string | null
+          asking_price_ngn?: number
+          assigned_consultant_id?: string | null
+          city?: string
+          created_at?: string
+          created_by_id?: string | null
+          description?: string | null
+          id?: string
+          min_price_ngn?: number | null
+          owner_contact?: string | null
+          owner_name?: string | null
+          property_type?: string
+          rental_potential_monthly_ngn?: number | null
+          risk_rating?: Database["public"]["Enums"]["risk_rating"]
+          status?: Database["public"]["Enums"]["property_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "properties_assigned_consultant_id_fkey"
+            columns: ["assigned_consultant_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "properties_created_by_id_fkey"
+            columns: ["created_by_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_documents: {
+        Row: {
+          doc_type: Database["public"]["Enums"]["doc_type"]
+          file_url: string | null
+          id: string
+          property_id: string
+          title: string
+          uploaded_at: string
+          uploaded_by_id: string | null
+        }
+        Insert: {
+          doc_type: Database["public"]["Enums"]["doc_type"]
+          file_url?: string | null
+          id?: string
+          property_id: string
+          title: string
+          uploaded_at?: string
+          uploaded_by_id?: string | null
+        }
+        Update: {
+          doc_type?: Database["public"]["Enums"]["doc_type"]
+          file_url?: string | null
+          id?: string
+          property_id?: string
+          title?: string
+          uploaded_at?: string
+          uploaded_by_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_documents_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_documents_uploaded_by_id_fkey"
+            columns: ["uploaded_by_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      roi_calculations: {
+        Row: {
+          airbnb_nightly_rate_ngn: number | null
+          airbnb_occupancy_rate_pct: number | null
+          annual_insurance_ngn: number
+          annual_maintenance_ngn: number
+          annual_property_tax_ngn: number
+          cap_rate_pct: number
+          cash_on_cash_return_pct: number
+          client_id: string | null
+          created_at: string
+          created_by_id: string | null
+          gross_annual_income_ngn: number
+          id: string
+          management_fee_pct: number
+          monthly_rent_ngn: number | null
+          net_annual_income_ngn: number
+          other_acquisition_costs_ngn: number
+          payback_period_years: number
+          property_id: string | null
+          property_location: string | null
+          purchase_price_ngn: number
+          renovation_cost_ngn: number
+          strategy: Database["public"]["Enums"]["roi_strategy"]
+        }
+        Insert: {
+          airbnb_nightly_rate_ngn?: number | null
+          airbnb_occupancy_rate_pct?: number | null
+          annual_insurance_ngn?: number
+          annual_maintenance_ngn?: number
+          annual_property_tax_ngn?: number
+          cap_rate_pct?: number
+          cash_on_cash_return_pct?: number
+          client_id?: string | null
+          created_at?: string
+          created_by_id?: string | null
+          gross_annual_income_ngn?: number
+          id?: string
+          management_fee_pct?: number
+          monthly_rent_ngn?: number | null
+          net_annual_income_ngn?: number
+          other_acquisition_costs_ngn?: number
+          payback_period_years?: number
+          property_id?: string | null
+          property_location?: string | null
+          purchase_price_ngn?: number
+          renovation_cost_ngn?: number
+          strategy: Database["public"]["Enums"]["roi_strategy"]
+        }
+        Update: {
+          airbnb_nightly_rate_ngn?: number | null
+          airbnb_occupancy_rate_pct?: number | null
+          annual_insurance_ngn?: number
+          annual_maintenance_ngn?: number
+          annual_property_tax_ngn?: number
+          cap_rate_pct?: number
+          cash_on_cash_return_pct?: number
+          client_id?: string | null
+          created_at?: string
+          created_by_id?: string | null
+          gross_annual_income_ngn?: number
+          id?: string
+          management_fee_pct?: number
+          monthly_rent_ngn?: number | null
+          net_annual_income_ngn?: number
+          other_acquisition_costs_ngn?: number
+          payback_period_years?: number
+          property_id?: string | null
+          property_location?: string | null
+          purchase_price_ngn?: number
+          renovation_cost_ngn?: number
+          strategy?: Database["public"]["Enums"]["roi_strategy"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "roi_calculations_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "roi_calculations_created_by_id_fkey"
+            columns: ["created_by_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "roi_calculations_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      viewings: {
+        Row: {
+          created_at: string
+          created_by_id: string | null
+          id: string
+          lead_id: string
+          notes: string | null
+          property_id: string
+          scheduled_at: string
+          status: Database["public"]["Enums"]["viewing_status"]
+        }
+        Insert: {
+          created_at?: string
+          created_by_id?: string | null
+          id?: string
+          lead_id: string
+          notes?: string | null
+          property_id: string
+          scheduled_at: string
+          status?: Database["public"]["Enums"]["viewing_status"]
+        }
+        Update: {
+          created_at?: string
+          created_by_id?: string | null
+          id?: string
+          lead_id?: string
+          notes?: string | null
+          property_id?: string
+          scheduled_at?: string
+          status?: Database["public"]["Enums"]["viewing_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "viewings_created_by_id_fkey"
+            columns: ["created_by_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "viewings_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "viewings_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      current_profile_id: { Args: never; Returns: string }
+      get_profile_id: { Args: { _user_id: string }; Returns: string }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      activity_entity_type:
+        | "property"
+        | "lead"
+        | "client"
+        | "deal"
+        | "viewing"
+        | "roi"
+      app_role: "admin" | "spc" | "support"
+      check_status: "pending" | "in_progress" | "completed" | "failed"
+      check_type:
+        | "ownership_verified"
+        | "title_verified"
+        | "survey_verified"
+        | "planning_approval_checked"
+        | "price_sanity_check"
+        | "rental_comp_check"
+        | "risk_review"
+      client_source:
+        | "referral"
+        | "social_media"
+        | "website_form"
+        | "walk_in"
+        | "other"
+      client_type:
+        | "buyer"
+        | "seller"
+        | "investor_developer"
+        | "landowner"
+        | "other"
+      consultant_role_type: "originator" | "assistant"
+      deal_status: "in_progress" | "under_contract" | "closed" | "cancelled"
+      doc_type:
+        | "c_of_o"
+        | "deed_of_assignment"
+        | "survey_plan"
+        | "building_approval"
+        | "estate_agreement"
+        | "other"
+      lead_stage:
+        | "new"
+        | "qualified"
+        | "viewing_scheduled"
+        | "offer_made"
+        | "under_negotiation"
+        | "closed_won"
+        | "closed_lost"
+      property_status: "draft" | "under_review" | "listed" | "on_hold" | "sold"
+      risk_rating: "low" | "medium" | "high"
+      roi_strategy: "long_term_rental" | "airbnb" | "compare"
+      viewing_status: "scheduled" | "completed" | "cancelled" | "no_show"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +871,63 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      activity_entity_type: [
+        "property",
+        "lead",
+        "client",
+        "deal",
+        "viewing",
+        "roi",
+      ],
+      app_role: ["admin", "spc", "support"],
+      check_status: ["pending", "in_progress", "completed", "failed"],
+      check_type: [
+        "ownership_verified",
+        "title_verified",
+        "survey_verified",
+        "planning_approval_checked",
+        "price_sanity_check",
+        "rental_comp_check",
+        "risk_review",
+      ],
+      client_source: [
+        "referral",
+        "social_media",
+        "website_form",
+        "walk_in",
+        "other",
+      ],
+      client_type: [
+        "buyer",
+        "seller",
+        "investor_developer",
+        "landowner",
+        "other",
+      ],
+      consultant_role_type: ["originator", "assistant"],
+      deal_status: ["in_progress", "under_contract", "closed", "cancelled"],
+      doc_type: [
+        "c_of_o",
+        "deed_of_assignment",
+        "survey_plan",
+        "building_approval",
+        "estate_agreement",
+        "other",
+      ],
+      lead_stage: [
+        "new",
+        "qualified",
+        "viewing_scheduled",
+        "offer_made",
+        "under_negotiation",
+        "closed_won",
+        "closed_lost",
+      ],
+      property_status: ["draft", "under_review", "listed", "on_hold", "sold"],
+      risk_rating: ["low", "medium", "high"],
+      roi_strategy: ["long_term_rental", "airbnb", "compare"],
+      viewing_status: ["scheduled", "completed", "cancelled", "no_show"],
+    },
   },
 } as const
