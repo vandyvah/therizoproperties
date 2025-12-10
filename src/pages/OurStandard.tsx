@@ -1,0 +1,263 @@
+import { Layout } from "@/components/layout/Layout";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import {
+  Shield,
+  XCircle,
+  CheckCircle,
+  FileSearch,
+  Building2,
+  Users,
+  Heart,
+} from "lucide-react";
+
+const refusals = [
+  "We do not push deals we cannot explain.",
+  "We do not hide title issues behind marketing language.",
+  "We do not overstate rental income just to close a sale.",
+  "If we are not comfortable putting our name on a property, we will not list it.",
+];
+
+const vettingSteps = [
+  {
+    title: "Confirm Ownership and Title",
+    description:
+      "We verify ownership and title status with our legal partners and relevant authorities, and we request supporting documentation from the seller or developer.",
+  },
+  {
+    title: "Check Approvals and Compliance",
+    description:
+      "Where applicable, we review planning permissions, building approvals, and estate regulations to understand what is allowed and what has been done.",
+  },
+  {
+    title: "Test the Price Against the Market",
+    description:
+      "We look at comparable sales, rental levels, and demand in the area. If the numbers do not make sense, we say so and we either renegotiate or walk away.",
+  },
+  {
+    title: "Assess Risk and Exit Options",
+    description:
+      "We consider vacancy risk, resale possibilities, and likely holding period. We prefer assets where a buyer has more than one realistic exit.",
+  },
+];
+
+const developerChecks = [
+  "Track record of completing projects and handing over units",
+  "Transparency on costs, timelines, and approvals",
+  "Quality of construction and infrastructure",
+  "Realistic sales and rental assumptions",
+];
+
+const promises = [
+  "Tell you when a deal looks strong",
+  "Tell you when a deal has issues",
+  "Tell you when we think you should walk away",
+];
+
+const OurStandard = () => {
+  return (
+    <Layout>
+      {/* Hero */}
+      <section className="pt-32 pb-16 bg-primary">
+        <div className="container-wide">
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 rounded-lg bg-gold/20 flex items-center justify-center">
+                <Shield className="text-gold" size={24} />
+              </div>
+              <span className="text-gold font-medium">Our Process</span>
+            </div>
+            <h1 className="font-display text-4xl md:text-5xl font-semibold text-primary-foreground mb-6">
+              Our Standard
+            </h1>
+            <p className="text-lg text-primary-foreground/80 leading-relaxed">
+              Nigerian real estate can reward you or punish you. The difference
+              is in the paperwork and the numbers. Therizo exists to reduce
+              uncertainty for serious buyers, investors, and partners. We do
+              this by holding every property we touch to a clear internal
+              standard.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* What We Refuse */}
+      <section className="section-padding bg-background">
+        <div className="container-wide">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground mb-6">
+                What We Refuse to Do
+              </h2>
+              <ul className="space-y-4">
+                {refusals.map((item) => (
+                  <li key={item} className="flex items-start gap-4">
+                    <XCircle
+                      className="text-destructive shrink-0 mt-1"
+                      size={20}
+                    />
+                    <span className="text-foreground">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="relative">
+              <div className="bg-card rounded-2xl p-8 shadow-therizo-md border border-border">
+                <div className="text-center">
+                  <div className="w-20 h-20 mx-auto rounded-full bg-destructive/10 flex items-center justify-center mb-4">
+                    <XCircle className="text-destructive" size={40} />
+                  </div>
+                  <p className="font-display text-xl font-semibold text-foreground">
+                    We walk away from deals we cannot defend.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How We Vet */}
+      <section className="section-padding bg-muted/50">
+        <div className="container-wide">
+          <div className="max-w-3xl mx-auto text-center mb-16">
+            <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground mb-6">
+              How We Vet Properties
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Before a property appears on Therizo, we:
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {vettingSteps.map((step, index) => (
+              <div
+                key={step.title}
+                className="relative p-8 bg-card rounded-lg border border-border hover:shadow-therizo-md transition-all duration-300 group"
+              >
+                <div className="absolute top-6 right-6 text-5xl font-display font-bold text-muted/50 group-hover:text-gold/20 transition-colors">
+                  {String(index + 1).padStart(2, "0")}
+                </div>
+                <div className="relative">
+                  <div className="w-12 h-12 rounded-lg bg-gold/10 flex items-center justify-center mb-4">
+                    <FileSearch className="text-gold" size={24} />
+                  </div>
+                  <h3 className="font-display text-xl font-semibold text-foreground mb-3">
+                    {step.title}
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {step.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Developers & JV */}
+      <section className="section-padding bg-background">
+        <div className="container-wide">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="order-2 lg:order-1">
+              <div className="bg-card rounded-2xl p-8 shadow-therizo-md border border-border">
+                <h3 className="font-display text-lg font-semibold text-foreground mb-6">
+                  For every developer or JV opportunity, we look at:
+                </h3>
+                <ul className="space-y-4">
+                  {developerChecks.map((item) => (
+                    <li key={item} className="flex items-start gap-4">
+                      <CheckCircle
+                        className="text-gold shrink-0 mt-0.5"
+                        size={20}
+                      />
+                      <span className="text-foreground">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-6 pt-6 border-t border-border">
+                  <p className="text-sm text-muted-foreground italic">
+                    If these elements are missing or unclear, we do not proceed.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="order-1 lg:order-2">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 rounded-lg bg-primary flex items-center justify-center">
+                  <Building2 className="text-primary-foreground" size={24} />
+                </div>
+              </div>
+              <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground mb-6">
+                Developers and Joint-Venture Partners
+              </h2>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                We work with developers and landowners who understand that
+                long-term success depends on more than just launching projects.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Protection */}
+      <section className="section-padding bg-muted/50">
+        <div className="container-wide">
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="w-16 h-16 mx-auto rounded-full bg-primary flex items-center justify-center mb-6">
+              <Users className="text-primary-foreground" size={32} />
+            </div>
+            <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground mb-6">
+              Protection for Buyers and Investors
+            </h2>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              Our role is not to replace your lawyer, but to reduce noise and
+              filter out weak deals. By the time a property reaches you through
+              Therizo, it has already been screened through legal, numerical,
+              and practical checks. We then work with your advisors to complete
+              your own independent verification, rather than pushing you to rush
+              into a commitment.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Promise */}
+      <section className="section-padding bg-primary">
+        <div className="container-wide">
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="w-16 h-16 mx-auto rounded-full bg-gold/20 flex items-center justify-center mb-6">
+              <Heart className="text-gold" size={32} />
+            </div>
+            <h2 className="font-display text-3xl md:text-4xl font-semibold text-primary-foreground mb-6">
+              Our Promise to You
+            </h2>
+            <p className="text-lg text-primary-foreground/80 leading-relaxed mb-8">
+              We cannot remove all risk from real estate. No one can. What we
+              can do is refuse to play with your trust. We will:
+            </p>
+            <ul className="space-y-3 mb-10">
+              {promises.map((promise) => (
+                <li
+                  key={promise}
+                  className="flex items-center justify-center gap-3 text-primary-foreground"
+                >
+                  <CheckCircle className="text-gold shrink-0" size={20} />
+                  <span>{promise}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-primary-foreground/70 italic mb-10">
+              We would rather lose a commission than help you buy a problem.
+            </p>
+            <Button variant="gold" size="lg" asChild>
+              <Link to="/contact">Speak with Therizo About Our Process</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+    </Layout>
+  );
+};
+
+export default OurStandard;
