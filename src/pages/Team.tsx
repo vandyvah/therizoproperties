@@ -1,0 +1,203 @@
+import { Layout } from "@/components/layout/Layout";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { Users, MapPin, ArrowRight } from "lucide-react";
+
+const founder = {
+  name: "Victor",
+  role: "Founder & Chief Executive Officer",
+  bio: "Victor leads Therizo's strategy, capital deployment, and key relationships. He focuses on finding properties and projects where the paperwork, numbers, and execution can support long-term value for both the firm and its clients. Victor personally oversees high-value transactions and all joint-venture and development discussions.",
+  initial: "V",
+};
+
+const consultants = [
+  {
+    name: "Bayo",
+    role: "Senior Property Consultant",
+    location: "Lagos Island",
+    bio: "Bayo focuses on Lagos Island corridors such as Lekki, Ajah, and surrounding estates. He works with buyers, investors, and developers on mid-to-high value residential and mixed-use properties, with an emphasis on strong rental demand and practical design. Clients rely on him for realistic expectations, straight feedback, and diligent follow-up.",
+    initial: "B",
+  },
+  {
+    name: "Kelly",
+    role: "Senior Property Consultant",
+    location: "Ikoyi & Victoria Island",
+    bio: "Kelly covers Ikoyi, Banana Island, Victoria Island, and other prime luxury pockets. He works with high-net-worth individuals, family offices, and corporate clients looking for secure, trophy-level or income-producing assets. He is known for rigorous deal preparation and careful management of complex negotiations.",
+    initial: "K",
+  },
+  {
+    name: "Aisha",
+    role: "Senior Property Consultant",
+    location: "Abuja & Emerging Markets",
+    bio: "Aisha focuses on Abuja and select mainland and emerging growth markets. She serves both end-users and investors, especially those looking for structured payment plans, affordable but documented housing, and developments with solid fundamentals. Her strength is clear communication and patient guidance through the full acquisition process.",
+    initial: "A",
+  },
+];
+
+const workflowSteps = [
+  "The CEO sets strategy and approves properties",
+  "Senior consultants drive deals and manage client relationships",
+  "Legal and external partners support documentation and compliance",
+];
+
+const Team = () => {
+  return (
+    <Layout>
+      {/* Hero */}
+      <section className="pt-32 pb-16 bg-primary">
+        <div className="container-wide">
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 rounded-lg bg-gold/20 flex items-center justify-center">
+                <Users className="text-gold" size={24} />
+              </div>
+              <span className="text-gold font-medium">Our People</span>
+            </div>
+            <h1 className="font-display text-4xl md:text-5xl font-semibold text-primary-foreground mb-6">
+              Team & Advisors
+            </h1>
+            <p className="text-lg text-primary-foreground/80 leading-relaxed">
+              Therizo is built for clients who want clear answers and
+              accountable people. Our team combines capital, on-ground
+              experience, and local relationships across Nigeria's key markets.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Founder */}
+      <section className="section-padding bg-background">
+        <div className="container-wide">
+          <div className="grid lg:grid-cols-3 gap-12 items-start">
+            <div className="lg:col-span-1">
+              <div className="text-center lg:text-left">
+                <div className="w-32 h-32 mx-auto lg:mx-0 rounded-full bg-gradient-to-br from-primary to-navy-light flex items-center justify-center mb-6">
+                  <span className="text-5xl font-display font-semibold text-primary-foreground">
+                    {founder.initial}
+                  </span>
+                </div>
+                <h2 className="font-display text-2xl font-semibold text-foreground mb-2">
+                  {founder.name}
+                </h2>
+                <p className="text-gold font-medium">{founder.role}</p>
+              </div>
+            </div>
+            <div className="lg:col-span-2">
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                {founder.bio}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Senior Consultants */}
+      <section className="section-padding bg-muted/50">
+        <div className="container-wide">
+          <div className="max-w-3xl mb-16">
+            <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground mb-6">
+              Senior Property Consultants
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Each senior consultant is responsible for a defined market and a
+              clear revenue target. They manage listings, viewings,
+              negotiations, and client communication from first contact to
+              completion.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {consultants.map((consultant) => (
+              <div
+                key={consultant.name}
+                className="bg-card rounded-lg border border-border p-8 hover:shadow-therizo-md transition-all duration-300"
+              >
+                <div className="text-center mb-6">
+                  <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center mb-4">
+                    <span className="text-4xl font-display font-semibold text-foreground">
+                      {consultant.initial}
+                    </span>
+                  </div>
+                  <h3 className="font-display text-xl font-semibold text-foreground mb-1">
+                    {consultant.name}
+                  </h3>
+                  <p className="text-sm text-gold font-medium mb-2">
+                    {consultant.role}
+                  </p>
+                  <div className="flex items-center justify-center gap-1 text-sm text-muted-foreground">
+                    <MapPin size={14} />
+                    <span>{consultant.location}</span>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {consultant.bio}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How We Work */}
+      <section className="section-padding bg-background">
+        <div className="container-wide">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground mb-6">
+                How We Work as a Team
+              </h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-8">
+                Every client of Therizo is supported by the entire firm, not
+                just one person.
+              </p>
+              <ul className="space-y-4 mb-8">
+                {workflowSteps.map((step) => (
+                  <li key={step} className="flex items-start gap-4">
+                    <ArrowRight className="text-gold shrink-0 mt-1" size={20} />
+                    <span className="text-foreground">{step}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="text-muted-foreground">
+                We keep communications simple, transparent, and written. From
+                first enquiry to closing, you know who is responsible at each
+                stage.
+              </p>
+            </div>
+            <div>
+              <div className="bg-primary rounded-2xl p-10 text-center">
+                <div className="w-20 h-20 mx-auto rounded-full bg-gold/20 flex items-center justify-center mb-6">
+                  <Users className="text-gold" size={40} />
+                </div>
+                <h3 className="font-display text-2xl font-semibold text-primary-foreground mb-4">
+                  One Team. One Standard.
+                </h3>
+                <p className="text-primary-foreground/70">
+                  Clear accountability from first contact to completion.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="section-padding bg-cream-dark">
+        <div className="container-narrow text-center">
+          <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground mb-6">
+            Ready to Work with Us?
+          </h2>
+          <p className="text-lg text-muted-foreground leading-relaxed mb-10 max-w-2xl mx-auto">
+            Connect with our team and discuss how we can help you find the right
+            property.
+          </p>
+          <Button variant="gold" size="lg" asChild>
+            <Link to="/contact">Contact the Therizo Team</Link>
+          </Button>
+        </div>
+      </section>
+    </Layout>
+  );
+};
+
+export default Team;
