@@ -565,43 +565,124 @@ const Calculator_Page = () => {
 
             {/* Right Column - Results */}
             <div className="space-y-6">
-              {/* Projection Card */}
-              <div className="border-l-4 border-gold bg-card rounded-r-lg p-6 shadow-sm">
-                <h3 className="font-display text-xl sm:text-2xl font-bold text-foreground mb-6">
-                  {projectionTitle}
-                </h3>
+              {/* Compare View - Side by Side */}
+              {formData.strategy === "compare" ? (
+                <div className="grid md:grid-cols-2 gap-4">
+                  {/* Long-Term Projection Card */}
+                  <div className="border-l-4 border-gold bg-card rounded-r-lg p-5 shadow-sm">
+                    <h3 className="font-display text-lg sm:text-xl font-bold text-foreground mb-4">
+                      Long-Term Projection
+                    </h3>
 
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gold text-sm">Total Investment</span>
-                    <span className="font-semibold text-foreground text-lg">
-                      {formatCurrency(currentResults.totalInvestment)}
-                    </span>
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center">
+                        <span className="text-gold text-sm">Total Investment</span>
+                        <span className="font-semibold text-foreground">
+                          {formatCurrency(longTermResults.totalInvestment)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-gold text-sm">Net Annual Income</span>
+                        <span className="font-bold text-gold">
+                          {formatCurrency(longTermResults.netAnnualIncome)}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 pt-4 border-t border-border">
+                      <div className="flex justify-between items-end">
+                        <span className="font-display text-base font-semibold text-foreground">
+                          Cash-on-Cash
+                        </span>
+                        <span className="font-display text-2xl sm:text-3xl font-bold text-gold">
+                          {longTermResults.cashOnCash.toFixed(1)}%
+                        </span>
+                      </div>
+                      <div className="text-right mt-1">
+                        <span className="text-xs text-muted-foreground">
+                          Payback: {longTermResults.paybackPeriod.toFixed(1)} Years
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gold text-sm">Net Annual Income</span>
-                    <span className="font-bold text-gold text-lg">
-                      {formatCurrency(currentResults.netAnnualIncome)}
-                    </span>
+
+                  {/* Airbnb Projection Card */}
+                  <div className="border-l-4 border-primary bg-card rounded-r-lg p-5 shadow-sm">
+                    <h3 className="font-display text-lg sm:text-xl font-bold text-foreground mb-4">
+                      Airbnb Projection
+                    </h3>
+
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground text-sm">Total Investment</span>
+                        <span className="font-semibold text-foreground">
+                          {formatCurrency(airbnbResults.totalInvestment)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground text-sm">Net Annual Income</span>
+                        <span className="font-bold text-gold">
+                          {formatCurrency(airbnbResults.netAnnualIncome)}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 pt-4 border-t border-border">
+                      <div className="flex justify-between items-end">
+                        <span className="font-display text-base font-semibold text-foreground">
+                          Cash-on-Cash
+                        </span>
+                        <span className="font-display text-2xl sm:text-3xl font-bold text-gold">
+                          {airbnbResults.cashOnCash.toFixed(1)}%
+                        </span>
+                      </div>
+                      <div className="text-right mt-1">
+                        <span className="text-xs text-muted-foreground">
+                          Payback: {airbnbResults.paybackPeriod.toFixed(1)} Years
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
+              ) : (
+                /* Single Projection Card for Long Term or Airbnb */
+                <div className="border-l-4 border-gold bg-card rounded-r-lg p-6 shadow-sm">
+                  <h3 className="font-display text-xl sm:text-2xl font-bold text-foreground mb-6">
+                    {projectionTitle}
+                  </h3>
 
-                <div className="mt-6 pt-6 border-t border-border">
-                  <div className="flex justify-between items-end">
-                    <span className="font-display text-lg font-semibold text-foreground">
-                      Cash-on-Cash
-                    </span>
-                    <span className="font-display text-3xl sm:text-4xl font-bold text-gold">
-                      {currentResults.cashOnCash.toFixed(1)}%
-                    </span>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-gold text-sm">Total Investment</span>
+                      <span className="font-semibold text-foreground text-lg">
+                        {formatCurrency(currentResults.totalInvestment)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gold text-sm">Net Annual Income</span>
+                      <span className="font-bold text-gold text-lg">
+                        {formatCurrency(currentResults.netAnnualIncome)}
+                      </span>
+                    </div>
                   </div>
-                  <div className="text-right mt-1">
-                    <span className="text-sm text-muted-foreground">
-                      Payback: {currentResults.paybackPeriod.toFixed(1)} Years
-                    </span>
+
+                  <div className="mt-6 pt-6 border-t border-border">
+                    <div className="flex justify-between items-end">
+                      <span className="font-display text-lg font-semibold text-foreground">
+                        Cash-on-Cash
+                      </span>
+                      <span className="font-display text-3xl sm:text-4xl font-bold text-gold">
+                        {currentResults.cashOnCash.toFixed(1)}%
+                      </span>
+                    </div>
+                    <div className="text-right mt-1">
+                      <span className="text-sm text-muted-foreground">
+                        Payback: {currentResults.paybackPeriod.toFixed(1)} Years
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               {/* Chart */}
               <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
@@ -652,46 +733,6 @@ const Calculator_Page = () => {
                   </ResponsiveContainer>
                 </div>
               </div>
-
-              {/* Compare View - Additional Card */}
-              {formData.strategy === "compare" && (
-                <div className="border-l-4 border-primary bg-card rounded-r-lg p-6 shadow-sm">
-                  <h3 className="font-display text-xl sm:text-2xl font-bold text-foreground mb-6">
-                    Airbnb Projection
-                  </h3>
-
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground text-sm">Total Investment</span>
-                      <span className="font-semibold text-foreground text-lg">
-                        {formatCurrency(airbnbResults.totalInvestment)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground text-sm">Net Annual Income</span>
-                      <span className="font-bold text-gold text-lg">
-                        {formatCurrency(airbnbResults.netAnnualIncome)}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="mt-6 pt-6 border-t border-border">
-                    <div className="flex justify-between items-end">
-                      <span className="font-display text-lg font-semibold text-foreground">
-                        Cash-on-Cash
-                      </span>
-                      <span className="font-display text-3xl sm:text-4xl font-bold text-gold">
-                        {airbnbResults.cashOnCash.toFixed(1)}%
-                      </span>
-                    </div>
-                    <div className="text-right mt-1">
-                      <span className="text-sm text-muted-foreground">
-                        Payback: {airbnbResults.paybackPeriod.toFixed(1)} Years
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
             </TabsContent>
