@@ -580,24 +580,29 @@ const Calculator_Page = () => {
                 </div>
               </div>
 
-              {/* Calculate Button */}
+              {/* Calculate Button - Prominent styling */}
               <Button 
                 onClick={handleCalculate}
-                variant="gold"
                 size="lg"
-                className="w-full"
+                className={`w-full relative overflow-hidden bg-gradient-to-r from-gold via-amber-400 to-gold text-primary font-bold text-base tracking-wide shadow-lg shadow-gold/40 hover:shadow-xl hover:shadow-gold/50 transition-all duration-300 hover:scale-[1.02] ${
+                  hasValidInputs && !isCalculating && !hasCalculated ? 'animate-pulse' : ''
+                }`}
                 disabled={!hasValidInputs || isCalculating}
               >
+                {/* Glossy overlay */}
+                <span className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-transparent pointer-events-none" />
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full hover:translate-x-full transition-transform duration-700 pointer-events-none" />
+                
                 {isCalculating ? (
-                  <>
-                    <Loader2 className="mr-2 animate-spin" size={18} />
+                  <span className="relative z-10 flex items-center justify-center">
+                    <Loader2 className="mr-2 animate-spin" size={20} />
                     Calculating...
-                  </>
+                  </span>
                 ) : (
-                  <>
-                    <Calculator className="mr-2" size={18} />
+                  <span className="relative z-10 flex items-center justify-center">
+                    <Calculator className="mr-2" size={20} />
                     Calculate Potential Returns
-                  </>
+                  </span>
                 )}
               </Button>
 
