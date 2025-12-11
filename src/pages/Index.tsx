@@ -3,6 +3,7 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { WhoWeServeSection } from "@/components/home/WhoWeServeSection";
 import { WhyTherizoSection } from "@/components/home/WhyTherizoSection";
 import { FeaturedPropertiesSection } from "@/components/home/FeaturedPropertiesSection";
+import { ElitePropertyCarousel } from "@/components/home/ElitePropertyCarousel";
 import { ROITeaserSection } from "@/components/home/ROITeaserSection";
 import { OurStandardSection } from "@/components/home/OurStandardSection";
 import { TeamPreviewSection } from "@/components/home/TeamPreviewSection";
@@ -14,6 +15,7 @@ const Index = () => {
       <HeroSection />
       <WhoWeServeSection />
       <WhyTherizoSection />
+      <ElitePropertyCarousel />
       <FeaturedPropertiesSection />
       <ROITeaserSection />
       <OurStandardSection />

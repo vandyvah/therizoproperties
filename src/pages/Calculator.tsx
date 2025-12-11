@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -97,6 +97,8 @@ const formatShortCurrency = (value: number): string => {
 
 const Calculator_Page = () => {
   const { toast } = useToast();
+  const contentRef = useRef<HTMLElement>(null);
+  
   const [formData, setFormData] = useState<FormData>({
     strategy: "long-term",
     purchasePrice: "85000000",
@@ -108,6 +110,12 @@ const Calculator_Page = () => {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  const handleTabChange = () => {
+    setTimeout(() => {
+      contentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
+  };
 
   const handleInputChange = (field: keyof FormData, value: string) => {
     // Allow only numbers and commas
@@ -421,9 +429,9 @@ const Calculator_Page = () => {
       </section>
 
       {/* Calculator Tools Tabs */}
-      <section className="pb-16 bg-background">
+      <section className="pb-16 bg-background" ref={contentRef}>
         <div className="container-wide">
-          <Tabs defaultValue="roi" className="space-y-8">
+          <Tabs defaultValue="roi" className="space-y-8" onValueChange={handleTabChange}>
             <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto gap-2 bg-transparent p-0">
               <TabsTrigger 
                 value="roi" 
