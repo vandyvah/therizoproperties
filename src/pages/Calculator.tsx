@@ -603,174 +603,191 @@ const Calculator_Page = () => {
 
             {/* Right Column - Results */}
             <div className="space-y-6">
-              {/* Compare View - Side by Side */}
-              {formData.strategy === "compare" ? (
-                <div className="grid md:grid-cols-2 gap-4">
-                  {/* Long-Term Projection Card */}
-                  <div className="border-l-4 border-gold bg-card rounded-r-lg p-5 shadow-sm">
-                    <h3 className="font-display text-lg sm:text-xl font-bold text-foreground mb-4">
-                      Long-Term Projection
-                    </h3>
-
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center">
-                        <span className="text-gold text-sm">Total Investment</span>
-                        <span className="font-semibold text-foreground">
-                          {formatCurrency(longTermResults.totalInvestment)}
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-gold text-sm">Net Annual Income</span>
-                        <span className="font-bold text-gold">
-                          {formatCurrency(longTermResults.netAnnualIncome)}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 pt-4 border-t border-border">
-                      <div className="flex justify-between items-end">
-                        <span className="font-display text-base font-semibold text-foreground">
-                          Cash-on-Cash
-                        </span>
-                        <span className="font-display text-2xl sm:text-3xl font-bold text-gold">
-                          {longTermResults.cashOnCash.toFixed(1)}%
-                        </span>
-                      </div>
-                      <div className="text-right mt-1">
-                        <span className="text-xs text-muted-foreground">
-                          Payback: {longTermResults.paybackPeriod.toFixed(1)} Years
-                        </span>
-                      </div>
-                    </div>
+              {!hasCalculated ? (
+                /* Placeholder before calculation */
+                <div className="flex flex-col items-center justify-center h-full min-h-[400px] bg-card rounded-lg border border-border p-8 text-center">
+                  <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                    <Calculator className="w-8 h-8 text-muted-foreground" />
                   </div>
-
-                  {/* Airbnb Projection Card */}
-                  <div className="border-l-4 border-primary bg-card rounded-r-lg p-5 shadow-sm">
-                    <h3 className="font-display text-lg sm:text-xl font-bold text-foreground mb-4">
-                      Airbnb Projection
-                    </h3>
-
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground text-sm">Total Investment</span>
-                        <span className="font-semibold text-foreground">
-                          {formatCurrency(airbnbResults.totalInvestment)}
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground text-sm">Net Annual Income</span>
-                        <span className="font-bold text-gold">
-                          {formatCurrency(airbnbResults.netAnnualIncome)}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 pt-4 border-t border-border">
-                      <div className="flex justify-between items-end">
-                        <span className="font-display text-base font-semibold text-foreground">
-                          Cash-on-Cash
-                        </span>
-                        <span className="font-display text-2xl sm:text-3xl font-bold text-gold">
-                          {airbnbResults.cashOnCash.toFixed(1)}%
-                        </span>
-                      </div>
-                      <div className="text-right mt-1">
-                        <span className="text-xs text-muted-foreground">
-                          Payback: {airbnbResults.paybackPeriod.toFixed(1)} Years
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                  <h3 className="font-display text-xl font-semibold text-foreground mb-2">
+                    Ready to Calculate
+                  </h3>
+                  <p className="text-muted-foreground max-w-sm">
+                    Enter your investment details and click "Calculate Potential Returns" to see your ROI projections.
+                  </p>
                 </div>
               ) : (
-                /* Single Projection Card for Long Term or Airbnb */
-                <div className="border-l-4 border-gold bg-card rounded-r-lg p-6 shadow-sm">
-                  <h3 className="font-display text-xl sm:text-2xl font-bold text-foreground mb-6">
-                    {projectionTitle}
-                  </h3>
+                <>
+                  {/* Compare View - Side by Side */}
+                  {formData.strategy === "compare" ? (
+                    <div className="grid md:grid-cols-2 gap-4 animate-fade-in">
+                      {/* Long-Term Projection Card */}
+                      <div className="border-l-4 border-gold bg-card rounded-r-lg p-5 shadow-sm">
+                        <h3 className="font-display text-lg sm:text-xl font-bold text-foreground mb-4">
+                          Long-Term Projection
+                        </h3>
 
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-gold text-sm">Total Investment</span>
-                      <span className="font-semibold text-foreground text-lg">
-                        {formatCurrency(currentResults.totalInvestment)}
-                      </span>
+                        <div className="space-y-3">
+                          <div className="flex justify-between items-center">
+                            <span className="text-gold text-sm">Total Investment</span>
+                            <span className="font-semibold text-foreground">
+                              {formatCurrency(longTermResults.totalInvestment)}
+                            </span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-gold text-sm">Net Annual Income</span>
+                            <span className="font-bold text-gold">
+                              {formatCurrency(longTermResults.netAnnualIncome)}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="mt-4 pt-4 border-t border-border">
+                          <div className="flex justify-between items-end">
+                            <span className="font-display text-base font-semibold text-foreground">
+                              Cash-on-Cash
+                            </span>
+                            <span className="font-display text-2xl sm:text-3xl font-bold text-gold">
+                              {longTermResults.cashOnCash.toFixed(1)}%
+                            </span>
+                          </div>
+                          <div className="text-right mt-1">
+                            <span className="text-xs text-muted-foreground">
+                              Payback: {longTermResults.paybackPeriod.toFixed(1)} Years
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Airbnb Projection Card */}
+                      <div className="border-l-4 border-primary bg-card rounded-r-lg p-5 shadow-sm">
+                        <h3 className="font-display text-lg sm:text-xl font-bold text-foreground mb-4">
+                          Airbnb Projection
+                        </h3>
+
+                        <div className="space-y-3">
+                          <div className="flex justify-between items-center">
+                            <span className="text-muted-foreground text-sm">Total Investment</span>
+                            <span className="font-semibold text-foreground">
+                              {formatCurrency(airbnbResults.totalInvestment)}
+                            </span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-muted-foreground text-sm">Net Annual Income</span>
+                            <span className="font-bold text-gold">
+                              {formatCurrency(airbnbResults.netAnnualIncome)}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="mt-4 pt-4 border-t border-border">
+                          <div className="flex justify-between items-end">
+                            <span className="font-display text-base font-semibold text-foreground">
+                              Cash-on-Cash
+                            </span>
+                            <span className="font-display text-2xl sm:text-3xl font-bold text-gold">
+                              {airbnbResults.cashOnCash.toFixed(1)}%
+                            </span>
+                          </div>
+                          <div className="text-right mt-1">
+                            <span className="text-xs text-muted-foreground">
+                              Payback: {airbnbResults.paybackPeriod.toFixed(1)} Years
+                            </span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-gold text-sm">Net Annual Income</span>
-                      <span className="font-bold text-gold text-lg">
-                        {formatCurrency(currentResults.netAnnualIncome)}
-                      </span>
+                  ) : (
+                    /* Single Projection Card for Long Term or Airbnb */
+                    <div className="border-l-4 border-gold bg-card rounded-r-lg p-6 shadow-sm animate-fade-in">
+                      <h3 className="font-display text-xl sm:text-2xl font-bold text-foreground mb-6">
+                        {projectionTitle}
+                      </h3>
+
+                      <div className="space-y-4">
+                        <div className="flex justify-between items-center">
+                          <span className="text-gold text-sm">Total Investment</span>
+                          <span className="font-semibold text-foreground text-lg">
+                            {formatCurrency(currentResults.totalInvestment)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-gold text-sm">Net Annual Income</span>
+                          <span className="font-bold text-gold text-lg">
+                            {formatCurrency(currentResults.netAnnualIncome)}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="mt-6 pt-6 border-t border-border">
+                        <div className="flex justify-between items-end">
+                          <span className="font-display text-lg font-semibold text-foreground">
+                            Cash-on-Cash
+                          </span>
+                          <span className="font-display text-3xl sm:text-4xl font-bold text-gold">
+                            {currentResults.cashOnCash.toFixed(1)}%
+                          </span>
+                        </div>
+                        <div className="text-right mt-1">
+                          <span className="text-sm text-muted-foreground">
+                            Payback: {currentResults.paybackPeriod.toFixed(1)} Years
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Chart */}
+                  <div className="bg-card rounded-lg p-6 shadow-sm border border-border animate-fade-in" style={{ animationDelay: '0.1s' }}>
+                    <h4 className="font-display text-base font-semibold text-foreground mb-4">
+                      Annual Net Income vs Expenses
+                    </h4>
+                    <div className="h-64 sm:h-72">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={chartData} barCategoryGap="20%">
+                          <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                          <XAxis 
+                            dataKey="name" 
+                            tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+                            axisLine={{ stroke: 'hsl(var(--border))' }}
+                          />
+                          <YAxis 
+                            tickFormatter={(value) => formatShortCurrency(value)}
+                            tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+                            axisLine={{ stroke: 'hsl(var(--border))' }}
+                            width={60}
+                          />
+                          <Tooltip 
+                            formatter={(value: number) => formatCurrency(value)}
+                            contentStyle={{
+                              backgroundColor: 'hsl(var(--card))',
+                              border: '1px solid hsl(var(--border))',
+                              borderRadius: '8px',
+                            }}
+                            labelStyle={{ color: 'hsl(var(--foreground))' }}
+                          />
+                          <Legend 
+                            wrapperStyle={{ paddingTop: '16px' }}
+                            formatter={(value) => <span className="text-sm text-muted-foreground">{value}</span>}
+                          />
+                          <Bar 
+                            dataKey="Expenses" 
+                            fill="hsl(var(--primary))" 
+                            radius={[4, 4, 0, 0]}
+                            name="Expenses"
+                          />
+                          <Bar 
+                            dataKey="Income" 
+                            fill="hsl(var(--gold))" 
+                            radius={[4, 4, 0, 0]}
+                            name="Income"
+                          />
+                        </BarChart>
+                      </ResponsiveContainer>
                     </div>
                   </div>
-
-                  <div className="mt-6 pt-6 border-t border-border">
-                    <div className="flex justify-between items-end">
-                      <span className="font-display text-lg font-semibold text-foreground">
-                        Cash-on-Cash
-                      </span>
-                      <span className="font-display text-3xl sm:text-4xl font-bold text-gold">
-                        {currentResults.cashOnCash.toFixed(1)}%
-                      </span>
-                    </div>
-                    <div className="text-right mt-1">
-                      <span className="text-sm text-muted-foreground">
-                        Payback: {currentResults.paybackPeriod.toFixed(1)} Years
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                </>
               )}
-
-              {/* Chart */}
-              <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
-                <h4 className="font-display text-base font-semibold text-foreground mb-4">
-                  Annual Net Income vs Expenses
-                </h4>
-                <div className="h-64 sm:h-72">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={chartData} barCategoryGap="20%">
-                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis 
-                        dataKey="name" 
-                        tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
-                        axisLine={{ stroke: 'hsl(var(--border))' }}
-                      />
-                      <YAxis 
-                        tickFormatter={(value) => formatShortCurrency(value)}
-                        tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
-                        axisLine={{ stroke: 'hsl(var(--border))' }}
-                        width={60}
-                      />
-                      <Tooltip 
-                        formatter={(value: number) => formatCurrency(value)}
-                        contentStyle={{
-                          backgroundColor: 'hsl(var(--card))',
-                          border: '1px solid hsl(var(--border))',
-                          borderRadius: '8px',
-                        }}
-                        labelStyle={{ color: 'hsl(var(--foreground))' }}
-                      />
-                      <Legend 
-                        wrapperStyle={{ paddingTop: '16px' }}
-                        formatter={(value) => <span className="text-sm text-muted-foreground">{value}</span>}
-                      />
-                      <Bar 
-                        dataKey="Expenses" 
-                        fill="hsl(var(--primary))" 
-                        radius={[4, 4, 0, 0]}
-                        name="Expenses"
-                      />
-                      <Bar 
-                        dataKey="Income" 
-                        fill="hsl(var(--gold))" 
-                        radius={[4, 4, 0, 0]}
-                        name="Income"
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
             </div>
           </div>
             </TabsContent>
