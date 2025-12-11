@@ -1,7 +1,13 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, MapPin } from "lucide-react";
+import { ArrowRight, MapPin, Shield, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useCurrency } from "@/components/currency/CurrencySwitcher";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import property1 from "@/assets/property-1.jpg";
 import property2 from "@/assets/property-2.jpg";
 import property3 from "@/assets/property-3.jpg";
@@ -14,7 +20,9 @@ const properties = [
     description: "Secure estate, strong rental demand, serviced",
     tag: "Exclusive Listing",
     image: property1,
-    price: "₦180,000,000",
+    priceNGN: 180000000,
+    verified: true,
+    verifiedDate: "Oct 12, 2024",
   },
   {
     id: 2,
@@ -23,7 +31,9 @@ const properties = [
     description: "High-floor unit, city and water views",
     tag: "New",
     image: property2,
-    price: "₦320,000,000",
+    priceNGN: 320000000,
+    verified: true,
+    verifiedDate: "Nov 5, 2024",
   },
   {
     id: 3,
@@ -32,11 +42,15 @@ const properties = [
     description: "Ideal for corporate lets and Airbnb",
     tag: "Developer Direct",
     image: property3,
-    price: "₦95,000,000",
+    priceNGN: 95000000,
+    verified: true,
+    verifiedDate: "Dec 1, 2024",
   },
 ];
 
 export function FeaturedPropertiesSection() {
+  const { formatPrice } = useCurrency();
+
   return (
     <section className="section-padding bg-background">
       <div className="container-wide">
@@ -55,7 +69,7 @@ export function FeaturedPropertiesSection() {
           {properties.map((property) => (
             <article
               key={property.id}
-              className="group bg-card rounded-lg overflow-hidden border border-border hover:shadow-therizo-lg transition-all duration-300"
+              className="group bg-card rounded-lg overflow-hidden border border-border hover:shadow-lg transition-all duration-300"
             >
               <div className="relative aspect-[4/3] overflow-hidden">
                 <img
@@ -63,9 +77,33 @@ export function FeaturedPropertiesSection() {
                   alt={property.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
-                <Badge className="absolute top-4 left-4 bg-gold text-foreground hover:bg-gold-light">
-                  {property.tag}
-                </Badge>
+                <div className="absolute top-4 left-4 flex gap-2">
+                  <Badge className="bg-accent text-accent-foreground hover:bg-accent/90">
+                    {property.tag}
+                  </Badge>
+                </div>
+                {/* Title Verification Badge */}
+                {property.verified && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="absolute top-4 right-4 bg-green-500/90 text-white px-2 py-1 rounded-md flex items-center gap-1.5 text-xs font-medium cursor-help">
+                        <Shield className="h-3.5 w-3.5" />
+                        Verified
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent side="left" className="max-w-xs">
+                      <div className="space-y-1">
+                        <p className="font-medium flex items-center gap-1">
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          Title Verified
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          C of O verified by our legal team on {property.verifiedDate}
+                        </p>
+                      </div>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
               </div>
               <div className="p-6">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
@@ -80,7 +118,7 @@ export function FeaturedPropertiesSection() {
                 </p>
                 <div className="flex items-center justify-between">
                   <span className="font-display text-xl font-semibold text-primary">
-                    {property.price}
+                    {formatPrice(property.priceNGN)}
                   </span>
                   <Button variant="outline" size="sm" asChild>
                     <Link to={`/calculator`}>
