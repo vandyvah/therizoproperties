@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Newspaper, X, Star } from "lucide-react";
+import { ArrowRight, Newspaper, X, Star, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import heroImage from "@/assets/hero-lagos.jpg";
 
@@ -18,6 +18,16 @@ export function HeroSection() {
   const [showNews, setShowNews] = useState(false);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [loadingNews, setLoadingNews] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+
+  // Parallax scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const fetchNews = async () => {
     setLoadingNews(true);
@@ -49,13 +59,21 @@ export function HeroSection() {
 
   return (
     <section className="relative min-h-screen flex flex-col overflow-hidden">
-      {/* Background Image */}
+      {/* Background Image with Parallax */}
       <div className="absolute inset-0 z-0">
-        <img
-          src={heroImage}
-          alt="Luxury Nigerian Real Estate"
-          className="w-full h-full object-cover"
-        />
+        <div 
+          className="absolute inset-0 w-full h-[120%] -top-[10%]"
+          style={{ 
+            transform: `translateY(${scrollY * 0.3}px)`,
+            willChange: 'transform'
+          }}
+        >
+          <img
+            src={heroImage}
+            alt="Luxury Nigerian Real Estate"
+            className="w-full h-full object-cover"
+          />
+        </div>
         {/* Elite dark overlay - sophisticated and refined */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#0a0f1a]/95 via-[#0a0f1a]/75 to-[#0a0f1a]/40" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1a]/80 via-transparent to-[#0a0f1a]/30" />
@@ -185,12 +203,31 @@ export function HeroSection() {
               </Button>
             </div>
 
+            {/* Private Client Inquiry - Exclusive CTA */}
+            <div className="mt-10 pt-8 border-t border-white/[0.06] animate-fade-up" style={{ animationDelay: "0.4s" }}>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <Button 
+                  size="lg" 
+                  className="relative overflow-hidden bg-transparent border border-gold/40 text-gold hover:bg-gold/10 hover:border-gold/60 px-8 py-5 text-xs tracking-[0.2em] uppercase transition-all duration-500 group"
+                  asChild
+                >
+                  <Link to="/contact?inquiry=private">
+                    <Crown className="w-4 h-4 mr-3" />
+                    <span className="relative z-10">Private Client Inquiry</span>
+                  </Link>
+                </Button>
+                <span className="text-white/40 text-xs tracking-wide">
+                  For investments above ₦500M
+                </span>
+              </div>
+            </div>
+
             {/* Latest News Button - Subtle, refined */}
             <button
               onClick={fetchNews}
               disabled={loadingNews}
-              className="mt-8 px-6 py-2.5 rounded-none bg-transparent border border-white/10 hover:border-gold/30 hover:bg-white/[0.02] transition-all duration-500 animate-fade-up group"
-              style={{ animationDelay: "0.4s" }}
+              className="mt-6 px-6 py-2.5 rounded-none bg-transparent border border-white/10 hover:border-gold/30 hover:bg-white/[0.02] transition-all duration-500 animate-fade-up group"
+              style={{ animationDelay: "0.5s" }}
             >
               <span className="text-white/60 text-xs font-medium tracking-wider uppercase flex items-center gap-3 group-hover:text-white/80 transition-colors">
                 <Newspaper className="w-3.5 h-3.5" />
