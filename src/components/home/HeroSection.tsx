@@ -59,7 +59,7 @@ export function HeroSection() {
 
   return (
     <section className="relative min-h-screen flex flex-col overflow-hidden">
-      {/* Background Image with Parallax */}
+      {/* Background Video/Image with Parallax */}
       <div className="absolute inset-0 z-0">
         <div 
           className="absolute inset-0 w-full h-[120%] -top-[10%]"
@@ -68,12 +68,30 @@ export function HeroSection() {
             willChange: 'transform'
           }}
         >
+          {/* Video Background */}
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster={heroImage}
+            className="absolute inset-0 w-full h-full object-cover"
+          >
+            <source 
+              src="https://videos.pexels.com/video-files/3773486/3773486-uhd_2560_1440_30fps.mp4" 
+              type="video/mp4" 
+            />
+            {/* Fallback to image if video doesn't load */}
+          </video>
+          
+          {/* Image Fallback (shows while video loads or if video fails) */}
           <img
             src={heroImage}
             alt="Luxury Nigerian Real Estate"
-            className="w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover -z-10"
           />
         </div>
+        
         {/* Elite dark overlay - sophisticated and refined */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#0a0f1a]/95 via-[#0a0f1a]/75 to-[#0a0f1a]/40" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1a]/80 via-transparent to-[#0a0f1a]/30" />
