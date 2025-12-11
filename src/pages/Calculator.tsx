@@ -3,7 +3,11 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Send, Download, AlertCircle } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Send, Download, AlertCircle, Calculator, Globe, Droplets, Building2 } from "lucide-react";
+import { DiasporaMortgageCalculator } from "@/components/calculator/DiasporaMortgageCalculator";
+import { FloodMappingOverlay } from "@/components/calculator/FloodMappingOverlay";
+import { InfrastructureTimeline } from "@/components/calculator/InfrastructureTimeline";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { jsPDF } from "jspdf";
@@ -416,9 +420,47 @@ const Calculator_Page = () => {
         </div>
       </section>
 
-      {/* Calculator Main Section */}
+      {/* Calculator Tools Tabs */}
       <section className="pb-16 bg-background">
         <div className="container-wide">
+          <Tabs defaultValue="roi" className="space-y-8">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto gap-2 bg-transparent p-0">
+              <TabsTrigger 
+                value="roi" 
+                className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-navy bg-card border border-border py-3"
+              >
+                <Calculator className="w-4 h-4" />
+                <span className="hidden sm:inline">ROI Calculator</span>
+                <span className="sm:hidden">ROI</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="diaspora" 
+                className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-navy bg-card border border-border py-3"
+              >
+                <Globe className="w-4 h-4" />
+                <span className="hidden sm:inline">Diaspora Mortgage</span>
+                <span className="sm:hidden">Mortgage</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="flood" 
+                className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-navy bg-card border border-border py-3"
+              >
+                <Droplets className="w-4 h-4" />
+                <span className="hidden sm:inline">Flood Mapping</span>
+                <span className="sm:hidden">Flood</span>
+              </TabsTrigger>
+              <TabsTrigger 
+                value="infrastructure" 
+                className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-navy bg-card border border-border py-3"
+              >
+                <Building2 className="w-4 h-4" />
+                <span className="hidden sm:inline">Infrastructure</span>
+                <span className="sm:hidden">Projects</span>
+              </TabsTrigger>
+            </TabsList>
+
+            {/* ROI Calculator Tab */}
+            <TabsContent value="roi" className="mt-0">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
             {/* Left Column - Form */}
             <div className="space-y-8">
@@ -436,10 +478,10 @@ const Calculator_Page = () => {
                     <button
                       key={option.value}
                       onClick={() => handleInputChange("strategy", option.value as Strategy)}
-                      className={`px-4 sm:px-6 py-2.5 text-sm font-medium transition-all ${
+                      className={`px-4 sm:px-6 py-2.5 text-sm font-medium transition-all border-r border-border last:border-r-0 ${
                         formData.strategy === option.value
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-background text-foreground hover:bg-muted"
+                          ? "bg-gold text-navy"
+                          : "bg-card text-foreground hover:bg-muted"
                       }`}
                     >
                       {option.label}
@@ -638,6 +680,29 @@ const Calculator_Page = () => {
               )}
             </div>
           </div>
+            </TabsContent>
+
+            {/* Diaspora Mortgage Tab */}
+            <TabsContent value="diaspora" className="mt-0">
+              <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
+                <DiasporaMortgageCalculator />
+              </div>
+            </TabsContent>
+
+            {/* Flood Mapping Tab */}
+            <TabsContent value="flood" className="mt-0">
+              <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
+                <FloodMappingOverlay />
+              </div>
+            </TabsContent>
+
+            {/* Infrastructure Timeline Tab */}
+            <TabsContent value="infrastructure" className="mt-0">
+              <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
+                <InfrastructureTimeline />
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </section>
 
