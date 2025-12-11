@@ -183,7 +183,7 @@ export function HeroSection() {
                   <span className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent" />
                   <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                   <span className="relative z-10 flex items-center">
-                    Model Your Returns
+                    Calculate Your ROI
                     <ArrowRight className="ml-2" size={18} />
                   </span>
                 </Link>
