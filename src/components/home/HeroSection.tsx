@@ -1,11 +1,21 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Calculator, ChevronLeft, ChevronRight, Star, Award, Shield } from "lucide-react";
+import { ArrowRight, Calculator, ChevronLeft, ChevronRight, Star, Award, Shield, Newspaper, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import heroImage from "@/assets/hero-lagos.jpg";
 import property1 from "@/assets/property-1.jpg";
 import property2 from "@/assets/property-2.jpg";
 import property3 from "@/assets/property-3.jpg";
+
+interface Announcement {
+  id: string;
+  title: string;
+  content: string;
+  category: string;
+  is_featured: boolean;
+  published_at: string;
+}
 
 const slides = [
   {
@@ -51,6 +61,9 @@ const consultants = [
 export function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [showNews, setShowNews] = useState(false);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [loadingNews, setLoadingNews] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -73,6 +86,34 @@ export function HeroSection() {
       setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
       setIsTransitioning(false);
     }, 300);
+  };
+
+  const fetchNews = async () => {
+    setLoadingNews(true);
+    try {
+      const { data, error } = await supabase
+        .from('announcements')
+        .select('*')
+        .order('published_at', { ascending: false })
+        .limit(5);
+      
+      if (error) throw error;
+      setAnnouncements(data || []);
+      setShowNews(true);
+    } catch (error) {
+      console.error('Error fetching announcements:', error);
+    } finally {
+      setLoadingNews(false);
+    }
+  };
+
+  const getCategoryColor = (category: string) => {
+    switch (category) {
+      case 'listing': return 'bg-gold text-navy';
+      case 'report': return 'bg-blue-500 text-white';
+      case 'news': return 'bg-emerald-500 text-white';
+      default: return 'bg-muted text-foreground';
+    }
   };
 
   return (
@@ -108,6 +149,60 @@ export function HeroSection() {
         }} />
       </div>
 
+      {/* News Modal */}
+      {showNews && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-card rounded-2xl shadow-2xl max-w-lg w-full max-h-[80vh] overflow-hidden animate-scale-in">
+            <div className="bg-primary p-6 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Newspaper className="text-gold w-6 h-6" />
+                <h3 className="font-display text-xl font-bold text-primary-foreground">Therizo News</h3>
+              </div>
+              <button 
+                onClick={() => setShowNews(false)}
+                className="text-primary-foreground/70 hover:text-primary-foreground transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <div className="p-6 overflow-y-auto max-h-[60vh] space-y-4">
+              {announcements.length === 0 ? (
+                <p className="text-muted-foreground text-center py-8">No announcements at this time.</p>
+              ) : (
+                announcements.map((announcement) => (
+                  <div 
+                    key={announcement.id}
+                    className="p-4 rounded-xl bg-muted/50 border border-border hover:border-gold/30 transition-colors"
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className={`px-2 py-0.5 rounded-full text-xs font-semibold uppercase ${getCategoryColor(announcement.category)}`}>
+                        {announcement.category}
+                      </span>
+                      {announcement.is_featured && (
+                        <Star className="w-4 h-4 text-gold fill-gold" />
+                      )}
+                    </div>
+                    <h4 className="font-display font-semibold text-foreground mb-1">
+                      {announcement.title}
+                    </h4>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {announcement.content}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      {new Date(announcement.published_at).toLocaleDateString('en-NG', { 
+                        year: 'numeric', 
+                        month: 'short', 
+                        day: 'numeric' 
+                      })}
+                    </p>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Main Content */}
       <div className="relative z-10 w-full pt-20 pb-32 sm:pb-36 lg:pb-12">
         <div className="container-wide">
@@ -122,9 +217,16 @@ export function HeroSection() {
                     ELITE REAL ESTATE
                   </span>
                 </div>
-                <div className="px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
-                  <span className="text-white/90 text-xs font-medium">Est. 2020</span>
-                </div>
+                <button
+                  onClick={fetchNews}
+                  disabled={loadingNews}
+                  className="px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 hover:border-gold/30 transition-all duration-300"
+                >
+                  <span className="text-white/90 text-xs font-medium flex items-center gap-1.5">
+                    <Newspaper className="w-3.5 h-3.5" />
+                    {loadingNews ? 'Loading...' : 'Latest News'}
+                  </span>
+                </button>
               </div>
               
               <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.1] animate-fade-up" style={{ animationDelay: "0.1s" }}>
