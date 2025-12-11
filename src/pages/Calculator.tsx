@@ -1,35 +1,30 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calculator, Send, TrendingUp, Clock, Percent } from "lucide-react";
+import { Send } from "lucide-react";
 import { Link } from "react-router-dom";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 type Strategy = "long-term" | "airbnb" | "compare";
 
 interface FormData {
   strategy: Strategy;
-  location: string;
   purchasePrice: string;
   renovationCosts: string;
-  otherCosts: string;
   monthlyRent: string;
   airbnbNightlyRate: string;
   airbnbOccupancy: string;
-  annualTax: string;
-  annualInsurance: string;
-  annualMaintenance: string;
-  managementFee: string;
 }
 
 interface Results {
@@ -51,508 +46,383 @@ const formatCurrency = (value: number): string => {
   }).format(value);
 };
 
-const locations = [
-  "Lagos",
-  "Abuja",
-  "Port Harcourt",
-  "Ogun State",
-  "Kano",
-  "Ibadan",
-  "Enugu",
-  "Other Location",
-];
+const formatShortCurrency = (value: number): string => {
+  if (value >= 1000000) {
+    return `₦${(value / 1000000).toFixed(1)}M`;
+  }
+  if (value >= 1000) {
+    return `₦${(value / 1000).toFixed(0)}K`;
+  }
+  return `₦${value}`;
+};
 
 const Calculator_Page = () => {
   const [formData, setFormData] = useState<FormData>({
     strategy: "long-term",
-    location: "",
-    purchasePrice: "",
-    renovationCosts: "",
-    otherCosts: "",
-    monthlyRent: "",
-    airbnbNightlyRate: "",
-    airbnbOccupancy: "60",
-    annualTax: "",
-    annualInsurance: "",
-    annualMaintenance: "",
-    managementFee: "10",
+    purchasePrice: "85000000",
+    renovationCosts: "5000000",
+    monthlyRent: "600000",
+    airbnbNightlyRate: "75000",
+    airbnbOccupancy: "55",
   });
-
-  const [longTermResults, setLongTermResults] = useState<Results | null>(null);
-  const [airbnbResults, setAirbnbResults] = useState<Results | null>(null);
-  const [showResults, setShowResults] = useState(false);
 
   const handleInputChange = (field: keyof FormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    setShowResults(false);
   };
 
   const parseNumber = (value: string): number => {
     return parseFloat(value.replace(/,/g, "")) || 0;
   };
 
-  const calculateResults = () => {
+  // Calculate results in real-time
+  const { longTermResults, airbnbResults } = useMemo(() => {
     const purchasePrice = parseNumber(formData.purchasePrice);
     const renovationCosts = parseNumber(formData.renovationCosts);
-    const otherCosts = parseNumber(formData.otherCosts);
     const monthlyRent = parseNumber(formData.monthlyRent);
     const airbnbNightlyRate = parseNumber(formData.airbnbNightlyRate);
     const airbnbOccupancy = parseNumber(formData.airbnbOccupancy) / 100;
-    const annualTax = parseNumber(formData.annualTax);
-    const annualInsurance = parseNumber(formData.annualInsurance);
-    const annualMaintenance = parseNumber(formData.annualMaintenance);
-    const managementFee = parseNumber(formData.managementFee) / 100;
 
-    const totalInvestment = purchasePrice + renovationCosts + otherCosts;
+    const totalInvestment = purchasePrice + renovationCosts;
+    const managementFee = 0.1; // 10%
+    const annualExpenseBase = totalInvestment * 0.02; // 2% of total for taxes/insurance/maintenance
 
     // Long-term rental calculation
-    if (formData.strategy === "long-term" || formData.strategy === "compare") {
-      const grossAnnualIncome = monthlyRent * 12;
-      const managementCost = grossAnnualIncome * managementFee;
-      const annualExpenses =
-        annualTax + annualInsurance + annualMaintenance + managementCost;
-      const netAnnualIncome = grossAnnualIncome - annualExpenses;
-      const capRate =
-        purchasePrice > 0 ? (netAnnualIncome / purchasePrice) * 100 : 0;
-      const cashOnCash =
-        totalInvestment > 0 ? (netAnnualIncome / totalInvestment) * 100 : 0;
-      const paybackPeriod =
-        netAnnualIncome > 0 ? totalInvestment / netAnnualIncome : 0;
+    const ltGrossAnnualIncome = monthlyRent * 12;
+    const ltManagementCost = ltGrossAnnualIncome * managementFee;
+    const ltAnnualExpenses = annualExpenseBase + ltManagementCost;
+    const ltNetAnnualIncome = ltGrossAnnualIncome - ltAnnualExpenses;
+    const ltCapRate = purchasePrice > 0 ? (ltNetAnnualIncome / purchasePrice) * 100 : 0;
+    const ltCashOnCash = totalInvestment > 0 ? (ltNetAnnualIncome / totalInvestment) * 100 : 0;
+    const ltPaybackPeriod = ltNetAnnualIncome > 0 ? totalInvestment / ltNetAnnualIncome : 0;
 
-      setLongTermResults({
-        totalInvestment,
-        grossAnnualIncome,
-        annualExpenses,
-        netAnnualIncome,
-        capRate,
-        cashOnCash,
-        paybackPeriod,
-      });
-    }
+    const longTermResults: Results = {
+      totalInvestment,
+      grossAnnualIncome: ltGrossAnnualIncome,
+      annualExpenses: ltAnnualExpenses,
+      netAnnualIncome: ltNetAnnualIncome,
+      capRate: ltCapRate,
+      cashOnCash: ltCashOnCash,
+      paybackPeriod: ltPaybackPeriod,
+    };
 
     // Airbnb calculation
-    if (formData.strategy === "airbnb" || formData.strategy === "compare") {
-      const grossAnnualIncome = airbnbNightlyRate * 365 * airbnbOccupancy;
-      const managementCost = grossAnnualIncome * managementFee;
-      const annualExpenses =
-        annualTax + annualInsurance + annualMaintenance + managementCost;
-      const netAnnualIncome = grossAnnualIncome - annualExpenses;
-      const capRate =
-        purchasePrice > 0 ? (netAnnualIncome / purchasePrice) * 100 : 0;
-      const cashOnCash =
-        totalInvestment > 0 ? (netAnnualIncome / totalInvestment) * 100 : 0;
-      const paybackPeriod =
-        netAnnualIncome > 0 ? totalInvestment / netAnnualIncome : 0;
+    const abGrossAnnualIncome = airbnbNightlyRate * 365 * airbnbOccupancy;
+    const abManagementCost = abGrossAnnualIncome * managementFee;
+    const abAnnualExpenses = annualExpenseBase + abManagementCost;
+    const abNetAnnualIncome = abGrossAnnualIncome - abAnnualExpenses;
+    const abCapRate = purchasePrice > 0 ? (abNetAnnualIncome / purchasePrice) * 100 : 0;
+    const abCashOnCash = totalInvestment > 0 ? (abNetAnnualIncome / totalInvestment) * 100 : 0;
+    const abPaybackPeriod = abNetAnnualIncome > 0 ? totalInvestment / abNetAnnualIncome : 0;
 
-      setAirbnbResults({
-        totalInvestment,
-        grossAnnualIncome,
-        annualExpenses,
-        netAnnualIncome,
-        capRate,
-        cashOnCash,
-        paybackPeriod,
-      });
-    }
+    const airbnbResults: Results = {
+      totalInvestment,
+      grossAnnualIncome: abGrossAnnualIncome,
+      annualExpenses: abAnnualExpenses,
+      netAnnualIncome: abNetAnnualIncome,
+      capRate: abCapRate,
+      cashOnCash: abCashOnCash,
+      paybackPeriod: abPaybackPeriod,
+    };
 
-    setShowResults(true);
-  };
+    return { longTermResults, airbnbResults };
+  }, [formData]);
 
-  const ResultCard = ({
-    title,
-    results,
-  }: {
-    title: string;
-    results: Results;
-  }) => (
-    <Card className="border-gold/30">
-      <CardHeader className="pb-4">
-        <CardTitle className="font-display text-xl text-foreground">
-          {title}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex justify-between py-3 border-b border-border">
-          <span className="text-muted-foreground">Total Investment</span>
-          <span className="font-semibold text-foreground">
-            {formatCurrency(results.totalInvestment)}
-          </span>
-        </div>
-        <div className="flex justify-between py-3 border-b border-border">
-          <span className="text-muted-foreground">Gross Annual Income</span>
-          <span className="font-semibold text-foreground">
-            {formatCurrency(results.grossAnnualIncome)}
-          </span>
-        </div>
-        <div className="flex justify-between py-3 border-b border-border">
-          <span className="text-muted-foreground">Annual Expenses</span>
-          <span className="font-semibold text-foreground">
-            {formatCurrency(results.annualExpenses)}
-          </span>
-        </div>
-        <div className="flex justify-between py-3 border-b border-border bg-gold/5 -mx-6 px-6">
-          <span className="text-foreground font-medium">Net Annual Income</span>
-          <span className="font-bold text-gold text-lg">
-            {formatCurrency(results.netAnnualIncome)}
-          </span>
-        </div>
-        <div className="flex justify-between py-3 border-b border-border">
-          <span className="text-muted-foreground">Cap Rate</span>
-          <span className="font-semibold text-foreground">
-            {results.capRate.toFixed(2)}%
-          </span>
-        </div>
-        <div className="flex justify-between py-3 border-b border-border">
-          <span className="text-muted-foreground">Cash-on-Cash Return</span>
-          <span className="font-semibold text-gold">
-            {results.cashOnCash.toFixed(2)}%
-          </span>
-        </div>
-        <div className="flex justify-between py-3">
-          <span className="text-muted-foreground">Payback Period</span>
-          <span className="font-semibold text-foreground">
-            {results.paybackPeriod.toFixed(1)} years
-          </span>
-        </div>
-      </CardContent>
-    </Card>
-  );
+  // Chart data
+  const chartData = useMemo(() => {
+    return [
+      {
+        name: "Long Term",
+        Income: longTermResults.netAnnualIncome,
+        Expenses: longTermResults.annualExpenses,
+      },
+      {
+        name: "Airbnb",
+        Income: airbnbResults.netAnnualIncome,
+        Expenses: airbnbResults.annualExpenses,
+      },
+    ];
+  }, [longTermResults, airbnbResults]);
+
+  const currentResults = formData.strategy === "airbnb" ? airbnbResults : longTermResults;
+  const projectionTitle = formData.strategy === "airbnb" ? "Airbnb Projection" : "Long-Term Projection";
 
   return (
     <Layout>
-      {/* Hero */}
-      <section className="pt-32 pb-16 bg-primary">
-        <div className="container-wide">
-          <div className="max-w-3xl">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-lg bg-gold/20 flex items-center justify-center">
-                <Calculator className="text-gold" size={24} />
-              </div>
-              <span className="text-gold font-medium">Investment Tool</span>
-            </div>
-            <h1 className="font-display text-4xl md:text-5xl font-semibold text-primary-foreground mb-6">
-              Therizo ROI Calculator
-            </h1>
-            <p className="text-lg text-primary-foreground/80 leading-relaxed">
-              Before you commit capital, run the numbers. The Therizo ROI
-              Calculator helps you estimate your potential returns in Nigerian
-              Naira (₦) for both long-term rental and Airbnb strategies.
-            </p>
-          </div>
+      {/* Header */}
+      <section className="pt-28 pb-12 bg-background">
+        <div className="container-wide text-center">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-4">
+            Therizo ROI Calculator
+          </h1>
+          <p className="text-base sm:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            Before you commit capital, run the numbers. Estimate your potential returns in
+            Nigerian Naira (₦) for both long-term rental and Airbnb strategies.
+          </p>
         </div>
       </section>
 
-      {/* Calculator Form */}
-      <section className="section-padding bg-background">
+      {/* Calculator Main Section */}
+      <section className="pb-16 bg-background">
         <div className="container-wide">
-          <div className="max-w-4xl mx-auto">
-            {/* Strategy Selection */}
-            <div className="mb-10">
-              <Label className="text-lg font-display font-semibold mb-4 block">
-                Investment Strategy
-              </Label>
-              <RadioGroup
-                value={formData.strategy}
-                onValueChange={(value) =>
-                  handleInputChange("strategy", value as Strategy)
-                }
-                className="flex flex-wrap gap-4"
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="long-term" id="long-term" />
-                  <Label htmlFor="long-term" className="cursor-pointer">
-                    Long-Term Rental
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="airbnb" id="airbnb" />
-                  <Label htmlFor="airbnb" className="cursor-pointer">
-                    Airbnb
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="compare" id="compare" />
-                  <Label htmlFor="compare" className="cursor-pointer">
-                    Compare Both
-                  </Label>
-                </div>
-              </RadioGroup>
-            </div>
-
-            {/* Location */}
-            <div className="mb-10">
-              <Label className="text-lg font-display font-semibold mb-4 block">
-                Property Location
-              </Label>
-              <Select
-                value={formData.location}
-                onValueChange={(value) => handleInputChange("location", value)}
-              >
-                <SelectTrigger className="max-w-md">
-                  <SelectValue placeholder="Select location" />
-                </SelectTrigger>
-                <SelectContent>
-                  {locations.map((loc) => (
-                    <SelectItem key={loc} value={loc}>
-                      {loc}
-                    </SelectItem>
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+            {/* Left Column - Form */}
+            <div className="space-y-8">
+              {/* Strategy Toggle */}
+              <div>
+                <Label className="text-sm font-medium text-foreground mb-3 block">
+                  Strategy
+                </Label>
+                <div className="inline-flex rounded-lg border border-border overflow-hidden">
+                  {[
+                    { value: "long-term", label: "Long Term" },
+                    { value: "airbnb", label: "Airbnb" },
+                    { value: "compare", label: "Compare" },
+                  ].map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => handleInputChange("strategy", option.value as Strategy)}
+                      className={`px-4 sm:px-6 py-2.5 text-sm font-medium transition-all ${
+                        formData.strategy === option.value
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-background text-foreground hover:bg-muted"
+                      }`}
+                    >
+                      {option.label}
+                    </button>
                   ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Acquisition Costs */}
-            <div className="mb-10">
-              <h3 className="text-lg font-display font-semibold mb-6">
-                Acquisition Costs (₦)
-              </h3>
-              <div className="grid md:grid-cols-3 gap-6">
-                <div>
-                  <Label htmlFor="purchasePrice" className="mb-2 block">
-                    Property Purchase Price
-                  </Label>
-                  <Input
-                    id="purchasePrice"
-                    type="text"
-                    placeholder="e.g., 150,000,000"
-                    value={formData.purchasePrice}
-                    onChange={(e) =>
-                      handleInputChange("purchasePrice", e.target.value)
-                    }
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="renovationCosts" className="mb-2 block">
-                    Renovation & Fit-Out
-                  </Label>
-                  <Input
-                    id="renovationCosts"
-                    type="text"
-                    placeholder="e.g., 10,000,000"
-                    value={formData.renovationCosts}
-                    onChange={(e) =>
-                      handleInputChange("renovationCosts", e.target.value)
-                    }
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="otherCosts" className="mb-2 block">
-                    Other Acquisition Costs
-                  </Label>
-                  <Input
-                    id="otherCosts"
-                    type="text"
-                    placeholder="Legal, stamp duty, etc."
-                    value={formData.otherCosts}
-                    onChange={(e) =>
-                      handleInputChange("otherCosts", e.target.value)
-                    }
-                  />
                 </div>
               </div>
-            </div>
 
-            {/* Income Assumptions */}
-            <div className="mb-10">
-              <h3 className="text-lg font-display font-semibold mb-6">
-                Income Assumptions
-              </h3>
-              <div className="grid md:grid-cols-3 gap-6">
-                {(formData.strategy === "long-term" ||
-                  formData.strategy === "compare") && (
+              {/* Property Purchase Price */}
+              <div>
+                <Label htmlFor="purchasePrice" className="text-sm font-medium text-foreground mb-2 block">
+                  Property Purchase Price (₦)
+                </Label>
+                <Input
+                  id="purchasePrice"
+                  type="text"
+                  value={formData.purchasePrice}
+                  onChange={(e) => handleInputChange("purchasePrice", e.target.value)}
+                  className="bg-primary text-primary-foreground border-0 h-12 text-base placeholder:text-primary-foreground/50"
+                />
+              </div>
+
+              {/* Renovation */}
+              <div>
+                <Label htmlFor="renovationCosts" className="text-sm font-medium text-foreground mb-2 block">
+                  Renovation & Fit-Out (₦)
+                </Label>
+                <Input
+                  id="renovationCosts"
+                  type="text"
+                  value={formData.renovationCosts}
+                  onChange={(e) => handleInputChange("renovationCosts", e.target.value)}
+                  className="bg-primary text-primary-foreground border-0 h-12 text-base placeholder:text-primary-foreground/50"
+                />
+              </div>
+
+              {/* Income Assumptions */}
+              <div>
+                <h3 className="font-display text-lg font-semibold text-foreground mb-4">
+                  Income Assumptions
+                </h3>
+                <div className="space-y-4">
                   <div>
-                    <Label htmlFor="monthlyRent" className="mb-2 block">
-                      Monthly Rental Income (₦)
+                    <Label htmlFor="monthlyRent" className="text-sm text-gold mb-2 block">
+                      Monthly Rent (Long Term)
                     </Label>
                     <Input
                       id="monthlyRent"
                       type="text"
-                      placeholder="e.g., 1,500,000"
                       value={formData.monthlyRent}
-                      onChange={(e) =>
-                        handleInputChange("monthlyRent", e.target.value)
-                      }
+                      onChange={(e) => handleInputChange("monthlyRent", e.target.value)}
+                      className="bg-primary text-primary-foreground border-0 h-12 text-base placeholder:text-primary-foreground/50"
                     />
                   </div>
-                )}
-                {(formData.strategy === "airbnb" ||
-                  formData.strategy === "compare") && (
-                  <>
-                    <div>
-                      <Label htmlFor="airbnbNightlyRate" className="mb-2 block">
-                        Airbnb Nightly Rate (₦)
-                      </Label>
-                      <Input
-                        id="airbnbNightlyRate"
-                        type="text"
-                        placeholder="e.g., 80,000"
-                        value={formData.airbnbNightlyRate}
-                        onChange={(e) =>
-                          handleInputChange("airbnbNightlyRate", e.target.value)
-                        }
+                  <div>
+                    <Label htmlFor="airbnbNightlyRate" className="text-sm text-gold mb-2 block">
+                      Nightly Rate (Airbnb)
+                    </Label>
+                    <Input
+                      id="airbnbNightlyRate"
+                      type="text"
+                      value={formData.airbnbNightlyRate}
+                      onChange={(e) => handleInputChange("airbnbNightlyRate", e.target.value)}
+                      className="bg-primary text-primary-foreground border-0 h-12 text-base placeholder:text-primary-foreground/50"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="airbnbOccupancy" className="text-sm text-gold mb-2 block">
+                      Occupancy Rate (%)
+                    </Label>
+                    <Input
+                      id="airbnbOccupancy"
+                      type="text"
+                      value={formData.airbnbOccupancy}
+                      onChange={(e) => handleInputChange("airbnbOccupancy", e.target.value)}
+                      className="bg-primary text-primary-foreground border-0 h-12 text-base placeholder:text-primary-foreground/50"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column - Results */}
+            <div className="space-y-6">
+              {/* Projection Card */}
+              <div className="border-l-4 border-gold bg-card rounded-r-lg p-6 shadow-sm">
+                <h3 className="font-display text-xl sm:text-2xl font-bold text-foreground mb-6">
+                  {projectionTitle}
+                </h3>
+
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gold text-sm">Total Investment</span>
+                    <span className="font-semibold text-foreground text-lg">
+                      {formatCurrency(currentResults.totalInvestment)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gold text-sm">Net Annual Income</span>
+                    <span className="font-bold text-gold text-lg">
+                      {formatCurrency(currentResults.netAnnualIncome)}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="mt-6 pt-6 border-t border-border">
+                  <div className="flex justify-between items-end">
+                    <span className="font-display text-lg font-semibold text-foreground">
+                      Cash-on-Cash
+                    </span>
+                    <span className="font-display text-3xl sm:text-4xl font-bold text-gold">
+                      {currentResults.cashOnCash.toFixed(1)}%
+                    </span>
+                  </div>
+                  <div className="text-right mt-1">
+                    <span className="text-sm text-muted-foreground">
+                      Payback: {currentResults.paybackPeriod.toFixed(1)} Years
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Chart */}
+              <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
+                <h4 className="font-display text-base font-semibold text-foreground mb-4">
+                  Annual Net Income vs Expenses
+                </h4>
+                <div className="h-64 sm:h-72">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={chartData} barCategoryGap="20%">
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                      <XAxis 
+                        dataKey="name" 
+                        tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+                        axisLine={{ stroke: 'hsl(var(--border))' }}
                       />
+                      <YAxis 
+                        tickFormatter={(value) => formatShortCurrency(value)}
+                        tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+                        axisLine={{ stroke: 'hsl(var(--border))' }}
+                        width={60}
+                      />
+                      <Tooltip 
+                        formatter={(value: number) => formatCurrency(value)}
+                        contentStyle={{
+                          backgroundColor: 'hsl(var(--card))',
+                          border: '1px solid hsl(var(--border))',
+                          borderRadius: '8px',
+                        }}
+                        labelStyle={{ color: 'hsl(var(--foreground))' }}
+                      />
+                      <Legend 
+                        wrapperStyle={{ paddingTop: '16px' }}
+                        formatter={(value) => <span className="text-sm text-muted-foreground">{value}</span>}
+                      />
+                      <Bar 
+                        dataKey="Expenses" 
+                        fill="hsl(var(--primary))" 
+                        radius={[4, 4, 0, 0]}
+                        name="Expenses"
+                      />
+                      <Bar 
+                        dataKey="Income" 
+                        fill="hsl(var(--gold))" 
+                        radius={[4, 4, 0, 0]}
+                        name="Income"
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              {/* Compare View - Additional Card */}
+              {formData.strategy === "compare" && (
+                <div className="border-l-4 border-primary bg-card rounded-r-lg p-6 shadow-sm">
+                  <h3 className="font-display text-xl sm:text-2xl font-bold text-foreground mb-6">
+                    Airbnb Projection
+                  </h3>
+
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-muted-foreground text-sm">Total Investment</span>
+                      <span className="font-semibold text-foreground text-lg">
+                        {formatCurrency(airbnbResults.totalInvestment)}
+                      </span>
                     </div>
-                    <div>
-                      <Label htmlFor="airbnbOccupancy" className="mb-2 block">
-                        Airbnb Occupancy Rate (%)
-                      </Label>
-                      <Input
-                        id="airbnbOccupancy"
-                        type="text"
-                        placeholder="e.g., 60"
-                        value={formData.airbnbOccupancy}
-                        onChange={(e) =>
-                          handleInputChange("airbnbOccupancy", e.target.value)
-                        }
-                      />
+                    <div className="flex justify-between items-center">
+                      <span className="text-muted-foreground text-sm">Net Annual Income</span>
+                      <span className="font-bold text-gold text-lg">
+                        {formatCurrency(airbnbResults.netAnnualIncome)}
+                      </span>
                     </div>
-                  </>
-                )}
-              </div>
+                  </div>
+
+                  <div className="mt-6 pt-6 border-t border-border">
+                    <div className="flex justify-between items-end">
+                      <span className="font-display text-lg font-semibold text-foreground">
+                        Cash-on-Cash
+                      </span>
+                      <span className="font-display text-3xl sm:text-4xl font-bold text-gold">
+                        {airbnbResults.cashOnCash.toFixed(1)}%
+                      </span>
+                    </div>
+                    <div className="text-right mt-1">
+                      <span className="text-sm text-muted-foreground">
+                        Payback: {airbnbResults.paybackPeriod.toFixed(1)} Years
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
-
-            {/* Operating Expenses */}
-            <div className="mb-10">
-              <h3 className="text-lg font-display font-semibold mb-6">
-                Annual Operating Expenses (₦)
-              </h3>
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div>
-                  <Label htmlFor="annualTax" className="mb-2 block">
-                    Annual Property Tax
-                  </Label>
-                  <Input
-                    id="annualTax"
-                    type="text"
-                    placeholder="e.g., 200,000"
-                    value={formData.annualTax}
-                    onChange={(e) =>
-                      handleInputChange("annualTax", e.target.value)
-                    }
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="annualInsurance" className="mb-2 block">
-                    Annual Insurance
-                  </Label>
-                  <Input
-                    id="annualInsurance"
-                    type="text"
-                    placeholder="e.g., 300,000"
-                    value={formData.annualInsurance}
-                    onChange={(e) =>
-                      handleInputChange("annualInsurance", e.target.value)
-                    }
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="annualMaintenance" className="mb-2 block">
-                    Annual Maintenance
-                  </Label>
-                  <Input
-                    id="annualMaintenance"
-                    type="text"
-                    placeholder="e.g., 500,000"
-                    value={formData.annualMaintenance}
-                    onChange={(e) =>
-                      handleInputChange("annualMaintenance", e.target.value)
-                    }
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="managementFee" className="mb-2 block">
-                    Management Fee (%)
-                  </Label>
-                  <Input
-                    id="managementFee"
-                    type="text"
-                    placeholder="e.g., 10"
-                    value={formData.managementFee}
-                    onChange={(e) =>
-                      handleInputChange("managementFee", e.target.value)
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Calculate Button */}
-            <div className="text-center mb-16">
-              <Button variant="gold" size="xl" onClick={calculateResults}>
-                <Calculator size={20} className="mr-2" />
-                Calculate Potential Returns
-              </Button>
-            </div>
-
-            {/* Results */}
-            {showResults && (
-              <div className="animate-fade-up">
-                <h2 className="font-display text-2xl md:text-3xl font-semibold text-foreground text-center mb-10">
-                  Your Projected Returns
-                </h2>
-
-                <div
-                  className={`grid gap-8 ${
-                    formData.strategy === "compare"
-                      ? "md:grid-cols-2"
-                      : "max-w-xl mx-auto"
-                  }`}
-                >
-                  {(formData.strategy === "long-term" ||
-                    formData.strategy === "compare") &&
-                    longTermResults && (
-                      <ResultCard
-                        title="Long-Term Rental Projection"
-                        results={longTermResults}
-                      />
-                    )}
-                  {(formData.strategy === "airbnb" ||
-                    formData.strategy === "compare") &&
-                    airbnbResults && (
-                      <ResultCard
-                        title="Airbnb Projection"
-                        results={airbnbResults}
-                      />
-                    )}
-                </div>
-
-                {/* Disclaimer */}
-                <div className="mt-10 p-6 bg-muted/50 rounded-lg border border-border">
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Disclaimer:</strong> These figures are projections
-                    based on the numbers you entered. They are not financial
-                    advice or a guarantee of returns. Market conditions,
-                    regulation, and unforeseen costs can change outcomes.
-                    Therizo can help you refine these assumptions with real
-                    market data for your chosen location.
-                  </p>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      {showResults && (
-        <section className="section-padding bg-primary">
-          <div className="container-narrow text-center">
-            <h2 className="font-display text-3xl md:text-4xl font-semibold text-primary-foreground mb-6">
-              Discuss These Numbers with Therizo
-            </h2>
-            <p className="text-lg text-primary-foreground/80 leading-relaxed mb-10 max-w-2xl mx-auto">
-              Share your results with us and we will match you with properties
-              that fit your risk tolerance, budget, and target returns.
-            </p>
-            <Button variant="gold" size="xl" asChild>
-              <Link to="/contact">
-                <Send size={20} className="mr-2" />
-                Send My ROI to a Senior Consultant
-              </Link>
-            </Button>
-          </div>
-        </section>
-      )}
+      {/* CTA Section */}
+      <section className="py-16 sm:py-20 bg-primary">
+        <div className="container-narrow text-center">
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-primary-foreground mb-4">
+            Discuss These Numbers with Therizo
+          </h2>
+          <p className="text-base sm:text-lg text-primary-foreground/80 leading-relaxed mb-8 max-w-2xl mx-auto">
+            Share your results with us and we will match you with properties
+            that fit your risk tolerance, budget, and target returns.
+          </p>
+          <Button 
+            size="lg"
+            className="bg-gradient-to-r from-gold to-gold-light text-navy font-semibold px-8 py-6 text-base hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-all duration-300 hover:scale-105"
+            asChild
+          >
+            <Link to="/contact">
+              <Send size={18} className="mr-2" />
+              Send My ROI to a Senior Consultant
+            </Link>
+          </Button>
+        </div>
+      </section>
     </Layout>
   );
 };
