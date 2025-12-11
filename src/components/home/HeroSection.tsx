@@ -56,23 +56,24 @@ export function HeroSection() {
           alt="Luxury Nigerian Real Estate"
           className="w-full h-full object-cover"
         />
-        {/* Warm, vibrant overlay gradient - more cheerful */}
-        <div className="absolute inset-0 bg-gradient-to-r from-navy/85 via-navy/60 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-navy/70 via-transparent to-navy/20" />
+        {/* Elite dark overlay - sophisticated and refined */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0f1a]/95 via-[#0a0f1a]/75 to-[#0a0f1a]/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1a]/80 via-transparent to-[#0a0f1a]/30" />
         
-        {/* Warm golden glow effects for happiness */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gold/10 via-transparent to-transparent" />
-        <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-gold/15 via-transparent to-transparent" />
+        {/* Subtle gold accent lighting */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gold/[0.03] via-transparent to-transparent" />
         
-        {/* Animated shimmer overlay */}
+        {/* Refined shimmer - slower, more elegant */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -inset-full bg-gradient-to-r from-transparent via-white/[0.05] to-transparent skew-x-12 animate-[shimmer_6s_ease-in-out_infinite]" />
+          <div className="absolute -inset-full bg-gradient-to-r from-transparent via-white/[0.02] to-transparent skew-x-12 animate-[shimmer_12s_ease-in-out_infinite]" />
         </div>
         
-        {/* Warm floating light orbs - more vibrant */}
-        <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-gold/20 rounded-full blur-[150px] animate-pulse" />
-        <div className="absolute top-1/3 right-1/3 w-80 h-80 bg-orange-400/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: "0.5s" }} />
-        <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-amber-300/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: "1s" }} />
+        {/* Subtle ambient glow - understated luxury */}
+        <div className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-gold/[0.08] rounded-full blur-[200px]" />
+        <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-white/[0.03] rounded-full blur-[150px]" />
+        
+        {/* Fine grain texture overlay for premium feel */}
+        <div className="absolute inset-0 opacity-[0.015]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\'/%3E%3C/svg%3E")' }} />
       </div>
 
       {/* News Modal */}
@@ -135,100 +136,88 @@ export function HeroSection() {
       <div className="relative z-10 flex-1 flex items-center pt-20">
         <div className="container-wide">
           <div className="max-w-2xl">
-            {/* Brand Label - Glossy pill */}
-            <div className="flex items-center gap-3 mb-6 animate-fade-up">
-              <div className="relative">
-                <div className="w-1.5 h-8 bg-gradient-to-b from-gold via-gold to-gold-light rounded-full shadow-lg shadow-gold/30" />
-                <div className="absolute inset-0 w-1.5 h-8 bg-gradient-to-b from-white/40 to-transparent rounded-full" />
-              </div>
-              <span className="text-gold text-xs sm:text-sm font-semibold tracking-[0.2em] uppercase drop-shadow-lg">
-                Therizo Property and Development
+            {/* Brand Label - Refined elite styling */}
+            <div className="flex items-center gap-4 mb-8 animate-fade-up">
+              <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-gold to-gold" />
+              <span className="text-gold/90 text-xs font-medium tracking-[0.3em] uppercase">
+                Therizo Property & Development
               </span>
+              <div className="w-12 h-[1px] bg-gradient-to-l from-transparent via-gold to-gold" />
             </div>
 
-            {/* Main Headline - Warm and inviting */}
-            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] mb-6 animate-fade-up" style={{ animationDelay: "0.1s" }}>
-              Your Dream Property<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-amber-400 to-gold-light" style={{ textShadow: "0 0 60px rgba(251, 191, 36, 0.5)" }}>
-                awaits in Nigeria.
+            {/* Main Headline - Elite, authoritative */}
+            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.05] mb-6 animate-fade-up tracking-tight" style={{ animationDelay: "0.1s" }}>
+              Prime Property for<br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#e8c252] to-gold">
+                Disciplined Capital.
               </span>
             </h1>
 
-            {/* Subheadline - More welcoming */}
-            <p className="text-lg sm:text-xl text-white/90 leading-relaxed mb-8 max-w-xl animate-fade-up" style={{ animationDelay: "0.2s" }}>
-              See vetted Nigerian properties with clean title and verified returns —before you send a single naira.
+            {/* Subheadline - Refined, confident */}
+            <p className="text-lg sm:text-xl text-white/70 leading-relaxed mb-10 max-w-lg animate-fade-up font-light tracking-wide" style={{ animationDelay: "0.2s" }}>
+              Vetted Nigerian assets with verified titles and transparent returns—before you commit a single naira.
             </p>
 
-            {/* CTA Buttons - Glossy styling */}
+            {/* CTA Buttons - Elite, refined styling */}
             <div className="flex flex-col sm:flex-row items-start gap-4 animate-fade-up" style={{ animationDelay: "0.3s" }}>
               <Button 
                 size="lg" 
-                className="relative overflow-hidden bg-gradient-to-r from-gold via-amber-400 to-gold text-navy font-semibold px-8 py-6 text-base transition-all duration-300 shadow-lg shadow-gold/40 hover:shadow-xl hover:shadow-amber-400/50 hover:scale-105 group"
+                className="relative overflow-hidden bg-gold hover:bg-gold/90 text-[#0a0f1a] font-semibold px-10 py-6 text-sm tracking-wider uppercase transition-all duration-500 shadow-lg shadow-gold/20 hover:shadow-xl hover:shadow-gold/30 group"
                 asChild
               >
                 <Link to="/properties">
-                  {/* Glossy shine effect */}
-                  <span className="absolute inset-0 bg-gradient-to-b from-white/40 via-transparent to-transparent" />
-                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                  <span className="relative z-10 flex items-center">
-                    ✨ See Verified Properties
-                  </span>
+                  <span className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-transparent" />
+                  <span className="relative z-10">View Portfolio</span>
                 </Link>
               </Button>
               <Button 
                 size="lg" 
                 variant="outline"
-                className="relative overflow-hidden bg-white/5 backdrop-blur-md border-2 border-white/30 text-white px-8 py-6 text-base hover:bg-white/15 hover:border-white/50 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 group"
+                className="relative overflow-hidden bg-transparent border border-white/20 text-white/90 px-10 py-6 text-sm tracking-wider uppercase hover:bg-white/5 hover:border-white/40 transition-all duration-500 group"
                 asChild
               >
                 <Link to="/calculator">
-                  {/* Glass shine effect */}
-                  <span className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent" />
-                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                   <span className="relative z-10 flex items-center">
-                    Calculate Your ROI
-                    <ArrowRight className="ml-2" size={18} />
+                    Calculate ROI
+                    <ArrowRight className="ml-3 transition-transform group-hover:translate-x-1" size={16} />
                   </span>
                 </Link>
               </Button>
             </div>
 
-            {/* Latest News Button - Glossy glass effect */}
+            {/* Latest News Button - Subtle, refined */}
             <button
               onClick={fetchNews}
               disabled={loadingNews}
-              className="mt-6 px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 hover:bg-white/20 hover:border-gold/40 transition-all duration-300 animate-fade-up shadow-lg hover:shadow-xl relative overflow-hidden group"
+              className="mt-8 px-6 py-2.5 rounded-none bg-transparent border border-white/10 hover:border-gold/30 hover:bg-white/[0.02] transition-all duration-500 animate-fade-up group"
               style={{ animationDelay: "0.4s" }}
             >
-              {/* Glossy top highlight */}
-              <span className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/15 to-transparent rounded-t-full" />
-              <span className="text-white/90 text-sm font-medium flex items-center gap-2 relative z-10">
-                <Newspaper className="w-4 h-4 drop-shadow-sm" />
-                {loadingNews ? 'Loading...' : 'Latest News'}
+              <span className="text-white/60 text-xs font-medium tracking-wider uppercase flex items-center gap-3 group-hover:text-white/80 transition-colors">
+                <Newspaper className="w-3.5 h-3.5" />
+                {loadingNews ? "Loading..." : "Latest Updates"}
               </span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Bottom Bar - Warm glass effect */}
-      <div className="relative z-10 border-t border-gold/20 bg-gradient-to-r from-gold/5 via-white/[0.03] to-gold/5 backdrop-blur-sm">
-        <div className="absolute inset-0 bg-gradient-to-b from-white/[0.05] to-transparent" />
-        <div className="container-wide py-6 relative z-10">
-          <div className="flex flex-wrap items-center justify-between gap-4 text-sm text-white/80">
+      {/* Bottom Bar - Elite, minimal */}
+      <div className="relative z-10 border-t border-white/[0.06] bg-[#0a0f1a]/40 backdrop-blur-sm">
+        <div className="container-wide py-5">
+          <div className="flex flex-wrap items-center justify-between gap-4 text-xs tracking-wider">
             {/* Cities */}
-            <div className="flex items-center gap-6">
-              <span className="hover:text-gold transition-colors cursor-pointer">🌴 Lagos</span>
-              <span className="hover:text-gold transition-colors cursor-pointer">🏛️ Abuja</span>
-              <span className="hover:text-gold transition-colors cursor-pointer">🌊 Port Harcourt</span>
-              <span className="hidden sm:block w-2 h-2 rounded-full bg-gradient-to-r from-gold to-amber-400 shadow-lg shadow-gold/50 animate-pulse" />
+            <div className="flex items-center gap-8 text-white/50">
+              <span className="hover:text-gold transition-colors cursor-pointer uppercase">Lagos</span>
+              <span className="hover:text-gold transition-colors cursor-pointer uppercase">Abuja</span>
+              <span className="hover:text-gold transition-colors cursor-pointer uppercase">Port Harcourt</span>
+              <span className="w-1 h-1 rounded-full bg-gold/60" />
             </div>
             
             {/* Trust Indicators */}
-            <div className="flex items-center gap-6">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-amber-400 font-semibold">₦12B+ Transacted</span>
-              <span className="flex items-center gap-1"><span className="text-emerald-400">✓</span> 100% Verified Titles</span>
-              <span className="flex items-center gap-1">🌍 Diaspora Trusted</span>
+            <div className="flex items-center gap-8 text-white/40">
+              <span className="text-gold/80 font-medium">₦12B+ Transacted</span>
+              <span>Verified Titles</span>
+              <span>Diaspora Trusted</span>
             </div>
           </div>
         </div>
