@@ -56,22 +56,23 @@ export function HeroSection() {
           alt="Luxury Nigerian Real Estate"
           className="w-full h-full object-cover"
         />
-        {/* Dark overlay gradient */}
-        <div className="absolute inset-0 bg-gradient-to-r from-navy/95 via-navy/80 to-navy/60" />
-        <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-transparent to-navy/30" />
+        {/* Warm, vibrant overlay gradient - more cheerful */}
+        <div className="absolute inset-0 bg-gradient-to-r from-navy/85 via-navy/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-navy/70 via-transparent to-navy/20" />
         
-        {/* Glossy light effects */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent" />
-        <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/[0.08] to-transparent" />
+        {/* Warm golden glow effects for happiness */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gold/10 via-transparent to-transparent" />
+        <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-gold/15 via-transparent to-transparent" />
         
         {/* Animated shimmer overlay */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -inset-full bg-gradient-to-r from-transparent via-white/[0.03] to-transparent skew-x-12 animate-[shimmer_8s_ease-in-out_infinite]" />
+          <div className="absolute -inset-full bg-gradient-to-r from-transparent via-white/[0.05] to-transparent skew-x-12 animate-[shimmer_6s_ease-in-out_infinite]" />
         </div>
         
-        {/* Floating light orbs for glossy effect */}
-        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-gold/10 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-1/3 left-1/4 w-80 h-80 bg-white/5 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: "1s" }} />
+        {/* Warm floating light orbs - more vibrant */}
+        <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-gold/20 rounded-full blur-[150px] animate-pulse" />
+        <div className="absolute top-1/3 right-1/3 w-80 h-80 bg-orange-400/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: "0.5s" }} />
+        <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-amber-300/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: "1s" }} />
       </div>
 
       {/* News Modal */}
@@ -145,31 +146,33 @@ export function HeroSection() {
               </span>
             </div>
 
-            {/* Main Headline - Enhanced with text shadow */}
-            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] mb-6 animate-fade-up drop-shadow-2xl" style={{ animationDelay: "0.1s" }}>
-              Real Estate for<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-gold-light to-gold drop-shadow-lg" style={{ textShadow: "0 0 40px rgba(212, 175, 55, 0.4)" }}>
-                disciplined capital.
+            {/* Main Headline - Warm and inviting */}
+            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] mb-6 animate-fade-up" style={{ animationDelay: "0.1s" }}>
+              Your Dream Property<br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-amber-400 to-gold-light" style={{ textShadow: "0 0 60px rgba(251, 191, 36, 0.5)" }}>
+                awaits in Nigeria.
               </span>
             </h1>
 
-            {/* Subheadline */}
-            <p className="text-lg sm:text-xl text-white/80 leading-relaxed mb-8 max-w-xl animate-fade-up drop-shadow-md" style={{ animationDelay: "0.2s" }}>
-              We curate Nigerian properties with clean titles and verified returns. No hype. No ambiguity. Just ownership.
+            {/* Subheadline - More welcoming */}
+            <p className="text-lg sm:text-xl text-white/90 leading-relaxed mb-8 max-w-xl animate-fade-up" style={{ animationDelay: "0.2s" }}>
+              Discover curated Nigerian properties with verified titles and transparent returns. Your journey to ownership starts here.
             </p>
 
             {/* CTA Buttons - Glossy styling */}
             <div className="flex flex-col sm:flex-row items-start gap-4 animate-fade-up" style={{ animationDelay: "0.3s" }}>
               <Button 
                 size="lg" 
-                className="relative overflow-hidden bg-gradient-to-r from-gold via-gold to-gold-light text-navy font-semibold px-8 py-6 text-base transition-all duration-300 shadow-lg shadow-gold/30 hover:shadow-xl hover:shadow-gold/40 hover:scale-105 group"
+                className="relative overflow-hidden bg-gradient-to-r from-gold via-amber-400 to-gold text-navy font-semibold px-8 py-6 text-base transition-all duration-300 shadow-lg shadow-gold/40 hover:shadow-xl hover:shadow-amber-400/50 hover:scale-105 group"
                 asChild
               >
                 <Link to="/properties">
                   {/* Glossy shine effect */}
-                  <span className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-transparent" />
-                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                  <span className="relative z-10">See Verified Properties</span>
+                  <span className="absolute inset-0 bg-gradient-to-b from-white/40 via-transparent to-transparent" />
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                  <span className="relative z-10 flex items-center">
+                    ✨ See Verified Properties
+                  </span>
                 </Link>
               </Button>
               <Button 
@@ -208,24 +211,24 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* Bottom Bar - Glossy glass effect */}
-      <div className="relative z-10 border-t border-white/10 bg-white/[0.02] backdrop-blur-sm">
-        <div className="absolute inset-0 bg-gradient-to-b from-white/[0.03] to-transparent" />
+      {/* Bottom Bar - Warm glass effect */}
+      <div className="relative z-10 border-t border-gold/20 bg-gradient-to-r from-gold/5 via-white/[0.03] to-gold/5 backdrop-blur-sm">
+        <div className="absolute inset-0 bg-gradient-to-b from-white/[0.05] to-transparent" />
         <div className="container-wide py-6 relative z-10">
-          <div className="flex flex-wrap items-center justify-between gap-4 text-sm text-white/70">
+          <div className="flex flex-wrap items-center justify-between gap-4 text-sm text-white/80">
             {/* Cities */}
             <div className="flex items-center gap-6">
-              <span className="hover:text-white transition-colors cursor-pointer hover:drop-shadow-lg">Lagos</span>
-              <span className="hover:text-white transition-colors cursor-pointer hover:drop-shadow-lg">Abuja</span>
-              <span className="hover:text-white transition-colors cursor-pointer hover:drop-shadow-lg">Port Harcourt</span>
-              <span className="hidden sm:block w-2 h-2 rounded-full bg-gradient-to-r from-gold to-gold-light shadow-lg shadow-gold/50" />
+              <span className="hover:text-gold transition-colors cursor-pointer">🌴 Lagos</span>
+              <span className="hover:text-gold transition-colors cursor-pointer">🏛️ Abuja</span>
+              <span className="hover:text-gold transition-colors cursor-pointer">🌊 Port Harcourt</span>
+              <span className="hidden sm:block w-2 h-2 rounded-full bg-gradient-to-r from-gold to-amber-400 shadow-lg shadow-gold/50 animate-pulse" />
             </div>
             
             {/* Trust Indicators */}
             <div className="flex items-center gap-6">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light font-semibold drop-shadow-lg">₦12B+ Transacted</span>
-              <span className="drop-shadow-sm">100% Verified Titles</span>
-              <span className="drop-shadow-sm">Diaspora Trusted</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-amber-400 font-semibold">₦12B+ Transacted</span>
+              <span className="flex items-center gap-1"><span className="text-emerald-400">✓</span> 100% Verified Titles</span>
+              <span className="flex items-center gap-1">🌍 Diaspora Trusted</span>
             </div>
           </div>
         </div>
