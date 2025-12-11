@@ -156,7 +156,7 @@ export function HeroSection() {
 
             {/* Subheadline - More welcoming */}
             <p className="text-lg sm:text-xl text-white/90 leading-relaxed mb-8 max-w-xl animate-fade-up" style={{ animationDelay: "0.2s" }}>
-              Discover curated Nigerian properties with verified titles and transparent returns. Your journey to ownership starts here.
+              See vetted Nigerian properties with clean title and verified returns —before you send a single naira.
             </p>
 
             {/* CTA Buttons - Glossy styling */}
