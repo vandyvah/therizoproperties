@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CurrencySwitcher } from "@/components/currency/CurrencySwitcher";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/properties", label: "Properties" },
+  { href: "/vault", label: "The Vault", icon: Lock, exclusive: true },
   { href: "/calculator", label: "ROI Calculator" },
   { href: "/our-standard", label: "Our Standard" },
   { href: "/team", label: "Team" },
@@ -58,20 +60,23 @@ export function Header() {
               key={link.href}
               to={link.href}
               className={cn(
-                "text-sm font-medium transition-colors hover:text-gold",
+                "text-sm font-medium transition-colors hover:text-gold flex items-center gap-1.5",
+                link.exclusive && "text-accent",
                 location.pathname === link.href
                   ? "text-gold"
                   : isScrolled
-                  ? "text-foreground"
-                  : "text-primary-foreground/90"
+                  ? link.exclusive ? "text-accent" : "text-foreground"
+                  : link.exclusive ? "text-accent" : "text-primary-foreground/90"
               )}
             >
+              {link.icon && <link.icon className="h-3.5 w-3.5" />}
               {link.label}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden lg:flex items-center gap-4">
+        <div className="hidden lg:flex items-center gap-3">
+          <CurrencySwitcher variant="compact" />
           <Button
             variant={isScrolled ? "gold" : "hero"}
             size="sm"
@@ -109,12 +114,14 @@ export function Header() {
               key={link.href}
               to={link.href}
               className={cn(
-                "text-base font-medium py-2 transition-colors hover:text-gold",
+                "text-base font-medium py-2 transition-colors hover:text-gold flex items-center gap-2",
+                link.exclusive && "text-accent",
                 location.pathname === link.href
                   ? "text-gold"
-                  : "text-foreground"
+                  : link.exclusive ? "text-accent" : "text-foreground"
               )}
             >
+              {link.icon && <link.icon className="h-4 w-4" />}
               {link.label}
             </Link>
           ))}
