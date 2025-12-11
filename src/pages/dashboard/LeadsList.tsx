@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Loader2, Eye } from "lucide-react";
+import { LeadForm } from "@/components/dashboard/LeadForm";
 
 type LeadStage = "new" | "qualified" | "viewing_scheduled" | "offer_made" | "under_negotiation" | "closed_won" | "closed_lost";
 
@@ -55,6 +56,7 @@ const stages: LeadStage[] = [
 export default function LeadsList() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     fetchLeads();
@@ -112,11 +114,9 @@ export default function LeadsList() {
             <h1 className="font-display text-3xl font-semibold text-foreground">Leads Pipeline</h1>
             <p className="text-muted-foreground mt-1">Track and manage your sales pipeline</p>
           </div>
-          <Button asChild>
-            <Link to="/dashboard/leads/new">
-              <Plus size={16} className="mr-2" />
-              Add Lead
-            </Link>
+          <Button onClick={() => setShowForm(true)}>
+            <Plus size={16} className="mr-2" />
+            Add Lead
           </Button>
         </div>
 
@@ -187,6 +187,12 @@ export default function LeadsList() {
             );
           })}
         </div>
+
+        <LeadForm
+          open={showForm}
+          onClose={() => setShowForm(false)}
+          onSuccess={fetchLeads}
+        />
       </div>
     </DashboardLayout>
   );

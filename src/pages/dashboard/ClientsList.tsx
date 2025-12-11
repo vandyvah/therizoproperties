@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Plus, Search, Eye, Edit, Loader2 } from "lucide-react";
+import { ClientForm } from "@/components/dashboard/ClientForm";
 
 type ClientType = "buyer" | "seller" | "investor_developer" | "landowner" | "other";
 
@@ -49,6 +50,7 @@ export default function ClientsList() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("all");
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     fetchClients();
@@ -97,11 +99,9 @@ export default function ClientsList() {
             <h1 className="font-display text-3xl font-semibold text-foreground">Clients</h1>
             <p className="text-muted-foreground mt-1">Manage your client relationships</p>
           </div>
-          <Button asChild>
-            <Link to="/dashboard/clients/new">
-              <Plus size={16} className="mr-2" />
-              Add Client
-            </Link>
+          <Button onClick={() => setShowForm(true)}>
+            <Plus size={16} className="mr-2" />
+            Add Client
           </Button>
         </div>
 
@@ -191,6 +191,12 @@ export default function ClientsList() {
           </CardContent>
         </Card>
       </div>
+
+      <ClientForm
+        open={showForm}
+        onClose={() => setShowForm(false)}
+        onSuccess={fetchClients}
+      />
     </DashboardLayout>
   );
 }

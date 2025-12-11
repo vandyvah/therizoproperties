@@ -21,8 +21,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Plus, Search, Eye, Edit, Loader2 } from "lucide-react";
+import { PropertyForm } from "@/components/dashboard/PropertyForm";
 
 type PropertyStatus = "draft" | "under_review" | "listed" | "on_hold" | "sold";
 type RiskRating = "low" | "medium" | "high";
@@ -61,6 +62,7 @@ export default function PropertiesList() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [cityFilter, setCityFilter] = useState<string>("all");
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     fetchProperties();
@@ -120,11 +122,9 @@ export default function PropertiesList() {
             <h1 className="font-display text-3xl font-semibold text-foreground">Properties</h1>
             <p className="text-muted-foreground mt-1">Manage property listings</p>
           </div>
-          <Button asChild>
-            <Link to="/dashboard/properties/new">
-              <Plus size={16} className="mr-2" />
-              Add Property
-            </Link>
+          <Button onClick={() => setShowForm(true)}>
+            <Plus size={16} className="mr-2" />
+            Add Property
           </Button>
         </div>
 
@@ -243,6 +243,12 @@ export default function PropertiesList() {
           </CardContent>
         </Card>
       </div>
+
+      <PropertyForm
+        open={showForm}
+        onClose={() => setShowForm(false)}
+        onSuccess={fetchProperties}
+      />
     </DashboardLayout>
   );
 }
