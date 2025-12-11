@@ -1,10 +1,10 @@
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, useCallback } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Send, Download, AlertCircle, Calculator, Globe, Droplets, Building2 } from "lucide-react";
+import { Send, Download, AlertCircle, Calculator, Globe, Droplets, Building2, Loader2 } from "lucide-react";
 import { DiasporaMortgageCalculator } from "@/components/calculator/DiasporaMortgageCalculator";
 import { FloodMappingOverlay } from "@/components/calculator/FloodMappingOverlay";
 import { InfrastructureTimeline } from "@/components/calculator/InfrastructureTimeline";
@@ -110,6 +110,8 @@ const Calculator_Page = () => {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [isCalculating, setIsCalculating] = useState(false);
+  const [hasCalculated, setHasCalculated] = useState(false);
 
   const handleTabChange = () => {
     setTimeout(() => {
@@ -252,6 +254,21 @@ const Calculator_Page = () => {
 
   const currentResults = formData.strategy === "airbnb" ? airbnbResults : longTermResults;
   const projectionTitle = formData.strategy === "airbnb" ? "Airbnb Projection" : "Long-Term Projection";
+
+  const handleCalculate = useCallback(async () => {
+    if (!validateAll()) return;
+    
+    setIsCalculating(true);
+    // Simulate calculation time for UX
+    await new Promise(resolve => setTimeout(resolve, 800));
+    setHasCalculated(true);
+    setIsCalculating(false);
+    
+    toast({
+      title: "Calculation Complete",
+      description: "Your ROI projections are ready.",
+    });
+  }, [validateAll, toast]);
 
   const generatePDF = () => {
     if (!validateAll()) return;
@@ -550,13 +567,34 @@ const Calculator_Page = () => {
                 </div>
               </div>
 
+              {/* Calculate Button */}
+              <Button 
+                onClick={handleCalculate}
+                variant="gold"
+                size="lg"
+                className="w-full"
+                disabled={!hasValidInputs || isCalculating}
+              >
+                {isCalculating ? (
+                  <>
+                    <Loader2 className="mr-2 animate-spin" size={18} />
+                    Calculating...
+                  </>
+                ) : (
+                  <>
+                    <Calculator className="mr-2" size={18} />
+                    Calculate Potential Returns
+                  </>
+                )}
+              </Button>
+
               {/* Download PDF Button */}
               <Button 
                 onClick={generatePDF}
                 variant="outline"
                 size="lg"
                 className="w-full"
-                disabled={!hasValidInputs}
+                disabled={!hasValidInputs || !hasCalculated}
               >
                 <Download className="mr-2" size={18} />
                 Download PDF Report
