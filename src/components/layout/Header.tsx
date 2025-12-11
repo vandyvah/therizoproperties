@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CurrencySwitcher } from "@/components/currency/CurrencySwitcher";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -76,6 +77,7 @@ export function Header() {
         </nav>
 
         <div className="hidden lg:flex items-center gap-3">
+          <ThemeToggle variant={isScrolled ? "default" : "compact"} />
           <CurrencySwitcher variant="compact" />
           <Button
             variant={isScrolled ? "gold" : "hero"}
