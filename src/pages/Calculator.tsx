@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Send, Download, AlertCircle, Calculator, Globe, Droplets, Building2, Loader2 } from "lucide-react";
+import { Send, Download, AlertCircle, Calculator, Globe, Droplets, Building2, Loader2, RotateCcw } from "lucide-react";
 import { DiasporaMortgageCalculator } from "@/components/calculator/DiasporaMortgageCalculator";
 import { FloodMappingOverlay } from "@/components/calculator/FloodMappingOverlay";
 import { InfrastructureTimeline } from "@/components/calculator/InfrastructureTimeline";
@@ -99,14 +99,16 @@ const Calculator_Page = () => {
   const { toast } = useToast();
   const contentRef = useRef<HTMLElement>(null);
   
-  const [formData, setFormData] = useState<FormData>({
+  const initialFormData: FormData = {
     strategy: "long-term",
     purchasePrice: "85000000",
     renovationCosts: "5000000",
     monthlyRent: "600000",
     airbnbNightlyRate: "75000",
     airbnbOccupancy: "55",
-  });
+  };
+
+  const [formData, setFormData] = useState<FormData>(initialFormData);
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -269,6 +271,17 @@ const Calculator_Page = () => {
       description: "Your ROI projections are ready.",
     });
   }, [validateAll, toast]);
+
+  const handleReset = useCallback(() => {
+    setFormData(initialFormData);
+    setErrors({});
+    setTouched({});
+    setHasCalculated(false);
+    toast({
+      title: "Calculator Reset",
+      description: "All inputs have been cleared.",
+    });
+  }, [toast]);
 
   const generatePDF = () => {
     if (!validateAll()) return;
@@ -598,6 +611,17 @@ const Calculator_Page = () => {
               >
                 <Download className="mr-2" size={18} />
                 Download PDF Report
+              </Button>
+
+              {/* Reset Button */}
+              <Button 
+                onClick={handleReset}
+                variant="ghost"
+                size="lg"
+                className="w-full text-muted-foreground hover:text-foreground"
+              >
+                <RotateCcw className="mr-2" size={18} />
+                Reset Calculator
               </Button>
             </div>
 
