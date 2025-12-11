@@ -52,6 +52,47 @@ export type Database = {
           },
         ]
       }
+      announcements: {
+        Row: {
+          category: string
+          content: string
+          created_at: string
+          created_by_id: string | null
+          id: string
+          is_featured: boolean
+          published_at: string
+          title: string
+        }
+        Insert: {
+          category?: string
+          content: string
+          created_at?: string
+          created_by_id?: string | null
+          id?: string
+          is_featured?: boolean
+          published_at?: string
+          title: string
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string
+          created_by_id?: string | null
+          id?: string
+          is_featured?: boolean
+          published_at?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "announcements_created_by_id_fkey"
+            columns: ["created_by_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clients: {
         Row: {
           assigned_consultant_id: string | null
