@@ -118,7 +118,13 @@ const Calculator_Page = () => {
   };
 
   const handleInputChange = (field: keyof FormData, value: string) => {
-    // Allow only numbers and commas
+    // For strategy field, don't sanitize - just set the value directly
+    if (field === "strategy") {
+      setFormData((prev) => ({ ...prev, [field]: value as Strategy }));
+      return;
+    }
+    
+    // Allow only numbers and commas for numeric fields
     const sanitizedValue = value.replace(/[^0-9,]/g, "");
     setFormData((prev) => ({ ...prev, [field]: sanitizedValue }));
     
