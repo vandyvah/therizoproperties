@@ -1,0 +1,175 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Plus, Loader2, Eye, Calculator } from "lucide-react";
+
+type ROIStrategy = "long_term_rental" | "airbnb" | "compare";
+
+interface ROICalculation {
+  id: string;
+  strategy: ROIStrategy;
+  property_location: string | null;
+  purchase_price_ngn: number;
+  net_annual_income_ngn: number;
+  cash_on_cash_return_pct: number;
+  payback_period_years: number;
+  created_at: string;
+  properties?: { title: string } | null;
+  clients?: { full_name: string } | null;
+  profiles?: { full_name: string } | null;
+}
+
+const strategyLabels: Record<ROIStrategy, string> = {
+  long_term_rental: "Long-Term Rental",
+  airbnb: "Airbnb",
+  compare: "Comparison",
+};
+
+export default function ROIList() {
+  const [calculations, setCalculations] = useState<ROICalculation[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchCalculations();
+  }, []);
+
+  const fetchCalculations = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("roi_calculations")
+        .select(`
+          *,
+          properties:property_id(title),
+          clients:client_id(full_name),
+          profiles:created_by_id(full_name)
+        `)
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      setCalculations((data as ROICalculation[]) || []);
+    } catch (error) {
+      console.error("Error fetching ROI calculations:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat("en-NG", {
+      style: "currency",
+      currency: "NGN",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value);
+  };
+
+  if (loading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center h-64">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  return (
+    <DashboardLayout>
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="font-display text-3xl font-semibold text-foreground">
+              ROI Calculations
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              Saved investment return analyses
+            </p>
+          </div>
+          <Button asChild>
+            <Link to="/dashboard/roi/new">
+              <Plus size={16} className="mr-2" />
+              New Calculation
+            </Link>
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Calculator className="h-5 w-5 text-gold" />
+              All Calculations
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Property / Location</TableHead>
+                  <TableHead>Client</TableHead>
+                  <TableHead>Strategy</TableHead>
+                  <TableHead>Purchase Price</TableHead>
+                  <TableHead>Net Annual Income</TableHead>
+                  <TableHead>Cash-on-Cash</TableHead>
+                  <TableHead>Payback</TableHead>
+                  <TableHead>Created By</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {calculations.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={10} className="text-center text-muted-foreground py-8">
+                      No ROI calculations found
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  calculations.map((calc) => (
+                    <TableRow key={calc.id}>
+                      <TableCell className="font-medium max-w-[200px] truncate">
+                        {calc.properties?.title || calc.property_location || "-"}
+                      </TableCell>
+                      <TableCell>{calc.clients?.full_name || "-"}</TableCell>
+                      <TableCell>
+                        <Badge variant="secondary">{strategyLabels[calc.strategy]}</Badge>
+                      </TableCell>
+                      <TableCell>{formatCurrency(calc.purchase_price_ngn)}</TableCell>
+                      <TableCell className="text-gold font-semibold">
+                        {formatCurrency(calc.net_annual_income_ngn)}
+                      </TableCell>
+                      <TableCell>{calc.cash_on_cash_return_pct.toFixed(2)}%</TableCell>
+                      <TableCell>{calc.payback_period_years.toFixed(1)} yrs</TableCell>
+                      <TableCell>{calc.profiles?.full_name || "-"}</TableCell>
+                      <TableCell className="text-muted-foreground text-sm">
+                        {new Date(calc.created_at).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button variant="ghost" size="icon" asChild>
+                          <Link to={`/dashboard/roi/${calc.id}`}>
+                            <Eye size={16} />
+                          </Link>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </div>
+    </DashboardLayout>
+  );
+}
