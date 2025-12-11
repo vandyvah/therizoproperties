@@ -169,7 +169,7 @@ export function HeroSection() {
                   {/* Glossy shine effect */}
                   <span className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-transparent" />
                   <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                  <span className="relative z-10">View Curated Portfolio</span>
+                  <span className="relative z-10">See Verified Properties</span>
                 </Link>
               </Button>
               <Button 
