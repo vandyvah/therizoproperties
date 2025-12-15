@@ -110,10 +110,10 @@ export const InfrastructureTimeline = () => {
           <Building2 className="w-6 h-6 text-purple-500" />
         </div>
         <div>
-          <h3 className="font-display text-xl font-bold text-foreground">
+          <h3 className="font-display text-xl font-bold text-ink">
             Lagos Infrastructure Timeline
           </h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-slate">
             Major projects driving capital appreciation
           </p>
         </div>
@@ -135,7 +135,7 @@ export const InfrastructureTimeline = () => {
           return (
             <Card
               key={project.id}
-              className="p-5 border border-border hover:border-gold/50 transition-colors"
+              className="p-5 border border-sand hover:border-gold/50 transition-colors bg-warm-white"
             >
               <div className="flex flex-col md:flex-row md:items-start gap-4">
                 {/* Icon & Year */}
@@ -143,37 +143,37 @@ export const InfrastructureTimeline = () => {
                   <div className={`p-2 rounded-lg ${project.status === "completed" ? "bg-green-100" : project.status === "in-progress" ? "bg-blue-100" : "bg-amber-100"}`}>
                     <Icon className={`w-5 h-5 ${project.status === "completed" ? "text-green-600" : project.status === "in-progress" ? "text-blue-600" : "text-amber-600"}`} />
                   </div>
-                  <span className="font-bold text-foreground">{project.completionYear}</span>
+                  <span className="font-bold text-ink">{project.completionYear}</span>
                 </div>
 
                 {/* Content */}
                 <div className="flex-1">
                   <div className="flex flex-wrap items-center gap-2 mb-2">
-                    <h4 className="font-semibold text-foreground">{project.name}</h4>
+                    <h4 className="font-semibold text-ink">{project.name}</h4>
                     <Badge className={statusColors[project.status]}>{statusLabels[project.status]}</Badge>
                   </div>
 
-                  <p className="text-sm text-muted-foreground mb-3">{project.description}</p>
+                  <p className="text-sm text-slate mb-3">{project.description}</p>
 
                   <div className="flex flex-wrap gap-4 text-sm">
                     <div>
-                      <span className="text-muted-foreground">Location:</span>{" "}
-                      <span className="text-foreground">{project.location}</span>
+                      <span className="text-slate">Location:</span>{" "}
+                      <span className="text-ink">{project.location}</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <TrendingUp className="w-4 h-4 text-green-600" />
                       <span className="text-green-600 font-medium">{project.appreciationEstimate}</span>
-                      <span className="text-muted-foreground text-xs">estimated appreciation</span>
+                      <span className="text-slate text-xs">estimated appreciation</span>
                     </div>
                   </div>
 
                   {/* Impact Areas */}
                   <div className="mt-3 flex flex-wrap gap-2">
-                    <span className="text-xs text-muted-foreground">Impact areas:</span>
+                    <span className="text-xs text-slate">Impact areas:</span>
                     {project.impactAreas.map((area) => (
                       <span
                         key={area}
-                        className="text-xs px-2 py-0.5 bg-primary/10 text-primary rounded-full"
+                        className="text-xs px-2 py-0.5 bg-navy/10 text-navy rounded-full"
                       >
                         {area}
                       </span>
@@ -190,8 +190,8 @@ export const InfrastructureTimeline = () => {
         <div className="flex items-start gap-3">
           <ArrowRight className="w-5 h-5 text-gold shrink-0 mt-0.5" />
           <div>
-            <h5 className="font-semibold text-foreground mb-1">Investment Insight</h5>
-            <p className="text-sm text-muted-foreground">
+            <h5 className="font-semibold text-ink mb-1">Investment Insight</h5>
+            <p className="text-sm text-slate">
               Properties within 5km of major infrastructure projects typically see 20-40% appreciation within 2 years of project completion. 
               Focus on Red Line corridor and Lekki-Epe axis for maximum growth potential in 2024-2027.
             </p>
@@ -199,9 +199,9 @@ export const InfrastructureTimeline = () => {
         </div>
       </Card>
 
-      <div className="bg-primary/5 rounded-lg p-4">
-        <p className="text-xs text-muted-foreground">
-          <strong>Data Source:</strong> Lagos State Government infrastructure announcements, LASG Ministry of Works reports, 
+      <div className="bg-navy/5 rounded-lg p-4">
+        <p className="text-xs text-slate">
+          <strong className="text-ink">Data Source:</strong> Lagos State Government infrastructure announcements, LASG Ministry of Works reports, 
           and verified contractor timelines. Appreciation estimates based on historical patterns around similar projects.
         </p>
       </div>
