@@ -129,6 +129,7 @@ export function Footer() {
               </li>
             </ul>
           </div>
+        </div>
 
         <div className="mt-12 pt-8 border-t border-ivory/10 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-ivory/50">
