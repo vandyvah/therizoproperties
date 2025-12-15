@@ -75,21 +75,21 @@ export function HeroSection() {
           <img src={heroImage} alt="Luxury Nigerian Real Estate" className="absolute inset-0 w-full h-full object-cover -z-10" />
         </div>
         
-        {/* Elite dark overlay - sophisticated and refined */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0f1a]/95 via-[#0a0f1a]/75 to-[#0a0f1a]/40" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1a]/80 via-transparent to-[#0a0f1a]/30" />
+        {/* Elite dark overlay - Brand Navy */}
+        <div className="absolute inset-0 bg-gradient-to-r from-navy/95 via-navy/75 to-navy/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-transparent to-navy/30" />
         
         {/* Subtle gold accent lighting */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gold/[0.03] via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-br from-gold/[0.02] via-transparent to-transparent" />
         
         {/* Refined shimmer - slower, more elegant */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -inset-full bg-gradient-to-r from-transparent via-white/[0.02] to-transparent skew-x-12 animate-[shimmer_12s_ease-in-out_infinite]" />
+          <div className="absolute -inset-full bg-gradient-to-r from-transparent via-ivory/[0.02] to-transparent skew-x-12 animate-[shimmer_12s_ease-in-out_infinite]" />
         </div>
         
         {/* Subtle ambient glow - understated luxury */}
-        <div className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-gold/[0.08] rounded-full blur-[200px]" />
-        <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-white/[0.03] rounded-full blur-[150px]" />
+        <div className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-gold/[0.05] rounded-full blur-[200px]" />
+        <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-ivory/[0.02] rounded-full blur-[150px]" />
         
         {/* Fine grain texture overlay for premium feel */}
         <div className="absolute inset-0 opacity-[0.015]" style={{
@@ -151,17 +151,17 @@ export function HeroSection() {
             </div>
 
             {/* Main Headline - Elite, authoritative */}
-            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.05] mb-6 animate-fade-up tracking-tight" style={{
+            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-ivory leading-[1.05] mb-6 animate-fade-up tracking-tight" style={{
             animationDelay: "0.1s"
           }}>
               Prime Property for<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[#e8c252] to-gold">
+              <span className="text-gold">
                 Disciplined Capital.
               </span>
             </h1>
 
             {/* Subheadline - Refined, confident */}
-            <p className="text-lg sm:text-xl text-white/70 leading-relaxed mb-10 max-w-lg animate-fade-up font-light tracking-wide" style={{
+            <p className="text-lg sm:text-xl text-ivory/70 leading-relaxed mb-10 max-w-lg animate-fade-up font-light tracking-wide" style={{
             animationDelay: "0.2s"
           }}>Vetted Nigerian Properties with verified titles and transparent returns—before you commit a single naira.</p>
 
@@ -169,44 +169,41 @@ export function HeroSection() {
             <div className="flex flex-col sm:flex-row items-start gap-4 animate-fade-up" style={{
             animationDelay: "0.3s"
           }}>
-              <Button size="lg" className="relative overflow-hidden bg-gold hover:bg-gold/90 text-[#0a0f1a] font-semibold px-10 py-6 text-sm tracking-wider uppercase transition-all duration-500 shadow-lg shadow-gold/20 hover:shadow-xl hover:shadow-gold/30 group" asChild>
+              <Button size="lg" variant="gold" className="px-10 py-6 text-sm tracking-wider uppercase" asChild>
                 <Link to="/properties">
-                  <span className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-transparent" />
-                  <span className="relative z-10">View Portfolio</span>
+                  View Portfolio
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className="relative overflow-hidden bg-transparent border border-white/20 text-white/90 px-10 py-6 text-sm tracking-wider uppercase hover:bg-white/5 hover:border-white/40 transition-all duration-500 group" asChild>
+              <Button size="lg" variant="hero-outline" className="px-10 py-6 text-sm tracking-wider uppercase" asChild>
                 <Link to="/calculator">
-                  <span className="relative z-10 flex items-center">
-                    Calculate ROI
-                    <ArrowRight className="ml-3 transition-transform group-hover:translate-x-1" size={16} />
-                  </span>
+                  Calculate ROI
+                  <ArrowRight className="ml-3" size={16} />
                 </Link>
               </Button>
             </div>
 
             {/* Private Client Inquiry - Exclusive CTA */}
-            <div className="mt-10 pt-8 border-t border-white/[0.06] animate-fade-up" style={{
+            <div className="mt-10 pt-8 border-t border-ivory/[0.06] animate-fade-up" style={{
             animationDelay: "0.4s"
           }}>
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                <Button size="lg" className="relative overflow-hidden bg-transparent border border-gold/40 text-gold hover:bg-gold/10 hover:border-gold/60 px-8 py-5 text-xs tracking-[0.2em] uppercase transition-all duration-500 group" asChild>
+                <Button size="lg" variant="gold-outline" className="px-8 py-5 text-xs tracking-[0.2em] uppercase" asChild>
                   <Link to="/contact?inquiry=private">
                     <Crown className="w-4 h-4 mr-3" />
-                    <span className="relative z-10">Private Client Inquiry</span>
+                    Private Client Inquiry
                   </Link>
                 </Button>
-                <span className="text-white/40 text-xs tracking-wide">
+                <span className="text-ivory/40 text-xs tracking-wide">
                   For investments above ₦500M
                 </span>
               </div>
             </div>
 
             {/* Latest News Button - Subtle, refined */}
-            <button onClick={fetchNews} disabled={loadingNews} className="mt-6 px-6 py-2.5 rounded-none bg-transparent border border-white/10 hover:border-gold/30 hover:bg-white/[0.02] transition-all duration-500 animate-fade-up group" style={{
+            <button onClick={fetchNews} disabled={loadingNews} className="mt-6 px-6 py-2.5 rounded-none bg-transparent border border-ivory/10 hover:border-gold/30 hover:bg-ivory/[0.02] transition-all duration-500 animate-fade-up group" style={{
             animationDelay: "0.5s"
           }}>
-              <span className="text-white/60 text-xs font-medium tracking-wider uppercase flex items-center gap-3 group-hover:text-white/80 transition-colors">
+              <span className="text-ivory/60 text-xs font-medium tracking-wider uppercase flex items-center gap-3 group-hover:text-ivory/80 transition-colors">
                 <Newspaper className="w-3.5 h-3.5" />
                 {loadingNews ? "Loading..." : "Latest Updates"}
               </span>
@@ -216,11 +213,11 @@ export function HeroSection() {
       </div>
 
       {/* Bottom Bar - Elite, minimal */}
-      <div className="relative z-10 border-t border-white/[0.06] bg-[#0a0f1a]/40 backdrop-blur-sm">
+      <div className="relative z-10 border-t border-ivory/[0.06] bg-navy/40 backdrop-blur-sm">
         <div className="container-wide py-5">
           <div className="flex flex-wrap items-center justify-between gap-4 text-xs tracking-wider">
             {/* Cities */}
-            <div className="flex items-center gap-8 text-white/50">
+            <div className="flex items-center gap-8 text-ivory/50">
               <span className="hover:text-gold transition-colors cursor-pointer uppercase">Lagos</span>
               <span className="hover:text-gold transition-colors cursor-pointer uppercase">Abuja</span>
               <span className="hover:text-gold transition-colors cursor-pointer uppercase">Port Harcourt</span>
@@ -228,7 +225,7 @@ export function HeroSection() {
             </div>
             
             {/* Trust Indicators */}
-            <div className="flex items-center gap-8 text-white/40">
+            <div className="flex items-center gap-8 text-ivory/40">
               <span className="text-gold/80 font-medium">₦12B+ Transacted</span>
               <span>Verified Titles</span>
               <span>Diaspora Trusted</span>
