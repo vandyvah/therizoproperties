@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -79,6 +80,7 @@ export default function Vault() {
   if (!user) {
     return (
       <Layout>
+        <SEOHead title="The Vault | Private Access" description="Exclusive off-market properties" noindex={true} />
         {/* Hero - Locked State */}
         <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
           {/* Background */}
@@ -184,6 +186,7 @@ export default function Vault() {
   // Logged in - show the vault
   return (
     <Layout>
+      <SEOHead title="The Vault | Private Access" description="Exclusive off-market properties" noindex={true} />
       {/* Hero - Unlocked State */}
       <section className="relative py-20 md:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-navy via-navy to-navy-light" />

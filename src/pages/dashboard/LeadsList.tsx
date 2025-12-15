@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -108,6 +109,7 @@ export default function LeadsList() {
 
   return (
     <DashboardLayout>
+      <SEOHead title="Leads Pipeline" description="Track and manage sales pipeline" noindex={true} />
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
