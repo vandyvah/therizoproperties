@@ -6,11 +6,17 @@ const footerLinks = {
     { href: "/our-standard", label: "Our Standard" },
     { href: "/team", label: "Team" },
     { href: "/contact", label: "Contact" },
+    { href: "/press", label: "Press & Media" },
   ],
   services: [
     { href: "/properties", label: "Properties" },
     { href: "/calculator", label: "ROI Calculator" },
     { href: "/contact", label: "Book Consultation" },
+  ],
+  guides: [
+    { href: "/guides/title-verification", label: "Title Verification Guide" },
+    { href: "/guides/buyer-guide", label: "Property Buyer's Guide" },
+    { href: "/guides/roi-methodology", label: "ROI Methodology" },
   ],
   locations: ["Lagos", "Abuja", "Port Harcourt", "Ogun State"],
 };
@@ -71,6 +77,28 @@ export function Footer() {
             </ul>
           </div>
 
+          {/* Guides */}
+          <div>
+            <h4 className="font-display text-lg font-semibold mb-4 text-ivory">
+              Guides
+            </h4>
+            <ul className="space-y-3">
+              {footerLinks.guides.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    to={link.href}
+                    className="text-sm text-ivory/70 hover:text-gold transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Contact Row */}
+        <div className="mt-12 pt-8 border-t border-ivory/10 grid md:grid-cols-2 gap-8">
           {/* Contact */}
           <div>
             <h4 className="font-display text-lg font-semibold mb-4 text-ivory">
@@ -101,14 +129,16 @@ export function Footer() {
               </li>
             </ul>
           </div>
-        </div>
 
-        <div className="mt-16 pt-8 border-t border-ivory/10 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="mt-12 pt-8 border-t border-ivory/10 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-ivory/50">
             © {new Date().getFullYear()} Therizo Property and Development
             Corporation. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
+            <Link to="/press" className="text-xs text-ivory/40 hover:text-gold transition-colors">
+              Press
+            </Link>
             <span className="text-xs text-ivory/40">
               Nigerian Real Estate
             </span>
