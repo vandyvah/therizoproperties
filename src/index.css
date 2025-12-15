@@ -134,17 +134,34 @@
     --secondary-foreground: 42 41% 94%;
 
     --muted: 213 50% 18%;
-    --muted-foreground: 220 9% 60%;
+    --muted-foreground: 220 9% 70%;
 
     --accent: 40 48% 55%;
     --accent-foreground: 213 71% 11%;
 
-    --destructive: 0 62% 35%;
+    --destructive: 0 62% 45%;
     --destructive-foreground: 42 41% 94%;
 
-    --border: 213 50% 18%;
-    --input: 213 50% 18%;
+    --border: 213 50% 22%;
+    --input: 213 50% 14%;
     --ring: 40 48% 55%;
+    
+    /* Dark mode brand colors */
+    --ivory: 42 41% 94%;
+    --warm-white: 213 71% 11%;
+    --ink: 42 41% 94%;
+    --slate: 220 9% 65%;
+    --sand: 213 50% 22%;
+    
+    /* Dark mode sidebar */
+    --sidebar-background: 216 13% 7%;
+    --sidebar-foreground: 42 41% 94%;
+    --sidebar-primary: 40 48% 60%;
+    --sidebar-primary-foreground: 213 71% 11%;
+    --sidebar-accent: 213 50% 18%;
+    --sidebar-accent-foreground: 42 41% 94%;
+    --sidebar-border: 213 50% 22%;
+    --sidebar-ring: 40 48% 55%;
   }
 }
 
