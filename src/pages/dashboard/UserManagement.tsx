@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -200,6 +201,7 @@ export default function UserManagement() {
 
   return (
     <DashboardLayout>
+      <SEOHead title="User Management" description="Manage user roles and permissions" noindex={true} />
       <div className="space-y-6">
         <div>
           <h1 className="font-display text-3xl font-semibold text-foreground">

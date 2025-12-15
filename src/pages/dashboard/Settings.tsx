@@ -1,4 +1,5 @@
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +10,7 @@ export default function Settings() {
 
   return (
     <DashboardLayout>
+      <SEOHead title="Settings" description="Account and preferences" noindex={true} />
       <div className="space-y-6 max-w-4xl">
         <div>
           <h1 className="font-display text-3xl font-semibold text-foreground">Settings</h1>

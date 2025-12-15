@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -116,6 +117,7 @@ export default function PropertiesList() {
 
   return (
     <DashboardLayout>
+      <SEOHead title="Properties" description="Manage property listings" noindex={true} />
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>

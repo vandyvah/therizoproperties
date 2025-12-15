@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -145,6 +146,7 @@ export default function ContactSubmissions() {
 
   return (
     <DashboardLayout>
+      <SEOHead title="Contact Submissions" description="Review contact form submissions" noindex={true} />
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>

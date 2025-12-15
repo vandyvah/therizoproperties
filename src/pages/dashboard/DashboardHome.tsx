@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -131,6 +132,7 @@ export default function DashboardHome() {
 
   return (
     <DashboardLayout>
+      <SEOHead title="Dashboard" description="Therizo internal dashboard" noindex={true} />
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
