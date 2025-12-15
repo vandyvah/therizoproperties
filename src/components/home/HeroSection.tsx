@@ -65,11 +65,12 @@ export function HeroSection() {
         transform: `translateY(${scrollY * 0.3}px)`,
         willChange: 'transform'
       }}>
-          {/* Video Background */}
-          <video autoPlay muted loop playsInline poster={heroImage} className="absolute inset-0 w-full h-full object-cover">
-            <source src="https://videos.pexels.com/video-files/3773486/3773486-uhd_2560_1440_30fps.mp4" type="video/mp4" />
-            {/* Fallback to image if video doesn't load */}
-          </video>
+          {/* Hero Background Image */}
+          <img 
+            src={heroImage} 
+            alt="Lagos cityscape - Premium Nigerian real estate" 
+            className="absolute inset-0 w-full h-full object-cover"
+          />
           
           {/* Image Fallback (shows while video loads or if video fails) */}
           <img src={heroImage} alt="Luxury Nigerian Real Estate" className="absolute inset-0 w-full h-full object-cover -z-10" />
