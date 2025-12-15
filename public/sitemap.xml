@@ -66,4 +66,23 @@
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
+  <!-- Location Pages -->
+  <url>
+    <loc>https://therizo.com/locations/lagos</loc>
+    <lastmod>2025-12-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://therizo.com/locations/abuja</loc>
+    <lastmod>2025-12-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://therizo.com/locations/port-harcourt</loc>
+    <lastmod>2025-12-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
 </urlset>

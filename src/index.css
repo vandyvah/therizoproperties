@@ -12,6 +12,15 @@
 @import '@fontsource/dm-sans/700.css';
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Scroll margin for anchored sections to account for sticky header */
+  [id] {
+    scroll-margin-top: 80px;
+  }
+  
   :root {
     /* Therizo Luxury Brand Theme */
     /* Primary / Brand Navy: #081A2F */
