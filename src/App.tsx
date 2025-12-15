@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CurrencyProvider } from "@/components/currency/CurrencySwitcher";
+import { ScrollManager } from "@/components/ScrollManager";
 import Index from "./pages/Index";
 import Calculator from "./pages/Calculator";
 import OurStandard from "./pages/OurStandard";
@@ -46,6 +47,7 @@ const App = () => (
             <Toaster />
             <Sonner />
           <BrowserRouter>
+            <ScrollManager />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/calculator" element={<Calculator />} />
