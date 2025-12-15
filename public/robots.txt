@@ -41,7 +41,10 @@ Disallow: /dashboard/
 Disallow: /dashboard/*
 Disallow: /style-guide
 
-# Sitemap location
+# Dynamic sitemap (auto-updates with new properties)
+Sitemap: https://nvpxoxlnculbkmzkpstn.supabase.co/functions/v1/sitemap
+
+# Fallback static sitemap
 Sitemap: https://therizoproperties.com/sitemap.xml
 
 # Host directive
