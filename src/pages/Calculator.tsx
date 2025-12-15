@@ -57,23 +57,23 @@ const calculatorSchema = z.object({
   purchasePrice: z.string().refine(val => {
     const num = parseFloat(val.replace(/,/g, ""));
     return !isNaN(num) && num > 0;
-  }, "Purchase price is required"),
+  }, "Purchase price must be greater than 0"),
   renovationCosts: z.string().refine(val => {
     const num = parseFloat(val.replace(/,/g, ""));
     return !isNaN(num) && num >= 0;
-  }, "Enter a valid amount"),
+  }, "Renovation costs must be 0 or greater"),
   monthlyRent: z.string().refine(val => {
     const num = parseFloat(val.replace(/,/g, ""));
     return !isNaN(num) && num >= 0;
-  }, "Enter a valid amount"),
+  }, "Monthly rent must be 0 or greater"),
   airbnbNightlyRate: z.string().refine(val => {
     const num = parseFloat(val.replace(/,/g, ""));
     return !isNaN(num) && num >= 0;
-  }, "Enter a valid amount"),
+  }, "Nightly rate must be 0 or greater"),
   airbnbOccupancy: z.string().refine(val => {
     const num = parseFloat(val.replace(/,/g, ""));
     return !isNaN(num) && num >= 0 && num <= 100;
-  }, "Enter a value between 0–100"),
+  }, "Occupancy must be between 0 and 100"),
 });
 
 const formatCurrency = (value: number): string => {
@@ -171,8 +171,8 @@ const Calculator_Page = () => {
         });
         setErrors(newErrors);
         toast({
-          title: "Please Review Your Inputs",
-          description: "Correct the highlighted fields to proceed.",
+          title: "Validation Error",
+          description: "Please fix the errors in the form before proceeding.",
           variant: "destructive",
         });
       }
@@ -255,7 +255,7 @@ const Calculator_Page = () => {
   }, [longTermResults, airbnbResults]);
 
   const currentResults = formData.strategy === "airbnb" ? airbnbResults : longTermResults;
-  const projectionTitle = formData.strategy === "airbnb" ? "Short-Term Rental Projection" : "Long-Term Rental Projection";
+  const projectionTitle = formData.strategy === "airbnb" ? "Airbnb Projection" : "Long-Term Projection";
 
   const handleCalculate = useCallback(async () => {
     if (!validateAll()) return;
@@ -267,8 +267,8 @@ const Calculator_Page = () => {
     setIsCalculating(false);
     
     toast({
-      title: "Analysis Complete",
-      description: "Your investment projections are ready for review.",
+      title: "Calculation Complete",
+      description: "Your ROI projections are ready.",
     });
   }, [validateAll, toast]);
 
@@ -279,7 +279,7 @@ const Calculator_Page = () => {
     setHasCalculated(false);
     toast({
       title: "Calculator Reset",
-      description: "All fields have been restored to defaults.",
+      description: "All inputs have been cleared.",
     });
   }, [toast]);
 
@@ -386,7 +386,7 @@ const Calculator_Page = () => {
     doc.setFontSize(9);
     doc.setTextColor(120, 120, 120);
     doc.setFont("helvetica", "italic");
-    const disclaimer = "Disclaimer: These projections are based on the figures provided. They do not constitute financial advice or a guarantee of returns. Market conditions, regulations, and unforeseen costs may affect actual outcomes.";
+    const disclaimer = "Disclaimer: These figures are projections based on the numbers entered. They are not financial advice or a guarantee of returns. Market conditions, regulation, and unforeseen costs can change outcomes.";
     const splitDisclaimer = doc.splitTextToSize(disclaimer, pageWidth - 40);
     doc.text(splitDisclaimer, leftCol, y);
     
@@ -402,8 +402,8 @@ const Calculator_Page = () => {
     doc.save("therizo-roi-report.pdf");
     
     toast({
-      title: "Report Downloaded",
-      description: "Your ROI analysis has been saved as a PDF.",
+      title: "PDF Generated",
+      description: "Your ROI report has been downloaded successfully.",
     });
   };
 
@@ -456,11 +456,11 @@ const Calculator_Page = () => {
       <section className="pt-28 pb-12 bg-ivory">
         <div className="container-wide text-center">
           <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-navy mb-4">
-            Investment Returns Calculator
+            Therizo ROI Calculator
           </h1>
           <p className="text-base sm:text-lg text-slate max-w-3xl mx-auto leading-relaxed">
-            Model your potential returns before committing capital. Compare long-term rental
-            and short-term rental strategies in Nigerian Naira (₦).
+            Before you commit capital, run the numbers. Estimate your potential returns in
+            Nigerian Naira (₦) for both long-term rental and Airbnb strategies.
           </p>
         </div>
       </section>
@@ -512,13 +512,13 @@ const Calculator_Page = () => {
               {/* Strategy Toggle */}
               <div>
                 <Label className="text-sm font-medium text-ink mb-3 block">
-                  Investment Strategy
+                  Strategy
                 </Label>
                 <div className="inline-flex rounded-lg border border-sand overflow-hidden">
                   {[
-                    { value: "long-term", label: "Long-Term" },
-                    { value: "airbnb", label: "Short-Term" },
-                    { value: "compare", label: "Compare Both" },
+                    { value: "long-term", label: "Long Term" },
+                    { value: "airbnb", label: "Airbnb" },
+                    { value: "compare", label: "Compare" },
                   ].map((option) => (
                     <button
                       key={option.value}
@@ -554,26 +554,26 @@ const Calculator_Page = () => {
               {/* Income Assumptions */}
               <div>
                 <h3 className="font-display text-lg font-semibold text-ink mb-4">
-                  Projected Income
+                  Income Assumptions
                 </h3>
                 <div className="space-y-4">
                   <InputField
                     id="monthlyRent"
-                    label="Expected Monthly Rent"
+                    label="Monthly Rent (Long Term)"
                     value={formData.monthlyRent}
                     onChange={(value) => handleInputChange("monthlyRent", value)}
                     goldLabel
                   />
                   <InputField
                     id="airbnbNightlyRate"
-                    label="Nightly Rate (Short-Term)"
+                    label="Nightly Rate (Airbnb)"
                     value={formData.airbnbNightlyRate}
                     onChange={(value) => handleInputChange("airbnbNightlyRate", value)}
                     goldLabel
                   />
                   <InputField
                     id="airbnbOccupancy"
-                    label="Expected Occupancy (%)"
+                    label="Occupancy Rate (%)"
                     value={formData.airbnbOccupancy}
                     onChange={(value) => handleInputChange("airbnbOccupancy", value)}
                     goldLabel
@@ -597,12 +597,12 @@ const Calculator_Page = () => {
                 {isCalculating ? (
                   <span className="relative z-10 flex items-center justify-center">
                     <Loader2 className="mr-2 animate-spin" size={20} />
-                    Analysing...
+                    Calculating...
                   </span>
                 ) : (
                   <span className="relative z-10 flex items-center justify-center">
                     <Calculator className="mr-2" size={20} />
-                    Calculate Returns
+                    Calculate Potential Returns
                   </span>
                 )}
               </Button>
@@ -640,10 +640,10 @@ const Calculator_Page = () => {
                     <Calculator className="w-8 h-8 text-slate" />
                   </div>
                   <h3 className="font-display text-xl font-semibold text-ink mb-2">
-                    Awaiting Your Inputs
+                    Ready to Calculate
                   </h3>
                   <p className="text-slate max-w-sm">
-                    Enter your investment details and select "Calculate Returns" to view your projections.
+                    Enter your investment details and click "Calculate Potential Returns" to see your ROI projections.
                   </p>
                 </div>
               ) : (
@@ -654,7 +654,7 @@ const Calculator_Page = () => {
                       {/* Long-Term Projection Card */}
                       <div className="border-l-4 border-gold bg-warm-white rounded-r-lg p-5 shadow-sm">
                         <h3 className="font-display text-lg sm:text-xl font-bold text-ink mb-4">
-                          Long-Term Rental
+                          Long-Term Projection
                         </h3>
 
                         <div className="space-y-3">
@@ -675,7 +675,7 @@ const Calculator_Page = () => {
                         <div className="mt-4 pt-4 border-t border-sand">
                           <div className="flex justify-between items-end">
                             <span className="font-display text-base font-semibold text-ink">
-                              Cash-on-Cash Return
+                              Cash-on-Cash
                             </span>
                             <span className="font-display text-2xl sm:text-3xl font-bold text-gold">
                               {longTermResults.cashOnCash.toFixed(1)}%
@@ -692,7 +692,7 @@ const Calculator_Page = () => {
                       {/* Airbnb Projection Card */}
                       <div className="border-l-4 border-navy bg-warm-white rounded-r-lg p-5 shadow-sm">
                         <h3 className="font-display text-lg sm:text-xl font-bold text-ink mb-4">
-                          Short-Term Rental
+                          Airbnb Projection
                         </h3>
 
                         <div className="space-y-3">
@@ -713,7 +713,7 @@ const Calculator_Page = () => {
                         <div className="mt-4 pt-4 border-t border-sand">
                           <div className="flex justify-between items-end">
                             <span className="font-display text-base font-semibold text-ink">
-                              Cash-on-Cash Return
+                              Cash-on-Cash
                             </span>
                             <span className="font-display text-2xl sm:text-3xl font-bold text-gold">
                               {airbnbResults.cashOnCash.toFixed(1)}%
@@ -752,7 +752,7 @@ const Calculator_Page = () => {
                       <div className="mt-6 pt-6 border-t border-sand">
                         <div className="flex justify-between items-end">
                           <span className="font-display text-lg font-semibold text-ink">
-                            Cash-on-Cash Return
+                            Cash-on-Cash
                           </span>
                           <span className="font-display text-3xl sm:text-4xl font-bold text-gold">
                             {currentResults.cashOnCash.toFixed(1)}%
@@ -770,7 +770,7 @@ const Calculator_Page = () => {
                   {/* Chart */}
                   <div className="bg-warm-white rounded-lg p-6 shadow-sm border border-sand animate-fade-in" style={{ animationDelay: '0.1s' }}>
                     <h4 className="font-display text-base font-semibold text-ink mb-4">
-                      Net Income vs. Operating Expenses
+                      Annual Net Income vs Expenses
                     </h4>
                     <div className="h-64 sm:h-72">
                       <ResponsiveContainer width="100%" height="100%">
@@ -804,13 +804,13 @@ const Calculator_Page = () => {
                             dataKey="Expenses" 
                             fill="hsl(var(--primary))" 
                             radius={[4, 4, 0, 0]}
-                            name="Operating Expenses"
+                            name="Expenses"
                           />
                           <Bar 
                             dataKey="Income" 
                             fill="hsl(var(--gold))" 
                             radius={[4, 4, 0, 0]}
-                            name="Net Income"
+                            name="Income"
                           />
                         </BarChart>
                       </ResponsiveContainer>
@@ -850,11 +850,11 @@ const Calculator_Page = () => {
       <section className="py-16 sm:py-20 bg-navy">
         <div className="container-narrow text-center">
           <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-ivory mb-4">
-            Discuss Your Results with a Consultant
+            Discuss These Numbers with Therizo
           </h2>
           <p className="text-base sm:text-lg text-ivory/80 leading-relaxed mb-8 max-w-2xl mx-auto">
-            Share your projections with our team. We will identify properties that align
-            with your risk profile, budget, and return expectations.
+            Share your results with us and we will match you with properties
+            that fit your risk tolerance, budget, and target returns.
           </p>
           <Button 
             size="lg"
@@ -863,7 +863,7 @@ const Calculator_Page = () => {
           >
             <Link to="/contact">
               <Send size={18} className="mr-2" />
-              Speak with a Consultant
+              Send My ROI to a Senior Consultant
             </Link>
           </Button>
         </div>
