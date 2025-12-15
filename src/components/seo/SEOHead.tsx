@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 interface SEOHeadProps {
   title: string;
@@ -13,6 +14,18 @@ interface SEOHeadProps {
   noindex?: boolean;
 }
 
+// Hreflang configuration for international SEO
+const hreflangConfig = [
+  { lang: "en-NG", region: "Nigeria (default)" },
+  { lang: "en-GB", region: "United Kingdom" },
+  { lang: "en-US", region: "United States" },
+  { lang: "en-CA", region: "Canada" },
+  { lang: "en-AE", region: "UAE/Middle East" },
+  { lang: "en-DE", region: "Germany" },
+  { lang: "en-NL", region: "Netherlands" },
+  { lang: "x-default", region: "Default" },
+];
+
 export function SEOHead({
   title,
   description,
@@ -25,9 +38,15 @@ export function SEOHead({
   keywords = [],
   noindex = false,
 }: SEOHeadProps) {
+  const location = useLocation();
   const baseUrl = "https://therizoproperties.com";
-  const canonicalPath = canonical || canonicalUrl || "";
-  const fullCanonical = canonicalPath.startsWith("http") ? canonicalPath : `${baseUrl}${canonicalPath}`;
+  
+  // Use provided canonical or derive from current route
+  const canonicalPath = canonical || canonicalUrl || location.pathname;
+  const fullCanonical = canonicalPath.startsWith("http") 
+    ? canonicalPath 
+    : `${baseUrl}${canonicalPath === "/" ? "" : canonicalPath}`;
+  
   const fullTitle = title.includes("Therizo") ? title : `${title} | Therizo`;
   const keywordsArray = typeof keywords === "string" ? keywords.split(",").map(k => k.trim()) : keywords;
 
@@ -67,6 +86,19 @@ export function SEOHead({
     }
     link.setAttribute("href", fullCanonical);
 
+    // Hreflang tags for international SEO
+    // Remove existing hreflang tags first
+    document.querySelectorAll('link[hreflang]').forEach(el => el.remove());
+    
+    // Add hreflang tags for each configured language/region
+    hreflangConfig.forEach(({ lang }) => {
+      const hreflangLink = document.createElement("link");
+      hreflangLink.setAttribute("rel", "alternate");
+      hreflangLink.setAttribute("hreflang", lang);
+      hreflangLink.setAttribute("href", fullCanonical);
+      document.head.appendChild(hreflangLink);
+    });
+
     // Open Graph
     updateMeta("og:title", fullTitle, true);
     updateMeta("og:description", description, true);
@@ -75,6 +107,12 @@ export function SEOHead({
     updateMeta("og:image", ogImage, true);
     updateMeta("og:site_name", "Therizo Property and Development Corporation", true);
     updateMeta("og:locale", "en_NG", true);
+    
+    // Additional og:locale:alternate for international targeting
+    const localeAlternates = ["en_GB", "en_US", "en_CA", "en_AE"];
+    localeAlternates.forEach(locale => {
+      updateMeta(`og:locale:alternate:${locale}`, locale, true);
+    });
 
     if (publishedTime) {
       updateMeta("article:published_time", publishedTime, true);
@@ -94,6 +132,8 @@ export function SEOHead({
     return () => {
       // Reset to default on unmount
       document.title = "Therizo Property and Development Corporation | Nigerian Real Estate";
+      // Remove hreflang tags on unmount
+      document.querySelectorAll('link[hreflang]').forEach(el => el.remove());
     };
   }, [fullTitle, description, fullCanonical, ogImage, ogType, publishedTime, modifiedTime, keywordsArray, noindex]);
 
