@@ -74,12 +74,23 @@ export function LeadForm({ open, onClose, onSuccess, initialData }: LeadFormProp
     },
   });
 
+  // Reset form when initialData changes (e.g., when converting enquiry to lead)
   useEffect(() => {
     if (open) {
+      form.reset({
+        client_id: initialData?.client_id || "",
+        property_id: initialData?.property_id || "",
+        stage: initialData?.stage || "new",
+        preferred_city: initialData?.preferred_city || "",
+        preferred_neighbourhoods: initialData?.preferred_neighbourhoods || "",
+        budget_min_ngn: initialData?.budget_min_ngn || undefined,
+        budget_max_ngn: initialData?.budget_max_ngn || undefined,
+        lost_reason: initialData?.lost_reason || "",
+      });
       fetchClients();
       fetchProperties();
     }
-  }, [open]);
+  }, [open, initialData?.client_id]);
 
   const fetchClients = async () => {
     const { data } = await supabase.from("clients").select("id, full_name").order("full_name");
