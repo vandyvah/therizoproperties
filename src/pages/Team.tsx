@@ -2,6 +2,9 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Users, MapPin, ArrowRight } from "lucide-react";
+import { SEOHead } from "@/components/seo/SEOHead";
+import { JsonLd, createOrganizationSchema } from "@/components/seo/JsonLd";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 
 const founder = {
   name: "Victor",
@@ -43,10 +46,19 @@ const workflowSteps = [
 const Team = () => {
   return (
     <Layout>
+      <SEOHead
+        title="Meet the Therizo Team | Nigerian Property Consultants"
+        description="Meet our experienced property consultants serving Lagos, Abuja, and key Nigerian markets. Trusted advisors for buyers, investors, and developers."
+        keywords="Nigerian real estate team, Lagos property consultants, Abuja real estate agents, Therizo team, Nigerian property experts"
+        canonicalUrl="https://therizo.com/team"
+      />
+      <JsonLd data={createOrganizationSchema()} />
+      
       {/* Hero */}
       <section className="pt-32 pb-16 bg-navy">
         <div className="container-wide">
-          <div className="max-w-3xl">
+          <Breadcrumbs items={[{ label: "Team", href: "/team" }]} />
+          <div className="max-w-3xl mt-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-sm bg-gold/20 flex items-center justify-center">
                 <Users className="text-gold" size={24} />

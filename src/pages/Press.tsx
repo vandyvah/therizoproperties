@@ -1,7 +1,7 @@
 import { Layout } from "@/components/layout/Layout";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
-import { OrganizationJsonLd } from "@/components/seo/JsonLd";
+import { JsonLd, createOrganizationSchema } from "@/components/seo/JsonLd";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { 
@@ -63,22 +63,7 @@ export default function Press() {
           "real estate press release Nigeria"
         ]}
       />
-      <OrganizationJsonLd
-        data={{
-          type: "RealEstateAgent",
-          name: "Therizo Property and Development Corporation",
-          description: "Curated Nigerian properties with verified titles and disciplined returns. Serving Lagos, Abuja, Port Harcourt and diaspora investors.",
-          url: "https://therizo.com",
-          telephone: "+234 123 456 7890",
-          email: "press@therizo.com",
-          address: {
-            addressLocality: "Lagos",
-            addressRegion: "Lagos State",
-            addressCountry: "Nigeria",
-          },
-          areaServed: ["Lagos", "Abuja", "Port Harcourt", "Nigeria"],
-        }}
-      />
+      <JsonLd data={createOrganizationSchema()} />
 
       {/* Hero */}
       <section className="pt-32 pb-16 bg-navy">

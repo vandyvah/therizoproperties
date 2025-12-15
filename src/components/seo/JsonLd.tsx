@@ -1,23 +1,5 @@
 import { useEffect } from "react";
 
-interface OrganizationSchema {
-  type: "Organization" | "RealEstateAgent" | "LocalBusiness";
-  name: string;
-  description: string;
-  url: string;
-  logo?: string;
-  telephone?: string;
-  email?: string;
-  address?: {
-    streetAddress?: string;
-    addressLocality: string;
-    addressRegion: string;
-    addressCountry: string;
-  };
-  areaServed?: string[];
-  sameAs?: string[];
-}
-
 interface FAQItem {
   question: string;
   answer: string;
@@ -55,66 +37,118 @@ interface BreadcrumbItem {
   url: string;
 }
 
-// Organization Schema
-export function OrganizationJsonLd({ data }: { data: OrganizationSchema }) {
+// Generic JsonLd component for any schema data
+export function JsonLd({ data }: { data: Record<string, unknown> }) {
   useEffect(() => {
     const script = document.createElement("script");
     script.type = "application/ld+json";
-    script.id = "organization-jsonld";
-    
-    const schema = {
-      "@context": "https://schema.org",
-      "@type": data.type,
-      name: data.name,
-      description: data.description,
-      url: data.url,
-      logo: data.logo,
-      telephone: data.telephone,
-      email: data.email,
-      address: data.address ? {
-        "@type": "PostalAddress",
-        ...data.address,
-      } : undefined,
-      areaServed: data.areaServed,
-      sameAs: data.sameAs,
-    };
-
-    script.textContent = JSON.stringify(schema);
-    
-    // Remove existing and add new
-    const existing = document.getElementById("organization-jsonld");
-    if (existing) existing.remove();
+    script.id = `jsonld-${Math.random().toString(36).slice(2, 9)}`;
+    script.textContent = JSON.stringify(data);
     document.head.appendChild(script);
 
     return () => {
-      const el = document.getElementById("organization-jsonld");
-      if (el) el.remove();
+      script.remove();
     };
   }, [data]);
 
   return null;
 }
 
-// FAQ Schema
+// Helper function to create Organization schema
+export function createOrganizationSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Therizo Property and Development Corporation",
+    description: "Premium Nigerian real estate firm serving serious buyers, diaspora investors, and developers with verified properties and disciplined due diligence.",
+    url: "https://therizo.com",
+    telephone: "+234 123 456 7890",
+    email: "hello@therizo.com",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Lagos",
+      addressRegion: "Lagos State",
+      addressCountry: "NG",
+    },
+    areaServed: ["Lagos", "Abuja", "Port Harcourt", "Ogun State"],
+    sameAs: [],
+  };
+}
+
+// Helper function to create RealEstateAgent schema
+export function createRealEstateAgentSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "RealEstateAgent",
+    name: "Therizo Property and Development Corporation",
+    description: "Boutique real estate firm specializing in verified Nigerian properties with clean titles and transparent pricing.",
+    url: "https://therizo.com",
+    telephone: "+234 123 456 7890",
+    email: "hello@therizo.com",
+    priceRange: "₦₦₦",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Lagos",
+      addressRegion: "Lagos State",
+      addressCountry: "NG",
+    },
+    areaServed: [
+      { "@type": "City", name: "Lagos" },
+      { "@type": "City", name: "Abuja" },
+      { "@type": "City", name: "Port Harcourt" },
+    ],
+  };
+}
+
+// Helper function to create FAQ schema
+export function createFAQSchema(faqs: FAQItem[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map(faq => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+}
+
+// Helper function to create Article schema
+export function createArticleSchema(data: ArticleSchema) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: data.headline,
+    description: data.description,
+    author: {
+      "@type": "Organization",
+      name: data.author,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Therizo Property and Development Corporation",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://therizo.com/logo.png",
+      },
+    },
+    datePublished: data.datePublished,
+    dateModified: data.dateModified || data.datePublished,
+    image: data.image,
+  };
+}
+
+// FAQ Schema component (for backward compatibility)
 export function FAQJsonLd({ items }: { items: FAQItem[] }) {
   useEffect(() => {
     const script = document.createElement("script");
     script.type = "application/ld+json";
     script.id = "faq-jsonld";
     
-    const schema = {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: items.map(item => ({
-        "@type": "Question",
-        name: item.question,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: item.answer,
-        },
-      })),
-    };
-
+    const schema = createFAQSchema(items);
     script.textContent = JSON.stringify(schema);
     
     const existing = document.getElementById("faq-jsonld");
@@ -126,95 +160,6 @@ export function FAQJsonLd({ items }: { items: FAQItem[] }) {
       if (el) el.remove();
     };
   }, [items]);
-
-  return null;
-}
-
-// Article Schema
-export function ArticleJsonLd({ data }: { data: ArticleSchema }) {
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.id = "article-jsonld";
-    
-    const schema = {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: data.headline,
-      description: data.description,
-      author: {
-        "@type": "Organization",
-        name: data.author,
-      },
-      publisher: {
-        "@type": "Organization",
-        name: "Therizo Property and Development Corporation",
-        logo: {
-          "@type": "ImageObject",
-          url: "https://therizo.com/logo.png",
-        },
-      },
-      datePublished: data.datePublished,
-      dateModified: data.dateModified || data.datePublished,
-      image: data.image,
-    };
-
-    script.textContent = JSON.stringify(schema);
-    
-    const existing = document.getElementById("article-jsonld");
-    if (existing) existing.remove();
-    document.head.appendChild(script);
-
-    return () => {
-      const el = document.getElementById("article-jsonld");
-      if (el) el.remove();
-    };
-  }, [data]);
-
-  return null;
-}
-
-// Real Estate Listing Schema
-export function RealEstateListingJsonLd({ data }: { data: RealEstateListingSchema }) {
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.id = "realestate-jsonld";
-    
-    const schema = {
-      "@context": "https://schema.org",
-      "@type": "RealEstateListing",
-      name: data.name,
-      description: data.description,
-      offers: {
-        "@type": "Offer",
-        price: data.price,
-        priceCurrency: data.priceCurrency,
-      },
-      address: {
-        "@type": "PostalAddress",
-        ...data.address,
-      },
-      numberOfRooms: data.numberOfRooms,
-      floorSize: data.floorSize ? {
-        "@type": "QuantitativeValue",
-        value: data.floorSize.value,
-        unitCode: data.floorSize.unitCode,
-      } : undefined,
-      image: data.image,
-    };
-
-    script.textContent = JSON.stringify(schema);
-    
-    const existing = document.getElementById("realestate-jsonld");
-    if (existing) existing.remove();
-    document.head.appendChild(script);
-
-    return () => {
-      const el = document.getElementById("realestate-jsonld");
-      if (el) el.remove();
-    };
-  }, [data]);
 
   return null;
 }

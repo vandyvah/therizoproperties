@@ -4,11 +4,12 @@ interface SEOHeadProps {
   title: string;
   description: string;
   canonical?: string;
+  canonicalUrl?: string; // alias for canonical
   ogImage?: string;
   ogType?: "website" | "article" | "product";
   publishedTime?: string;
   modifiedTime?: string;
-  keywords?: string[];
+  keywords?: string | string[];
   noindex?: boolean;
 }
 
@@ -16,6 +17,7 @@ export function SEOHead({
   title,
   description,
   canonical,
+  canonicalUrl,
   ogImage = "https://lovable.dev/opengraph-image-p98pqg.png",
   ogType = "website",
   publishedTime,
@@ -24,8 +26,10 @@ export function SEOHead({
   noindex = false,
 }: SEOHeadProps) {
   const baseUrl = "https://therizo.com";
-  const fullCanonical = canonical ? `${baseUrl}${canonical}` : baseUrl;
+  const canonicalPath = canonical || canonicalUrl || "";
+  const fullCanonical = canonicalPath.startsWith("http") ? canonicalPath : `${baseUrl}${canonicalPath}`;
   const fullTitle = title.includes("Therizo") ? title : `${title} | Therizo`;
+  const keywordsArray = typeof keywords === "string" ? keywords.split(",").map(k => k.trim()) : keywords;
 
   useEffect(() => {
     // Update document title
@@ -45,8 +49,8 @@ export function SEOHead({
 
     // Core SEO
     updateMeta("description", description);
-    if (keywords.length > 0) {
-      updateMeta("keywords", keywords.join(", "));
+    if (keywordsArray.length > 0) {
+      updateMeta("keywords", keywordsArray.join(", "));
     }
     if (noindex) {
       updateMeta("robots", "noindex, nofollow");
@@ -91,7 +95,7 @@ export function SEOHead({
       // Reset to default on unmount
       document.title = "Therizo Property and Development Corporation | Nigerian Real Estate";
     };
-  }, [fullTitle, description, fullCanonical, ogImage, ogType, publishedTime, modifiedTime, keywords, noindex]);
+  }, [fullTitle, description, fullCanonical, ogImage, ogType, publishedTime, modifiedTime, keywordsArray, noindex]);
 
   return null;
 }

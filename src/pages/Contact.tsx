@@ -15,6 +15,29 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, Phone, MapPin, Send, MessageSquare } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { SEOHead } from "@/components/seo/SEOHead";
+import { JsonLd, createOrganizationSchema, createFAQSchema } from "@/components/seo/JsonLd";
+import { FAQSection } from "@/components/seo/FAQSection";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+
+const contactFAQs = [
+  {
+    question: "How quickly does Therizo respond to enquiries?",
+    answer: "We acknowledge all enquiries within the same business day when possible. A senior consultant will review your request and respond with next steps, typically within 24-48 hours depending on volume and time zones."
+  },
+  {
+    question: "Can I schedule a property viewing before visiting Nigeria?",
+    answer: "Yes. We offer virtual property tours and can coordinate in-person viewings to align with your travel schedule. Our concierge service also includes airport pickup for serious buyers."
+  },
+  {
+    question: "Does Therizo charge consultation fees?",
+    answer: "Initial consultations are complimentary. We operate on a commission basis when transactions are completed, ensuring our interests are aligned with yours."
+  },
+  {
+    question: "What information should I prepare before contacting Therizo?",
+    answer: "Please share your budget range, preferred locations, property type, and timeline. This helps us match you with suitable properties and assign the right consultant to your needs."
+  }
+];
 
 const clientTypes = ["Buyer", "Seller", "Investor / Developer", "Landowner", "Other"];
 
@@ -87,9 +110,19 @@ const Contact = () => {
 
   return (
     <Layout>
+      <SEOHead
+        title="Contact Therizo | Nigerian Property Consultation & Enquiries"
+        description="Get in touch with Therizo for Nigerian real estate consultation. Speak with senior property consultants in Lagos, Abuja & Port Harcourt. Same-day response for serious buyers."
+        keywords="contact Nigerian real estate agent, Lagos property consultant, Abuja real estate enquiry, diaspora property investment help, Nigerian property consultation"
+        canonicalUrl="https://therizo.com/contact"
+      />
+      <JsonLd data={createOrganizationSchema()} />
+      <JsonLd data={createFAQSchema(contactFAQs)} />
+      
       {/* Hero */}
       <section className="pt-32 pb-16 bg-navy">
         <div className="container-wide">
+          <Breadcrumbs items={[{ label: "Contact", href: "/contact" }]} />
           <div className="max-w-3xl">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-sm bg-gold/20 flex items-center justify-center">
@@ -317,6 +350,18 @@ const Contact = () => {
               </Card>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="section-padding bg-muted/50">
+        <div className="container-wide">
+          <div className="max-w-3xl mx-auto text-center mb-12">
+            <h2 className="font-display text-2xl md:text-3xl font-semibold text-ink mb-4">
+              Contact FAQs
+            </h2>
+          </div>
+          <FAQSection faqs={contactFAQs} />
         </div>
       </section>
 
