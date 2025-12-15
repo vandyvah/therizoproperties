@@ -115,6 +115,7 @@ const Contact = () => {
         description="Get in touch with Therizo for Nigerian real estate consultation. Speak with senior property consultants in Lagos, Abuja & Port Harcourt. Same-day response for serious buyers."
         keywords="contact Nigerian real estate agent, Lagos property consultant, Abuja real estate enquiry, diaspora property investment help, Nigerian property consultation"
         canonicalUrl="https://therizo.com/contact"
+        ogImage="https://therizo.com/og/og-contact.jpg"
       />
       <JsonLd data={createOrganizationSchema()} />
       <JsonLd data={createFAQSchema(contactFAQs)} />
