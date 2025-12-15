@@ -2,7 +2,7 @@ import { Layout } from "@/components/layout/Layout";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FAQSection } from "@/components/seo/FAQSection";
-import { ArticleJsonLd } from "@/components/seo/JsonLd";
+import { JsonLd, createArticleSchema } from "@/components/seo/JsonLd";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { 
@@ -115,15 +115,13 @@ export default function ROIMethodology() {
           "Nigerian property investment analysis"
         ]}
       />
-      <ArticleJsonLd
-        data={{
-          headline: "ROI Calculation Methodology for Nigerian Real Estate Investments",
-          description: "How we calculate and present property investment returns - cap rates, yields, and payback periods explained.",
-          author: "Therizo Property and Development Corporation",
-          datePublished: "2025-01-15",
-          dateModified: "2025-12-15",
-        }}
-      />
+      <JsonLd data={createArticleSchema({
+        headline: "ROI Calculation Methodology for Nigerian Real Estate Investments",
+        description: "How we calculate and present property investment returns - cap rates, yields, and payback periods explained.",
+        author: "Therizo Property and Development Corporation",
+        datePublished: "2025-01-15",
+        dateModified: "2025-12-15",
+      })} />
 
       {/* Hero */}
       <section className="pt-32 pb-16 bg-navy">

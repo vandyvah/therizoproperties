@@ -10,6 +10,29 @@ import {
   Users,
   Heart,
 } from "lucide-react";
+import { SEOHead } from "@/components/seo/SEOHead";
+import { JsonLd, createFAQSchema } from "@/components/seo/JsonLd";
+import { FAQSection } from "@/components/seo/FAQSection";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+
+const standardFAQs = [
+  {
+    question: "How does Therizo verify property ownership in Nigeria?",
+    answer: "We work with licensed legal partners to verify ownership through land registry searches, title document review (C of O, Governor's Consent, Survey Plans), and confirmation of the chain of ownership before any property is listed."
+  },
+  {
+    question: "What happens if a property fails Therizo's vetting process?",
+    answer: "We walk away. If documentation is incomplete, pricing is unrealistic, or we identify red flags, we do not list the property—even if it means losing potential commission."
+  },
+  {
+    question: "Does Therizo provide legal services?",
+    answer: "No. We are not a law firm. However, we work with trusted legal partners and can coordinate with your own solicitor to ensure proper due diligence and documentation."
+  },
+  {
+    question: "How does Therizo evaluate developer projects?",
+    answer: "We assess track record of completion, transparency on costs and timelines, quality of construction, planning approvals, and the realism of projected returns before recommending any developer project."
+  }
+];
 
 const refusals = [
   "We do not push deals we cannot explain.",
@@ -57,10 +80,19 @@ const promises = [
 const OurStandard = () => {
   return (
     <Layout>
+      <SEOHead
+        title="Our Standard | Nigerian Property Due Diligence & Verification"
+        description="Learn how Therizo vets Nigerian properties. Our rigorous due diligence process includes title verification, price validation, and risk assessment to protect buyers."
+        keywords="Nigerian property verification, title due diligence Nigeria, property vetting Lagos, real estate verification Abuja, safe property investment Nigeria"
+        canonicalUrl="https://therizo.com/our-standard"
+      />
+      <JsonLd data={createFAQSchema(standardFAQs)} />
+      
       {/* Hero */}
       <section className="pt-32 pb-16 bg-navy">
         <div className="container-wide">
-          <div className="max-w-3xl">
+          <Breadcrumbs items={[{ label: "Our Standard", href: "/our-standard" }]} />
+          <div className="max-w-3xl mt-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-sm bg-gold/20 flex items-center justify-center">
                 <Shield className="text-gold" size={24} />

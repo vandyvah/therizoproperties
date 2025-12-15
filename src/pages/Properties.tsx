@@ -6,6 +6,29 @@ import { MapPin, ArrowRight, Building } from "lucide-react";
 import property1 from "@/assets/property-1.jpg";
 import property2 from "@/assets/property-2.jpg";
 import property3 from "@/assets/property-3.jpg";
+import { SEOHead } from "@/components/seo/SEOHead";
+import { JsonLd, createFAQSchema } from "@/components/seo/JsonLd";
+import { FAQSection } from "@/components/seo/FAQSection";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+
+const propertyFAQs = [
+  {
+    question: "Are all Therizo properties verified for clean titles?",
+    answer: "Yes. Every property listed on Therizo undergoes our rigorous due diligence process, including ownership verification, title document review, and market price validation before being approved for listing."
+  },
+  {
+    question: "Can I invest in Nigerian property from abroad?",
+    answer: "Absolutely. Many of our clients are diaspora investors. We handle on-ground coordination, property inspections, documentation, and can work with your legal representatives to complete transactions remotely."
+  },
+  {
+    question: "What locations does Therizo cover?",
+    answer: "We focus on prime markets including Lagos (Lekki, Ikoyi, Victoria Island, Ajah), Abuja (Maitama, Wuse), Port Harcourt, and select growth corridors in Ogun State and other regions."
+  },
+  {
+    question: "How do I calculate potential returns on a property?",
+    answer: "Use our free ROI Calculator to estimate rental yields, cap rates, and payback periods. Our consultants can also provide market-specific analysis for any property you're considering."
+  }
+];
 
 const properties = [
   {
@@ -91,10 +114,19 @@ const properties = [
 const Properties = () => {
   return (
     <Layout>
+      <SEOHead
+        title="Nigerian Properties for Sale | Verified Listings in Lagos & Abuja"
+        description="Browse verified Nigerian properties with clean titles. Luxury homes, investment apartments, and development opportunities in Lagos, Abuja, and key growth markets."
+        keywords="Nigerian properties for sale, Lagos real estate listings, Abuja property investment, Lekki homes for sale, Ikoyi luxury apartments, verified Nigerian property"
+        canonicalUrl="https://therizo.com/properties"
+      />
+      <JsonLd data={createFAQSchema(propertyFAQs)} />
+      
       {/* Hero */}
       <section className="pt-32 pb-16 bg-navy">
         <div className="container-wide">
-          <div className="max-w-3xl">
+          <Breadcrumbs items={[{ label: "Properties", href: "/properties" }]} />
+          <div className="max-w-3xl mt-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-lg bg-gold/20 flex items-center justify-center">
                 <Building className="text-gold" size={24} />
@@ -182,6 +214,18 @@ const Properties = () => {
               <ArrowRight size={18} className="ml-2" />
             </Link>
           </Button>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="section-padding bg-muted/50">
+        <div className="container-wide">
+          <div className="max-w-3xl mx-auto text-center mb-12">
+            <h2 className="font-display text-2xl md:text-3xl font-semibold text-ink mb-4">
+              Property Investment FAQs
+            </h2>
+          </div>
+          <FAQSection faqs={propertyFAQs} />
         </div>
       </section>
     </Layout>

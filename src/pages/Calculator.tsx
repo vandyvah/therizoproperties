@@ -22,6 +22,13 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { z } from "zod";
+import { SEOHead } from "@/components/seo/SEOHead";
+import { JsonLd, createFAQSchema } from "@/components/seo/JsonLd";
+
+const calculatorFAQs = [
+  { question: "How accurate are the ROI calculations?", answer: "Our calculations use standard investment metrics (cap rate, cash-on-cash return, payback period) based on the numbers you enter. Actual returns depend on market conditions, expenses, and occupancy rates." },
+  { question: "What's included in operating expenses?", answer: "We estimate 2% of property value for taxes, insurance, and maintenance, plus a 10% management fee on rental income." },
+];
 
 type Strategy = "long-term" | "airbnb" | "compare";
 
@@ -452,6 +459,14 @@ const Calculator_Page = () => {
 
   return (
     <Layout>
+      <SEOHead
+        title="Nigerian Property ROI Calculator | Rental Yield & Investment Returns"
+        description="Free ROI calculator for Nigerian real estate. Calculate rental yields, cap rates, and payback periods for Lagos, Abuja property investments. Compare long-term vs Airbnb strategies."
+        canonicalUrl="/calculator"
+        keywords="Nigerian property ROI calculator, Lagos rental yield calculator, Abuja real estate investment returns, property cap rate Nigeria, Airbnb vs rental income Nigeria"
+      />
+      <JsonLd data={createFAQSchema(calculatorFAQs)} />
+      
       {/* Header */}
       <section className="pt-28 pb-12 bg-ivory">
         <div className="container-wide text-center">
