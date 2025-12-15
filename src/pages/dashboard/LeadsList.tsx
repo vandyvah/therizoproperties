@@ -6,7 +6,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Plus, Loader2, Eye, Mail, UserCheck } from "lucide-react";
+import { Plus, Loader2, Eye, Mail, UserCheck, UserPlus } from "lucide-react";
+import { toast } from "sonner";
 import { LeadForm } from "@/components/dashboard/LeadForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
@@ -75,7 +76,13 @@ export default function LeadsList() {
   const [contactSubmissions, setContactSubmissions] = useState<ContactSubmission[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const { isAdmin } = useAuth();
+  const [convertingId, setConvertingId] = useState<string | null>(null);
+  const [prefilledClientId, setPrefilledClientId] = useState<string | undefined>(undefined);
+  const [prefilledData, setPrefilledData] = useState<{
+    preferred_city?: string;
+    budget_max_ngn?: number;
+  } | undefined>(undefined);
+  const { isAdmin, profile } = useAuth();
 
   useEffect(() => {
     fetchData();
@@ -129,6 +136,74 @@ export default function LeadsList() {
     } catch (error) {
       console.error("Error updating status:", error);
     }
+  };
+
+  const convertToLead = async (contact: ContactSubmission) => {
+    if (!profile) {
+      toast.error("You must be logged in");
+      return;
+    }
+
+    setConvertingId(contact.id);
+    try {
+      // Map client_type to valid enum value
+      const clientTypeMap: Record<string, string> = {
+        "buyer": "buyer",
+        "seller": "seller",
+        "investor": "investor_developer",
+        "developer": "investor_developer",
+        "landowner": "landowner",
+      };
+      const clientType = clientTypeMap[contact.client_type?.toLowerCase() || ""] || "buyer";
+
+      // Create client from contact submission
+      const { data: newClient, error: clientError } = await supabase
+        .from("clients")
+        .insert({
+          full_name: contact.name,
+          email: contact.email,
+          phone: contact.phone,
+          client_type: clientType as any,
+          source: "website_form" as const,
+          notes: `Converted from website enquiry.\nOriginal message: ${contact.message}`,
+          assigned_consultant_id: profile.id,
+        })
+        .select()
+        .single();
+
+      if (clientError) throw clientError;
+
+      // Parse budget string to number (remove currency symbols and commas)
+      let budgetValue: number | undefined;
+      if (contact.budget) {
+        const numericBudget = contact.budget.replace(/[^0-9]/g, "");
+        budgetValue = numericBudget ? parseInt(numericBudget, 10) : undefined;
+      }
+
+      // Update contact submission status
+      await updateContactStatus(contact.id, "closed");
+
+      // Pre-fill lead form data
+      setPrefilledClientId(newClient.id);
+      setPrefilledData({
+        preferred_city: contact.preferred_location || undefined,
+        budget_max_ngn: budgetValue,
+      });
+      setShowForm(true);
+
+      toast.success(`Client "${contact.name}" created! Complete the lead details.`);
+    } catch (error: any) {
+      console.error("Error converting to lead:", error);
+      toast.error(error.message || "Failed to convert enquiry");
+    } finally {
+      setConvertingId(null);
+    }
+  };
+
+  const handleFormClose = () => {
+    setShowForm(false);
+    setPrefilledClientId(undefined);
+    setPrefilledData(undefined);
   };
 
   const formatCurrency = (value: number | null) => {
@@ -319,7 +394,16 @@ export default function LeadsList() {
                                     </span>
                                   </div>
                                   {status !== "closed" && (
-                                    <div className="flex gap-2 pt-2">
+                                    <div className="flex flex-wrap gap-2 pt-2">
+                                      <Button 
+                                        size="sm" 
+                                        className="text-xs h-7"
+                                        disabled={convertingId === contact.id}
+                                        onClick={() => convertToLead(contact)}
+                                      >
+                                        <UserPlus size={12} className="mr-1" />
+                                        {convertingId === contact.id ? "Converting..." : "Convert to Lead"}
+                                      </Button>
                                       {status === "new" && (
                                         <Button 
                                           size="sm" 
@@ -356,8 +440,14 @@ export default function LeadsList() {
 
         <LeadForm
           open={showForm}
-          onClose={() => setShowForm(false)}
+          onClose={handleFormClose}
           onSuccess={fetchData}
+          initialData={prefilledClientId ? {
+            client_id: prefilledClientId,
+            stage: "new",
+            preferred_city: prefilledData?.preferred_city,
+            budget_max_ngn: prefilledData?.budget_max_ngn,
+          } : undefined}
         />
       </div>
     </DashboardLayout>
