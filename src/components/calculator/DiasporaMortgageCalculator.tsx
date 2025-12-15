@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
@@ -37,14 +37,25 @@ const formatForeignCurrency = (value: number, currency: "USD" | "GBP" | "EUR"): 
 };
 
 export const DiasporaMortgageCalculator = () => {
-  const [data, setData] = useState<MortgageData>({
+  const initialData: MortgageData = {
     propertyPrice: "150000000",
     foreignIncome: "8000",
     currency: "USD",
     loanTermYears: "20",
     interestRate: "12",
     downPaymentPercent: "30",
-  });
+  };
+
+  const [data, setData] = useState<MortgageData>(initialData);
+  const [debouncedData, setDebouncedData] = useState<MortgageData>(initialData);
+
+  // Debounce data updates to prevent lag during typing
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedData(data);
+    }, 150);
+    return () => clearTimeout(timer);
+  }, [data]);
 
   const parseNumber = (value: string): number => {
     return parseFloat(value.replace(/,/g, "")) || 0;
@@ -59,13 +70,14 @@ export const DiasporaMortgageCalculator = () => {
     }
   };
 
+  // Calculate results using debounced data to prevent typing lag
   const results = useMemo(() => {
-    const propertyPrice = parseNumber(data.propertyPrice);
-    const foreignMonthlyIncome = parseNumber(data.foreignIncome);
-    const rate = exchangeRates[data.currency];
-    const loanTerm = parseNumber(data.loanTermYears);
-    const annualInterest = parseNumber(data.interestRate) / 100;
-    const downPaymentPct = parseNumber(data.downPaymentPercent) / 100;
+    const propertyPrice = parseNumber(debouncedData.propertyPrice);
+    const foreignMonthlyIncome = parseNumber(debouncedData.foreignIncome);
+    const rate = exchangeRates[debouncedData.currency];
+    const loanTerm = parseNumber(debouncedData.loanTermYears);
+    const annualInterest = parseNumber(debouncedData.interestRate) / 100;
+    const downPaymentPct = parseNumber(debouncedData.downPaymentPercent) / 100;
 
     const monthlyIncomeNGN = foreignMonthlyIncome * rate;
     const annualIncomeNGN = monthlyIncomeNGN * 12;
@@ -101,7 +113,7 @@ export const DiasporaMortgageCalculator = () => {
       isEligible,
       foreignMonthlyIncome,
     };
-  }, [data]);
+  }, [debouncedData]);
 
   return (
     <div className="space-y-6">
