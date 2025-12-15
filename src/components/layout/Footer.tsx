@@ -129,7 +129,7 @@ export function Footer() {
             <ul className="space-y-3">
               <li className="flex items-start gap-3 text-sm text-ivory/70">
                 <MapPin size={18} className="shrink-0 mt-0.5 text-gold" />
-                <span>Lagos, Abuja & Key Growth Markets</span>
+                <span>Suite C1, Plot 759, Kubwa Extension, F15, Abuja</span>
               </li>
               <li>
                 <a
@@ -142,11 +142,11 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="tel:+2341234567890"
+                  href="tel:+2348034830087"
                   className="flex items-center gap-3 text-sm text-ivory/70 hover:text-gold transition-colors"
                 >
                   <Phone size={18} className="shrink-0 text-gold" />
-                  <span>+234 123 456 7890</span>
+                  <span>+234 803 483 0087</span>
                 </a>
               </li>
             </ul>
