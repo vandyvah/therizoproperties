@@ -13,6 +13,7 @@ import Team from "./pages/Team";
 import Contact from "./pages/Contact";
 import Properties from "./pages/Properties";
 import Vault from "./pages/Vault";
+import StyleGuide from "./pages/StyleGuide";
 import NotFound from "./pages/NotFound";
 import DashboardAuth from "./pages/dashboard/DashboardAuth";
 import DashboardHome from "./pages/dashboard/DashboardHome";
@@ -44,6 +45,7 @@ const App = () => (
               <Route path="/contact" element={<Contact />} />
               <Route path="/properties" element={<Properties />} />
               <Route path="/vault" element={<Vault />} />
+              <Route path="/style-guide" element={<StyleGuide />} />
               
               {/* Dashboard Routes */}
               <Route path="/dashboard/auth" element={<DashboardAuth />} />

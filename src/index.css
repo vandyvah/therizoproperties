@@ -13,64 +13,81 @@
 
 @layer base {
   :root {
-    /* Therizo Luxury Real Estate - Refined Palette */
-    --background: 30 25% 96%;
-    --foreground: 215 35% 12%;
+    /* Therizo Luxury Brand Theme */
+    /* Primary / Brand Navy: #081A2F */
+    --navy: 213 71% 11%;
+    --navy-light: 213 50% 18%;
+    --navy-dark: 213 80% 7%;
+    
+    /* Secondary / Charcoal: #0F1216 */
+    --charcoal: 216 13% 7%;
+    
+    /* Accent / Champagne Gold: #C7A86A */
+    --gold: 40 48% 60%;
+    --gold-light: 40 48% 70%;
+    --gold-dark: 40 48% 50%;
+    
+    /* Optional Accent 2 / Emerald: #1F6F5B */
+    --emerald: 163 56% 28%;
+    --emerald-light: 163 50% 38%;
+    
+    /* Background / Ivory: #F7F3EA */
+    --ivory: 42 41% 94%;
+    
+    /* Surface / Warm White: #FFFCF6 */
+    --warm-white: 40 100% 98%;
+    
+    /* Borders / Sand Gray: #D8D1C5 */
+    --sand: 38 19% 81%;
+    
+    /* Text / Ink: #111827 */
+    --ink: 222 47% 11%;
+    
+    /* Muted Text / Slate: #6B7280 */
+    --slate: 220 9% 46%;
+    
+    /* Semantic tokens */
+    --background: 42 41% 94%;
+    --foreground: 222 47% 11%;
 
-    --card: 30 20% 99%;
-    --card-foreground: 215 35% 12%;
+    --card: 40 100% 98%;
+    --card-foreground: 222 47% 11%;
 
-    --popover: 30 20% 99%;
-    --popover-foreground: 215 35% 12%;
+    --popover: 40 100% 98%;
+    --popover-foreground: 222 47% 11%;
 
-    /* Deep Charcoal Navy - Authority & Trust */
-    --primary: 215 40% 14%;
-    --primary-foreground: 30 25% 96%;
+    --primary: 213 71% 11%;
+    --primary-foreground: 42 41% 94%;
 
-    /* Champagne Gold - Luxury & Prestige */
-    --secondary: 38 45% 52%;
-    --secondary-foreground: 215 35% 12%;
+    --secondary: 216 13% 7%;
+    --secondary-foreground: 42 41% 94%;
 
-    --muted: 30 15% 90%;
-    --muted-foreground: 215 20% 40%;
+    --muted: 38 19% 81%;
+    --muted-foreground: 220 9% 46%;
 
-    /* Rich Gold Accent */
-    --accent: 38 55% 48%;
-    --accent-foreground: 30 25% 96%;
+    --accent: 40 48% 60%;
+    --accent-foreground: 213 71% 11%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 30 15% 85%;
-    --input: 30 15% 85%;
-    --ring: 38 45% 52%;
+    --border: 38 19% 81%;
+    --input: 38 19% 81%;
+    --ring: 40 48% 60%;
 
     --radius: 0.25rem;
-
-    /* Custom Therizo tokens */
-    --navy: 215 40% 14%;
-    --navy-light: 215 30% 22%;
-    --navy-dark: 215 45% 8%;
-    --gold: 38 55% 48%;
-    --gold-light: 38 45% 62%;
-    --gold-dark: 38 60% 38%;
-    --cream: 30 25% 96%;
-    --cream-dark: 30 18% 90%;
-    --charcoal: 215 25% 18%;
-    --warm-white: 35 30% 98%;
     
     /* Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(215 40% 14% / 0.97), hsl(215 30% 22% / 0.90));
-    --gradient-gold: linear-gradient(135deg, hsl(38 55% 48%), hsl(38 45% 58%));
-    --gradient-subtle: linear-gradient(180deg, hsl(30 25% 96%), hsl(30 18% 93%));
-    --gradient-luxury: linear-gradient(135deg, hsl(215 40% 14%), hsl(215 45% 8%));
+    --gradient-hero: linear-gradient(135deg, hsl(213 71% 11% / 0.98), hsl(213 50% 18% / 0.92));
+    --gradient-gold: linear-gradient(135deg, hsl(40 48% 60%), hsl(40 48% 70%));
+    --gradient-subtle: linear-gradient(180deg, hsl(42 41% 94%), hsl(42 35% 91%));
+    --gradient-luxury: linear-gradient(135deg, hsl(213 71% 11%), hsl(216 13% 7%));
     
     /* Shadows */
-    --shadow-sm: 0 2px 8px hsl(215 40% 14% / 0.05);
-    --shadow-md: 0 4px 20px hsl(215 40% 14% / 0.08);
-    --shadow-lg: 0 8px 40px hsl(215 40% 14% / 0.12);
-    --shadow-gold: 0 4px 24px hsl(38 55% 48% / 0.20);
-    --shadow-elegant: 0 12px 48px hsl(215 40% 14% / 0.15);
+    --shadow-sm: 0 1px 3px hsl(213 71% 11% / 0.04);
+    --shadow-md: 0 4px 12px hsl(213 71% 11% / 0.06);
+    --shadow-lg: 0 8px 24px hsl(213 71% 11% / 0.08);
+    --shadow-gold: 0 4px 16px hsl(40 48% 60% / 0.15);
     
     /* Typography */
     --font-display: 'Playfair Display', serif;
@@ -81,44 +98,44 @@
     --transition-base: 250ms ease;
     --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
 
-    --sidebar-background: 30 20% 98%;
-    --sidebar-foreground: 215 30% 20%;
-    --sidebar-primary: 215 40% 14%;
-    --sidebar-primary-foreground: 30 25% 96%;
-    --sidebar-accent: 30 15% 94%;
-    --sidebar-accent-foreground: 215 30% 20%;
-    --sidebar-border: 30 15% 88%;
-    --sidebar-ring: 38 45% 52%;
+    --sidebar-background: 40 100% 98%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 213 71% 11%;
+    --sidebar-primary-foreground: 42 41% 94%;
+    --sidebar-accent: 42 41% 94%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 38 19% 81%;
+    --sidebar-ring: 40 48% 60%;
   }
 
   .dark {
-    --background: 215 35% 7%;
-    --foreground: 30 20% 94%;
+    --background: 216 13% 7%;
+    --foreground: 42 41% 94%;
 
-    --card: 215 32% 11%;
-    --card-foreground: 30 20% 94%;
+    --card: 213 71% 11%;
+    --card-foreground: 42 41% 94%;
 
-    --popover: 215 32% 11%;
-    --popover-foreground: 30 20% 94%;
+    --popover: 213 71% 11%;
+    --popover-foreground: 42 41% 94%;
 
-    --primary: 38 55% 52%;
-    --primary-foreground: 215 35% 7%;
+    --primary: 40 48% 60%;
+    --primary-foreground: 213 71% 11%;
 
-    --secondary: 215 30% 16%;
-    --secondary-foreground: 30 20% 94%;
+    --secondary: 213 50% 18%;
+    --secondary-foreground: 42 41% 94%;
 
-    --muted: 215 28% 14%;
-    --muted-foreground: 215 18% 55%;
+    --muted: 213 50% 18%;
+    --muted-foreground: 220 9% 60%;
 
-    --accent: 38 50% 45%;
-    --accent-foreground: 215 35% 7%;
+    --accent: 40 48% 55%;
+    --accent-foreground: 213 71% 11%;
 
     --destructive: 0 62% 35%;
-    --destructive-foreground: 30 20% 94%;
+    --destructive-foreground: 42 41% 94%;
 
-    --border: 215 28% 16%;
-    --input: 215 28% 16%;
-    --ring: 38 50% 45%;
+    --border: 213 50% 18%;
+    --input: 213 50% 18%;
+    --ring: 40 48% 55%;
   }
 }
 

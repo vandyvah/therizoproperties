@@ -22,13 +22,15 @@ const buttonVariants = cva(
         link: 
           "text-primary underline-offset-4 hover:underline",
         gold:
-          "bg-gold text-foreground hover:bg-gold/90 shadow-md hover:shadow-lg font-semibold",
+          "bg-gold text-navy hover:bg-gold-dark shadow-sm hover:shadow-md font-semibold",
         "gold-outline":
-          "border-2 border-gold bg-transparent text-gold hover:bg-gold hover:text-foreground font-semibold",
+          "border-2 border-gold bg-transparent text-gold hover:bg-gold/10 font-semibold",
+        inverse:
+          "bg-ivory text-navy hover:bg-ivory/90 border border-sand font-semibold",
         hero:
-          "bg-gold text-foreground hover:bg-gold/90 shadow-md hover:shadow-lg font-semibold tracking-wide",
+          "bg-gold text-navy hover:bg-gold-dark shadow-md hover:shadow-lg font-semibold tracking-wide",
         "hero-outline":
-          "border-2 border-white/30 bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm font-medium",
+          "border border-ivory/30 bg-transparent text-ivory hover:bg-ivory/10 font-medium",
       },
       size: {
         default: "h-11 px-6 py-2",
