@@ -33,7 +33,7 @@ import ViewingsList from "./pages/dashboard/ViewingsList";
 import DealsList from "./pages/dashboard/DealsList";
 import ROIList from "./pages/dashboard/ROIList";
 import Settings from "./pages/dashboard/Settings";
-import ContactSubmissions from "./pages/dashboard/ContactSubmissions";
+
 import UserManagement from "./pages/dashboard/UserManagement";
 
 const queryClient = new QueryClient();
@@ -79,7 +79,7 @@ const App = () => (
               <Route path="/dashboard/viewings" element={<ViewingsList />} />
               <Route path="/dashboard/deals" element={<DealsList />} />
               <Route path="/dashboard/roi" element={<ROIList />} />
-              <Route path="/dashboard/contacts" element={<ContactSubmissions />} />
+              
               <Route path="/dashboard/users" element={<UserManagement />} />
               <Route path="/dashboard/settings" element={<Settings />} />
               
