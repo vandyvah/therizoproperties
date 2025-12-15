@@ -92,7 +92,7 @@ const Properties = () => {
   return (
     <Layout>
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-primary">
+      <section className="pt-32 pb-16 bg-navy">
         <div className="container-wide">
           <div className="max-w-3xl">
             <div className="flex items-center gap-3 mb-6">
@@ -101,10 +101,10 @@ const Properties = () => {
               </div>
               <span className="text-gold font-medium">Our Portfolio</span>
             </div>
-            <h1 className="font-display text-4xl md:text-5xl font-semibold text-primary-foreground mb-6">
+            <h1 className="font-display text-4xl md:text-5xl font-semibold text-ivory mb-6">
               Selected Properties
             </h1>
-            <p className="text-lg text-primary-foreground/80 leading-relaxed">
+            <p className="text-lg text-ivory/80 leading-relaxed">
               A focused selection of properties we are comfortable standing
               behind. Each listing comes with clear documentation, transparent
               pricing, and support from a senior consultant.
@@ -114,13 +114,13 @@ const Properties = () => {
       </section>
 
       {/* Properties Grid */}
-      <section className="section-padding bg-background">
+      <section className="section-padding bg-ivory">
         <div className="container-wide">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {properties.map((property) => (
               <article
                 key={property.id}
-                className="group bg-card rounded-lg overflow-hidden border border-border hover:shadow-therizo-lg transition-all duration-300"
+                className="group bg-warm-white rounded-sm overflow-hidden border border-sand hover:shadow-lg transition-all duration-300"
               >
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <img
@@ -128,7 +128,7 @@ const Properties = () => {
                     alt={property.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <Badge className="absolute top-4 left-4 bg-gold text-foreground hover:bg-gold-light">
+                  <Badge className="absolute top-4 left-4 bg-gold text-navy hover:bg-gold-dark">
                     {property.tag}
                   </Badge>
                 </div>
@@ -137,19 +137,19 @@ const Properties = () => {
                     <MapPin size={14} />
                     <span>{property.location}</span>
                   </div>
-                  <h3 className="font-display text-lg font-semibold text-foreground mb-2 line-clamp-2">
+                  <h3 className="font-display text-lg font-semibold text-ink mb-2 line-clamp-2">
                     {property.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                  <p className="text-sm text-slate mb-4 line-clamp-2">
                     {property.description}
                   </p>
-                  <div className="flex items-center gap-4 text-xs text-muted-foreground mb-4 pb-4 border-b border-border">
+                  <div className="flex items-center gap-4 text-xs text-slate mb-4 pb-4 border-b border-sand">
                     <span>{property.beds} Beds</span>
                     <span>{property.baths} Baths</span>
                     <span>{property.sqm} sqm</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="font-display text-xl font-semibold text-primary">
+                    <span className="font-display text-xl font-semibold text-navy">
                       {property.price}
                     </span>
                     <Button variant="outline" size="sm" asChild>
@@ -167,12 +167,12 @@ const Properties = () => {
       </section>
 
       {/* CTA */}
-      <section className="section-padding bg-primary">
+      <section className="section-padding bg-navy">
         <div className="container-narrow text-center">
-          <h2 className="font-display text-3xl md:text-4xl font-semibold text-primary-foreground mb-6">
+          <h2 className="font-display text-3xl md:text-4xl font-semibold text-ivory mb-6">
             Looking for Something Specific?
           </h2>
-          <p className="text-lg text-primary-foreground/80 leading-relaxed mb-10 max-w-2xl mx-auto">
+          <p className="text-lg text-ivory/80 leading-relaxed mb-10 max-w-2xl mx-auto">
             Tell us your requirements and budget. We can source properties that
             match your criteria and meet our documentation standards.
           </p>

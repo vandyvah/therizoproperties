@@ -44,19 +44,19 @@ const Team = () => {
   return (
     <Layout>
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-primary">
+      <section className="pt-32 pb-16 bg-navy">
         <div className="container-wide">
           <div className="max-w-3xl">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-lg bg-gold/20 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-sm bg-gold/20 flex items-center justify-center">
                 <Users className="text-gold" size={24} />
               </div>
               <span className="text-gold font-medium">Our People</span>
             </div>
-            <h1 className="font-display text-4xl md:text-5xl font-semibold text-primary-foreground mb-6">
+            <h1 className="font-display text-4xl md:text-5xl font-semibold text-ivory mb-6">
               Team & Advisors
             </h1>
-            <p className="text-lg text-primary-foreground/80 leading-relaxed">
+            <p className="text-lg text-ivory/80 leading-relaxed">
               Therizo is built for clients who want clear answers and
               accountable people. Our team combines capital, on-ground
               experience, and local relationships across Nigeria's key markets.
@@ -66,24 +66,24 @@ const Team = () => {
       </section>
 
       {/* Founder */}
-      <section className="section-padding bg-background">
+      <section className="section-padding bg-ivory">
         <div className="container-wide">
           <div className="grid lg:grid-cols-3 gap-12 items-start">
             <div className="lg:col-span-1">
               <div className="text-center lg:text-left">
-                <div className="w-32 h-32 mx-auto lg:mx-0 rounded-full bg-gradient-to-br from-primary to-navy-light flex items-center justify-center mb-6">
-                  <span className="text-5xl font-display font-semibold text-primary-foreground">
+                <div className="w-32 h-32 mx-auto lg:mx-0 rounded-full bg-gradient-to-br from-navy to-navy-light flex items-center justify-center mb-6">
+                  <span className="text-5xl font-display font-semibold text-ivory">
                     {founder.initial}
                   </span>
                 </div>
-                <h2 className="font-display text-2xl font-semibold text-foreground mb-2">
+                <h2 className="font-display text-2xl font-semibold text-ink mb-2">
                   {founder.name}
                 </h2>
                 <p className="text-gold font-medium">{founder.role}</p>
               </div>
             </div>
             <div className="lg:col-span-2">
-              <p className="text-lg text-muted-foreground leading-relaxed">
+              <p className="text-lg text-slate leading-relaxed">
                 {founder.bio}
               </p>
             </div>
@@ -95,10 +95,10 @@ const Team = () => {
       <section className="section-padding bg-muted/50">
         <div className="container-wide">
           <div className="max-w-3xl mb-16">
-            <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground mb-6">
+            <h2 className="font-display text-3xl md:text-4xl font-semibold text-ink mb-6">
               Senior Property Consultants
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg text-slate">
               Each senior consultant is responsible for a defined market and a
               clear revenue target. They manage listings, viewings,
               negotiations, and client communication from first contact to
@@ -110,26 +110,26 @@ const Team = () => {
             {consultants.map((consultant) => (
               <div
                 key={consultant.name}
-                className="bg-card rounded-lg border border-border p-8 hover:shadow-therizo-md transition-all duration-300"
+                className="bg-warm-white rounded-sm border border-sand p-8 hover:shadow-md transition-all duration-300"
               >
                 <div className="text-center mb-6">
-                  <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center mb-4">
-                    <span className="text-4xl font-display font-semibold text-foreground">
-                      {consultant.initial}
+                    <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center mb-4">
+                      <span className="text-4xl font-display font-semibold text-navy">
+                        {consultant.initial}
                     </span>
                   </div>
-                  <h3 className="font-display text-xl font-semibold text-foreground mb-1">
+                  <h3 className="font-display text-xl font-semibold text-ink mb-1">
                     {consultant.name}
                   </h3>
                   <p className="text-sm text-gold font-medium mb-2">
                     {consultant.role}
                   </p>
-                  <div className="flex items-center justify-center gap-1 text-sm text-muted-foreground">
+                  <div className="flex items-center justify-center gap-1 text-sm text-slate">
                     <MapPin size={14} />
                     <span>{consultant.location}</span>
                   </div>
                 </div>
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                <p className="text-sm text-slate leading-relaxed">
                   {consultant.bio}
                 </p>
               </div>
@@ -139,14 +139,14 @@ const Team = () => {
       </section>
 
       {/* How We Work */}
-      <section className="section-padding bg-background">
+      <section className="section-padding bg-ivory">
         <div className="container-wide">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground mb-6">
+              <h2 className="font-display text-3xl md:text-4xl font-semibold text-ink mb-6">
                 How We Work as a Team
               </h2>
-              <p className="text-lg text-muted-foreground leading-relaxed mb-8">
+              <p className="text-lg text-slate leading-relaxed mb-8">
                 Every client of Therizo is supported by the entire firm, not
                 just one person.
               </p>
@@ -154,25 +154,25 @@ const Team = () => {
                 {workflowSteps.map((step) => (
                   <li key={step} className="flex items-start gap-4">
                     <ArrowRight className="text-gold shrink-0 mt-1" size={20} />
-                    <span className="text-foreground">{step}</span>
+                    <span className="text-ink">{step}</span>
                   </li>
                 ))}
               </ul>
-              <p className="text-muted-foreground">
+              <p className="text-slate">
                 We keep communications simple, transparent, and written. From
                 first enquiry to closing, you know who is responsible at each
                 stage.
               </p>
             </div>
             <div>
-              <div className="bg-primary rounded-2xl p-10 text-center">
+              <div className="bg-navy rounded-sm p-10 text-center">
                 <div className="w-20 h-20 mx-auto rounded-full bg-gold/20 flex items-center justify-center mb-6">
                   <Users className="text-gold" size={40} />
                 </div>
-                <h3 className="font-display text-2xl font-semibold text-primary-foreground mb-4">
+                <h3 className="font-display text-2xl font-semibold text-ivory mb-4">
                   One Team. One Standard.
                 </h3>
-                <p className="text-primary-foreground/70">
+                <p className="text-ivory/70">
                   Clear accountability from first contact to completion.
                 </p>
               </div>
@@ -182,12 +182,12 @@ const Team = () => {
       </section>
 
       {/* CTA */}
-      <section className="section-padding bg-cream-dark">
+      <section className="section-padding bg-ivory">
         <div className="container-narrow text-center">
-          <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground mb-6">
+          <h2 className="font-display text-3xl md:text-4xl font-semibold text-ink mb-6">
             Ready to Work with Us?
           </h2>
-          <p className="text-lg text-muted-foreground leading-relaxed mb-10 max-w-2xl mx-auto">
+          <p className="text-lg text-slate leading-relaxed mb-10 max-w-2xl mx-auto">
             Connect with our team and discuss how we can help you find the right
             property.
           </p>

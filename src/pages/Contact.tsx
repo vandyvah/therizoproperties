@@ -58,19 +58,19 @@ const Contact = () => {
   return (
     <Layout>
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-primary">
+      <section className="pt-32 pb-16 bg-navy">
         <div className="container-wide">
           <div className="max-w-3xl">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-lg bg-gold/20 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-sm bg-gold/20 flex items-center justify-center">
                 <MessageSquare className="text-gold" size={24} />
               </div>
               <span className="text-gold font-medium">Get in Touch</span>
             </div>
-            <h1 className="font-display text-4xl md:text-5xl font-semibold text-primary-foreground mb-6">
+            <h1 className="font-display text-4xl md:text-5xl font-semibold text-ivory mb-6">
               Contact Therizo
             </h1>
-            <p className="text-lg text-primary-foreground/80 leading-relaxed">
+            <p className="text-lg text-ivory/80 leading-relaxed">
               Tell us what you are looking for and where you are in your
               property journey. A senior consultant will review your message and
               respond with next steps, usually within a reasonable time window
@@ -81,12 +81,12 @@ const Contact = () => {
       </section>
 
       {/* Contact Form & Info */}
-      <section className="section-padding bg-background">
+      <section className="section-padding bg-ivory">
         <div className="container-wide">
           <div className="grid lg:grid-cols-3 gap-12">
             {/* Form */}
             <div className="lg:col-span-2">
-              <Card className="border-border shadow-therizo-md">
+              <Card className="border-sand shadow-md bg-warm-white">
                 <CardHeader>
                   <CardTitle className="font-display text-2xl">
                     Send Us a Message
@@ -217,7 +217,7 @@ const Contact = () => {
 
             {/* Contact Info */}
             <div className="space-y-8">
-              <Card className="border-border">
+              <Card className="border-sand bg-warm-white">
                 <CardHeader>
                   <CardTitle className="font-display text-xl">
                     Prefer to Speak Directly?
@@ -247,21 +247,21 @@ const Contact = () => {
                       <span>hello@therizo.com</span>
                     </a>
                   </div>
-                  <p className="text-xs text-muted-foreground pt-4 border-t border-border">
+                  <p className="text-xs text-slate pt-4 border-t border-sand">
                     Please share your name, location, and a short summary of
                     what you need before the call, so we can prepare.
                   </p>
                 </CardContent>
               </Card>
 
-              <Card className="border-border">
+              <Card className="border-sand bg-warm-white">
                 <CardHeader>
                   <CardTitle className="font-display text-xl">
                     Where We Operate
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">
+                  <p className="text-sm text-slate mb-4">
                     Therizo is focused on Nigeria, with core activity in:
                   </p>
                   <ul className="space-y-2">
@@ -278,7 +278,7 @@ const Contact = () => {
                       </li>
                     ))}
                   </ul>
-                  <p className="text-xs text-muted-foreground mt-4 pt-4 border-t border-border">
+                  <p className="text-xs text-slate mt-4 pt-4 border-t border-sand">
                     We also serve diaspora clients across the UK, Europe, North
                     America, and the Middle East who need a disciplined local
                     partner.
@@ -291,12 +291,12 @@ const Contact = () => {
       </section>
 
       {/* Closing CTA */}
-      <section className="section-padding bg-cream-dark">
+      <section className="section-padding bg-ivory">
         <div className="container-narrow text-center">
-          <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+          <p className="text-lg text-slate leading-relaxed mb-6">
             Real estate decisions carry weight.
           </p>
-          <p className="text-xl text-foreground font-medium">
+          <p className="text-xl text-ink font-medium">
             If you want clear answers, realistic numbers, and properties that
             can stand scrutiny, we are ready to speak with you.
           </p>

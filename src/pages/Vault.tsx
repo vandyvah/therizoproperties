@@ -82,7 +82,7 @@ export default function Vault() {
         {/* Hero - Locked State */}
         <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
           {/* Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary to-navy-light" />
+          <div className="absolute inset-0 bg-gradient-to-br from-navy via-navy to-navy-light" />
           <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&auto=format&fit=crop&q=60')] bg-cover bg-center opacity-10" />
           
           {/* Content */}
@@ -92,11 +92,11 @@ export default function Vault() {
               Private Access Required
             </div>
             
-            <h1 className="font-display text-4xl md:text-6xl text-primary-foreground font-semibold mb-6">
+            <h1 className="font-display text-4xl md:text-6xl text-ivory font-semibold mb-6">
               The Vault
             </h1>
             
-            <p className="text-primary-foreground/80 text-lg md:text-xl mb-8 leading-relaxed">
+            <p className="text-ivory/80 text-lg md:text-xl mb-8 leading-relaxed">
               Exclusive off-market properties reserved for verified clients. 
               These opportunities never appear on public listings.
             </p>
@@ -114,7 +114,7 @@ export default function Vault() {
               <Button
                 variant="outline"
                 size="lg"
-                className="bg-transparent border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10"
+                className="bg-transparent border-ivory/30 text-ivory hover:bg-ivory/10"
                 onClick={() => navigate("/contact")}
               >
                 Speak with Consultant
@@ -122,7 +122,7 @@ export default function Vault() {
             </div>
 
             {/* Trust badges */}
-            <div className="mt-12 flex flex-wrap items-center justify-center gap-6 text-primary-foreground/60 text-sm">
+            <div className="mt-12 flex flex-wrap items-center justify-center gap-6 text-ivory/60 text-sm">
               <div className="flex items-center gap-2">
                 <Shield className="h-4 w-4" />
                 <span>NDA Protected</span>
@@ -143,10 +143,10 @@ export default function Vault() {
         <section className="section-padding bg-muted">
           <div className="container-wide">
             <div className="text-center mb-12">
-              <h2 className="font-display text-3xl md:text-4xl text-foreground font-semibold mb-4">
+              <h2 className="font-display text-3xl md:text-4xl text-ink font-semibold mb-4">
                 What's Inside The Vault
               </h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-slate max-w-2xl mx-auto">
                 A glimpse of what awaits verified clients
               </p>
             </div>
@@ -163,8 +163,8 @@ export default function Vault() {
                       alt="Exclusive property"
                       className="w-full h-full object-cover blur-md"
                     />
-                    <div className="absolute inset-0 bg-foreground/40 flex items-center justify-center">
-                      <Lock className="h-12 w-12 text-background/80" />
+                    <div className="absolute inset-0 bg-ink/40 flex items-center justify-center">
+                      <Lock className="h-12 w-12 text-ivory/80" />
                     </div>
                   </div>
                   <div className="p-6">
@@ -186,7 +186,7 @@ export default function Vault() {
     <Layout>
       {/* Hero - Unlocked State */}
       <section className="relative py-20 md:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary to-navy-light" />
+        <div className="absolute inset-0 bg-gradient-to-br from-navy via-navy to-navy-light" />
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&auto=format&fit=crop&q=60')] bg-cover bg-center opacity-10" />
         
         <div className="relative z-10 container-wide">
@@ -199,11 +199,11 @@ export default function Vault() {
             </Badge>
           </div>
           
-          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-primary-foreground font-semibold mb-4">
+          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-ivory font-semibold mb-4">
             The Vault
           </h1>
           
-          <p className="text-primary-foreground/80 text-lg md:text-xl max-w-2xl mb-8">
+          <p className="text-ivory/80 text-lg md:text-xl max-w-2xl mb-8">
             Exclusive off-market opportunities. These properties are available only to verified clients 
             and are not listed publicly.
           </p>
@@ -212,7 +212,7 @@ export default function Vault() {
             <Button
               variant={isRevealed ? "outline" : "gold"}
               onClick={() => setIsRevealed(!isRevealed)}
-              className={isRevealed ? "bg-transparent border-primary-foreground/30 text-primary-foreground" : ""}
+              className={isRevealed ? "bg-transparent border-ivory/30 text-ivory" : ""}
             >
               {isRevealed ? (
                 <>
@@ -231,7 +231,7 @@ export default function Vault() {
       </section>
 
       {/* Properties Grid */}
-      <section className="section-padding bg-background">
+      <section className="section-padding bg-ivory">
         <div className="container-wide">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {exclusiveProperties.map((property, index) => (
@@ -262,16 +262,16 @@ export default function Vault() {
                 </div>
                 
                 <div className="p-6">
-                  <div className="flex items-start gap-2 text-muted-foreground text-sm mb-2">
+                  <div className="flex items-start gap-2 text-slate text-sm mb-2">
                     <MapPin className="h-4 w-4 flex-shrink-0 mt-0.5" />
                     <span>{isRevealed ? property.location : "••••••••, Lagos"}</span>
                   </div>
                   
-                  <h3 className="font-display text-xl font-semibold text-foreground mb-3">
+                  <h3 className="font-display text-xl font-semibold text-ink mb-3">
                     {isRevealed ? property.title : "Exclusive Property"}
                   </h3>
                   
-                  <div className="flex items-center gap-4 text-muted-foreground text-sm mb-4">
+                  <div className="flex items-center gap-4 text-slate text-sm mb-4">
                     <span className="flex items-center gap-1">
                       <Bed className="h-4 w-4" />
                       {property.beds}
@@ -304,11 +304,11 @@ export default function Vault() {
 
           {/* CTA */}
           <div className="mt-16 text-center">
-            <Card className="inline-block p-8 bg-primary text-primary-foreground">
+            <Card className="inline-block p-8 bg-navy text-ivory">
               <h3 className="font-display text-2xl font-semibold mb-2">
                 Interested in These Properties?
               </h3>
-              <p className="text-primary-foreground/80 mb-6">
+              <p className="text-ivory/80 mb-6">
                 Schedule a confidential consultation with our team
               </p>
               <Button variant="gold" size="lg" asChild>
