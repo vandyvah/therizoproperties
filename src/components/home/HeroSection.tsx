@@ -214,21 +214,21 @@ export function HeroSection() {
 
       {/* Bottom Bar - Elite, minimal */}
       <div className="relative z-10 border-t border-ivory/[0.06] bg-navy/40 backdrop-blur-sm">
-        <div className="container-wide py-5">
-          <div className="flex flex-wrap items-center justify-between gap-4 text-xs tracking-wider">
+        <div className="container-wide py-4 md:py-5">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs tracking-wider">
             {/* Cities */}
-            <div className="flex items-center gap-8 text-ivory/50">
-              <span className="hover:text-gold transition-colors cursor-pointer uppercase">Lagos</span>
-              <span className="hover:text-gold transition-colors cursor-pointer uppercase">Abuja</span>
-              <span className="hover:text-gold transition-colors cursor-pointer uppercase">Port Harcourt</span>
-              <span className="w-1 h-1 rounded-full bg-gold/60" />
+            <div className="flex items-center gap-4 sm:gap-8 text-ivory/50">
+              <span className="hover:text-gold transition-colors cursor-pointer uppercase text-[10px] sm:text-xs">Lagos</span>
+              <span className="hover:text-gold transition-colors cursor-pointer uppercase text-[10px] sm:text-xs">Abuja</span>
+              <span className="hover:text-gold transition-colors cursor-pointer uppercase text-[10px] sm:text-xs">Port Harcourt</span>
+              <span className="w-1 h-1 rounded-full bg-gold/60 hidden sm:block" />
             </div>
             
             {/* Trust Indicators */}
-            <div className="flex items-center gap-8 text-ivory/40">
+            <div className="flex items-center gap-4 sm:gap-8 text-ivory/40 text-[10px] sm:text-xs">
               <span className="text-gold/80 font-medium">₦12B+ Transacted</span>
-              <span>Verified Titles</span>
-              <span>Diaspora Trusted</span>
+              <span className="hidden sm:inline">Verified Titles</span>
+              <span className="hidden sm:inline">Diaspora Trusted</span>
             </div>
           </div>
         </div>

@@ -65,7 +65,7 @@ export function FeaturedPropertiesSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 mb-12">
           {properties.map((property) => (
             <article
               key={property.id}
@@ -76,9 +76,10 @@ export function FeaturedPropertiesSection() {
                   src={property.image}
                   alt={property.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
                 />
-                <div className="absolute top-4 left-4 flex gap-2">
-                  <Badge className="bg-accent text-accent-foreground hover:bg-accent/90">
+                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 flex gap-2">
+                  <Badge className="bg-accent text-accent-foreground hover:bg-accent/90 text-[10px] sm:text-xs">
                     {property.tag}
                   </Badge>
                 </div>
@@ -86,9 +87,9 @@ export function FeaturedPropertiesSection() {
                 {property.verified && (
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <div className="absolute top-4 right-4 bg-green-500/90 text-white px-2 py-1 rounded-md flex items-center gap-1.5 text-xs font-medium cursor-help">
-                        <Shield className="h-3.5 w-3.5" />
-                        Verified
+                      <div className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-green-500/90 text-white px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md flex items-center gap-1 text-[10px] sm:text-xs font-medium cursor-help">
+                        <Shield className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                        <span className="hidden sm:inline">Verified</span>
                       </div>
                     </TooltipTrigger>
                     <TooltipContent side="left" className="max-w-xs">
@@ -105,25 +106,26 @@ export function FeaturedPropertiesSection() {
                   </Tooltip>
                 )}
               </div>
-              <div className="p-6">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-                  <MapPin size={14} />
+              <div className="p-4 sm:p-6">
+                <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground mb-1 sm:mb-2">
+                  <MapPin size={12} className="sm:w-3.5 sm:h-3.5" />
                   <span>{property.location}</span>
                 </div>
-                <h3 className="font-display text-lg font-semibold text-foreground mb-2 line-clamp-2">
+                <h3 className="font-display text-base sm:text-lg font-semibold text-foreground mb-1 sm:mb-2 line-clamp-2">
                   {property.title}
                 </h3>
-                <p className="text-sm text-muted-foreground mb-4">
+                <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4 line-clamp-2">
                   {property.description}
                 </p>
-                <div className="flex items-center justify-between">
-                  <span className="font-display text-xl font-semibold text-primary">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-display text-base sm:text-xl font-semibold text-primary">
                     {formatPrice(property.priceNGN)}
                   </span>
-                  <Button variant="outline" size="sm" asChild>
+                  <Button variant="outline" size="sm" className="text-xs px-2 sm:px-3" asChild>
                     <Link to={`/calculator`}>
-                      View Details & ROI
-                      <ArrowRight size={14} className="ml-1" />
+                      <span className="hidden sm:inline">View & ROI</span>
+                      <span className="sm:hidden">View</span>
+                      <ArrowRight size={12} className="ml-1" />
                     </Link>
                   </Button>
                 </div>

@@ -5,6 +5,7 @@ import { Users, MapPin, ArrowRight } from "lucide-react";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { JsonLd, createOrganizationSchema } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import bayoImage from "@/assets/team-bayo.jpg";
 
 const founder = {
   name: "Victor",
@@ -20,6 +21,7 @@ const consultants = [
     location: "Lagos Island",
     bio: "Bayo focuses on Lagos Island corridors such as Lekki, Ajah, and surrounding estates. He works with buyers, investors, and developers on mid-to-high value residential and mixed-use properties, with an emphasis on strong rental demand and practical design. Clients rely on him for realistic expectations, straight feedback, and diligent follow-up.",
     initial: "B",
+    image: bayoImage,
   },
   {
     name: "Kelly",
@@ -27,6 +29,7 @@ const consultants = [
     location: "Ikoyi & Victoria Island",
     bio: "Kelly covers Ikoyi, Banana Island, Victoria Island, and other prime luxury pockets. He works with high-net-worth individuals, family offices, and corporate clients looking for secure, trophy-level or income-producing assets. He is known for rigorous deal preparation and careful management of complex negotiations.",
     initial: "K",
+    image: null,
   },
   {
     name: "Aisha",
@@ -34,6 +37,7 @@ const consultants = [
     location: "Abuja & Emerging Markets",
     bio: "Aisha focuses on Abuja and select mainland and emerging growth markets. She serves both end-users and investors, especially those looking for structured payment plans, affordable but documented housing, and developments with solid fundamentals. Her strength is clear communication and patient guidance through the full acquisition process.",
     initial: "A",
+    image: null,
   },
 ];
 
@@ -119,30 +123,38 @@ const Team = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {consultants.map((consultant) => (
               <div
                 key={consultant.name}
-                className="bg-warm-white rounded-sm border border-sand p-8 hover:shadow-md transition-all duration-300"
+                className="bg-warm-white rounded-sm border border-sand p-6 md:p-8 hover:shadow-md transition-all duration-300"
               >
-                <div className="text-center mb-6">
-                    <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center mb-4">
-                      <span className="text-4xl font-display font-semibold text-navy">
+                <div className="text-center mb-4 md:mb-6">
+                  {consultant.image ? (
+                    <img
+                      src={consultant.image}
+                      alt={consultant.name}
+                      className="w-20 h-20 md:w-24 md:h-24 mx-auto rounded-full object-cover object-top mb-4 border-2 border-gold/30"
+                    />
+                  ) : (
+                    <div className="w-20 h-20 md:w-24 md:h-24 mx-auto rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center mb-4">
+                      <span className="text-3xl md:text-4xl font-display font-semibold text-navy">
                         {consultant.initial}
-                    </span>
-                  </div>
-                  <h3 className="font-display text-xl font-semibold text-ink mb-1">
+                      </span>
+                    </div>
+                  )}
+                  <h3 className="font-display text-lg md:text-xl font-semibold text-ink mb-1">
                     {consultant.name}
                   </h3>
-                  <p className="text-sm text-gold font-medium mb-2">
+                  <p className="text-xs md:text-sm text-gold font-medium mb-2">
                     {consultant.role}
                   </p>
-                  <div className="flex items-center justify-center gap-1 text-sm text-slate">
+                  <div className="flex items-center justify-center gap-1 text-xs md:text-sm text-slate">
                     <MapPin size={14} />
                     <span>{consultant.location}</span>
                   </div>
                 </div>
-                <p className="text-sm text-slate leading-relaxed">
+                <p className="text-xs md:text-sm text-slate leading-relaxed text-center sm:text-left">
                   {consultant.bio}
                 </p>
               </div>
