@@ -40,23 +40,23 @@ export function WhyTherizoSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8">
           {pillars.map((pillar, index) => (
             <div
               key={pillar.title}
-              className="relative p-8 bg-card rounded-lg border border-border hover:shadow-therizo-md transition-all duration-300 group"
+              className="relative p-5 md:p-8 bg-card rounded-lg border border-border hover:shadow-therizo-md transition-all duration-300 group"
             >
-              <div className="absolute top-6 right-6 text-6xl font-display font-bold text-muted/50 group-hover:text-gold/20 transition-colors">
+              <div className="absolute top-4 right-4 md:top-6 md:right-6 text-4xl md:text-6xl font-display font-bold text-muted/50 group-hover:text-gold/20 transition-colors">
                 {String(index + 1).padStart(2, "0")}
               </div>
               <div className="relative">
-                <div className="w-14 h-14 rounded-lg bg-primary flex items-center justify-center mb-5">
-                  <pillar.icon className="text-primary-foreground" size={28} />
+                <div className="w-10 h-10 md:w-14 md:h-14 rounded-lg bg-primary flex items-center justify-center mb-4 md:mb-5">
+                  <pillar.icon className="text-primary-foreground" size={20} />
                 </div>
-                <h3 className="font-display text-xl font-semibold text-foreground mb-3">
+                <h3 className="font-display text-lg md:text-xl font-semibold text-foreground mb-2 md:mb-3">
                   {pillar.title}
                 </h3>
-                <p className="text-muted-foreground leading-relaxed">
+                <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
                   {pillar.description}
                 </p>
               </div>
