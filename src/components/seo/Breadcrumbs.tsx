@@ -13,7 +13,7 @@ interface BreadcrumbsProps {
 }
 
 export function Breadcrumbs({ items, className = "" }: BreadcrumbsProps) {
-  const baseUrl = "https://therizo.com";
+  const baseUrl = "https://therizoproperties.com";
   
   const allItems = [
     { label: "Home", href: "/" },

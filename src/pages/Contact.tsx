@@ -114,8 +114,8 @@ const Contact = () => {
         title="Contact Therizo | Nigerian Property Consultation & Enquiries"
         description="Get in touch with Therizo for Nigerian real estate consultation. Speak with senior property consultants in Lagos, Abuja & Port Harcourt. Same-day response for serious buyers."
         keywords="contact Nigerian real estate agent, Lagos property consultant, Abuja real estate enquiry, diaspora property investment help, Nigerian property consultation"
-        canonicalUrl="https://therizo.com/contact"
-        ogImage="https://therizo.com/og/og-contact.jpg"
+        canonicalUrl="/contact"
+        ogImage="https://therizoproperties.com/og/og-contact.jpg"
       />
       <JsonLd data={createOrganizationSchema()} />
       <JsonLd data={createFAQSchema(contactFAQs)} />
@@ -302,13 +302,13 @@ const Contact = () => {
                       <span>+234 123 456 7890</span>
                     </a>
                     <a
-                      href="mailto:hello@therizo.com"
+                      href="mailto:hello@therizoproperties.com"
                       className="flex items-center gap-3 text-foreground hover:text-gold transition-colors"
                     >
                       <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
                         <Mail size={18} className="text-gold" />
                       </div>
-                      <span>hello@therizo.com</span>
+                      <span>hello@therizoproperties.com</span>
                     </a>
                   </div>
                   <p className="text-xs text-slate pt-4 border-t border-sand">

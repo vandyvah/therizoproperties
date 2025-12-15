@@ -54,8 +54,8 @@ const Team = () => {
         title="Meet the Therizo Team | Nigerian Property Consultants"
         description="Meet our experienced property consultants serving Lagos, Abuja, and key Nigerian markets. Trusted advisors for buyers, investors, and developers."
         keywords="Nigerian real estate team, Lagos property consultants, Abuja real estate agents, Therizo team, Nigerian property experts"
-        canonicalUrl="https://therizo.com/team"
-        ogImage="https://therizo.com/og/og-team.jpg"
+        canonicalUrl="/team"
+        ogImage="https://therizoproperties.com/og/og-team.jpg"
       />
       <JsonLd data={createOrganizationSchema()} />
       

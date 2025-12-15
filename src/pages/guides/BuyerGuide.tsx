@@ -138,7 +138,7 @@ export default function BuyerGuide() {
           "real estate investment Nigeria",
           "Abuja property guide"
         ]}
-        ogImage="https://therizo.com/og/og-buyer-guide.jpg"
+        ogImage="https://therizoproperties.com/og/og-buyer-guide.jpg"
       />
       <JsonLd data={createArticleSchema({
         headline: "Complete Guide to Buying Property in Nigeria",

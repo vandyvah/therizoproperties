@@ -1,5 +1,5 @@
 # Therizo Property and Development Corporation
-# https://therizo.com
+# https://therizoproperties.com
 
 User-agent: *
 Allow: /
@@ -42,7 +42,7 @@ Disallow: /dashboard/*
 Disallow: /style-guide
 
 # Sitemap location
-Sitemap: https://therizo.com/sitemap.xml
+Sitemap: https://therizoproperties.com/sitemap.xml
 
 # Host directive
-Host: https://therizo.com
+Host: https://therizoproperties.com

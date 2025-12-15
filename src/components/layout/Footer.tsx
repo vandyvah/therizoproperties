@@ -133,11 +133,11 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:hello@therizo.com"
+                  href="mailto:hello@therizoproperties.com"
                   className="flex items-center gap-3 text-sm text-ivory/70 hover:text-gold transition-colors"
                 >
                   <Mail size={18} className="shrink-0 text-gold" />
-                  <span>hello@therizo.com</span>
+                  <span>hello@therizoproperties.com</span>
                 </a>
               </li>
               <li>

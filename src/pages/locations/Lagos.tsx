@@ -63,9 +63,9 @@ export default function Lagos() {
     "@type": "RealEstateAgent",
     "name": "Therizo Lagos",
     "description": "Premium Lagos real estate services - property investment, verified titles, and professional property management in Lekki, Victoria Island, Ikoyi and beyond.",
-    "url": "https://therizo.com/locations/lagos",
-    "telephone": "+234-123-456-7890",
-    "email": "lagos@therizo.com",
+    "url": "https://therizoproperties.com/locations/lagos",
+    "telephone": "+234-803-483-0087",
+    "email": "lagos@therizoproperties.com",
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Lagos",

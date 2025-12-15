@@ -63,9 +63,9 @@ export default function Abuja() {
     "@type": "RealEstateAgent",
     "name": "Therizo Abuja",
     "description": "Premium Abuja real estate services - property investment, verified titles, and professional property management in Maitama, Asokoro, Wuse and across FCT.",
-    "url": "https://therizo.com/locations/abuja",
-    "telephone": "+234-123-456-7890",
-    "email": "abuja@therizo.com",
+    "url": "https://therizoproperties.com/locations/abuja",
+    "telephone": "+234-803-483-0087",
+    "email": "abuja@therizoproperties.com",
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Abuja",
