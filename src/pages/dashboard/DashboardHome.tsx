@@ -15,6 +15,7 @@ import {
   Calendar,
   ClipboardList,
   Loader2,
+  Mail,
 } from "lucide-react";
 
 interface KPIs {
@@ -24,6 +25,7 @@ interface KPIs {
   dealsInProgress: number;
   dealsClosedThisMonth: number;
   totalCommissionThisMonth: number;
+  newContactSubmissions?: number;
 }
 
 export default function DashboardHome() {
@@ -55,6 +57,16 @@ export default function DashboardHome() {
         supabase.from("deals").select("net_company_commission_ngn").eq("status", "closed").gte("closing_date", new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString()),
       ]);
 
+      // Fetch contact submissions count for admins separately
+      let newContactSubmissions = 0;
+      if (isAdmin) {
+        const { count } = await supabase
+          .from("contact_submissions")
+          .select("*", { count: "exact", head: true })
+          .eq("status", "new");
+        newContactSubmissions = count || 0;
+      }
+
       const totalCommission = closedDeals?.reduce((sum, deal) => sum + (Number(deal.net_company_commission_ngn) || 0), 0) || 0;
 
       setKPIs({
@@ -64,14 +76,31 @@ export default function DashboardHome() {
         dealsInProgress: dealsInProgress || 0,
         dealsClosedThisMonth: closedDeals?.length || 0,
         totalCommissionThisMonth: totalCommission,
+        newContactSubmissions,
       });
 
-      // Fetch recent activity
+      // Fetch recent activity - join with profiles table correctly
       const { data: activity } = await supabase
         .from("activity_log")
-        .select("*, profiles:user_id(full_name)")
+        .select("*")
         .order("created_at", { ascending: false })
         .limit(10);
+      
+      // Fetch profile names for activity entries
+      if (activity && activity.length > 0) {
+        const userIds = [...new Set(activity.map(a => a.user_id).filter(Boolean))];
+        if (userIds.length > 0) {
+          const { data: profiles } = await supabase
+            .from("profiles")
+            .select("id, full_name")
+            .in("id", userIds);
+          
+          const profileMap = new Map(profiles?.map(p => [p.id, p.full_name]) || []);
+          activity.forEach(a => {
+            (a as any).profile_name = profileMap.get(a.user_id) || "Unknown";
+          });
+        }
+      }
 
       setRecentActivity(activity || []);
     } catch (error) {
@@ -254,11 +283,11 @@ export default function DashboardHome() {
                     className="flex items-start gap-3 pb-3 border-b border-border last:border-0"
                   >
                     <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-xs font-semibold">
-                      {activity.profiles?.full_name?.charAt(0) || "?"}
+                      {(activity as any).profile_name?.charAt(0) || "?"}
                     </div>
                     <div className="flex-1">
                       <p className="text-sm">
-                        <span className="font-medium">{activity.profiles?.full_name}</span>{" "}
+                        <span className="font-medium">{(activity as any).profile_name || "System"}</span>{" "}
                         {activity.description || activity.action}
                       </p>
                       <p className="text-xs text-muted-foreground">

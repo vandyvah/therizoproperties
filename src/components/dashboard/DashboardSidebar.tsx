@@ -12,12 +12,14 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
+  Mail,
+  ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
-const navItems = [
+const baseNavItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/dashboard/properties", label: "Properties", icon: Building2 },
   { href: "/dashboard/leads", label: "Leads", icon: UserCheck },
@@ -25,13 +27,32 @@ const navItems = [
   { href: "/dashboard/viewings", label: "Viewings", icon: Calendar },
   { href: "/dashboard/deals", label: "Deals", icon: HandshakeIcon },
   { href: "/dashboard/roi", label: "ROI Calculator", icon: Calculator },
+];
+
+const adminNavItems = [
+  { href: "/dashboard/contacts", label: "Contact Enquiries", icon: Mail },
+];
+
+const superAdminNavItems = [
+  { href: "/dashboard/users", label: "User Management", icon: ShieldCheck },
+];
+
+const settingsNavItems = [
   { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ];
 
 export function DashboardSidebar() {
   const location = useLocation();
-  const { profile, role, signOut } = useAuth();
+  const { profile, role, isAdmin, isSuperAdmin, signOut } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
+
+  // Build nav items based on role
+  const navItems = [
+    ...baseNavItems,
+    ...(isAdmin ? adminNavItems : []),
+    ...(isSuperAdmin ? superAdminNavItems : []),
+    ...settingsNavItems,
+  ];
 
   return (
     <aside

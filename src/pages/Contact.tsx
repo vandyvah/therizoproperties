@@ -14,6 +14,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, Phone, MapPin, Send, MessageSquare } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const clientTypes = ["Buyer", "Seller", "Investor / Developer", "Landowner", "Other"];
 
@@ -42,17 +43,46 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get("fullName") as string;
+    const email = formData.get("email") as string;
+    const phone = formData.get("phone") as string;
+    const clientType = formData.get("clientType") as string;
+    const budget = formData.get("budget") as string;
+    const preferredLocation = formData.get("preferredLocation") as string;
+    const message = formData.get("message") as string;
 
-    toast({
-      title: "Enquiry Submitted",
-      description:
-        "Thank you for your message. A senior consultant will review your request and respond shortly.",
-    });
+    try {
+      const { error } = await supabase.from("contact_submissions").insert({
+        name,
+        email,
+        phone: phone || null,
+        client_type: clientType || null,
+        budget: budget || null,
+        preferred_location: preferredLocation || null,
+        message,
+        page: "contact",
+      });
 
-    setIsSubmitting(false);
-    (e.target as HTMLFormElement).reset();
+      if (error) throw error;
+
+      toast({
+        title: "Enquiry Submitted",
+        description:
+          "Thank you for your message. A senior consultant will review your request and respond shortly.",
+      });
+
+      (e.target as HTMLFormElement).reset();
+    } catch (error: any) {
+      console.error("Error submitting contact form:", error);
+      toast({
+        title: "Submission Failed",
+        description: "There was an error submitting your enquiry. Please try again or contact us directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

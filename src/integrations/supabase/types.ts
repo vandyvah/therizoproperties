@@ -93,6 +93,33 @@ export type Database = {
           },
         ]
       }
+      audit_log: {
+        Row: {
+          action: string
+          actor_user_id: string | null
+          created_at: string
+          details: Json | null
+          id: string
+          target_user_id: string | null
+        }
+        Insert: {
+          action: string
+          actor_user_id?: string | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+          target_user_id?: string | null
+        }
+        Update: {
+          action?: string
+          actor_user_id?: string | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+          target_user_id?: string | null
+        }
+        Relationships: []
+      }
       clients: {
         Row: {
           assigned_consultant_id: string | null
@@ -136,6 +163,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      contact_submissions: {
+        Row: {
+          budget: string | null
+          client_type: string | null
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          page: string | null
+          phone: string | null
+          preferred_location: string | null
+          status: string
+        }
+        Insert: {
+          budget?: string | null
+          client_type?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          page?: string | null
+          phone?: string | null
+          preferred_location?: string | null
+          status?: string
+        }
+        Update: {
+          budget?: string | null
+          client_type?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          page?: string | null
+          phone?: string | null
+          preferred_location?: string | null
+          status?: string
+        }
+        Relationships: []
       }
       deal_consultant_shares: {
         Row: {
@@ -734,6 +803,14 @@ export type Database = {
         Returns: boolean
       }
       is_admin: { Args: never; Returns: boolean }
+      is_super_admin: { Args: never; Returns: boolean }
+      set_user_role: {
+        Args: {
+          new_role: Database["public"]["Enums"]["app_role"]
+          target_user_id: string
+        }
+        Returns: Json
+      }
     }
     Enums: {
       activity_entity_type:
