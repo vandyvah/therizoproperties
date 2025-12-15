@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-interface FAQItem {
+export interface FAQItem {
   question: string;
   answer: string;
 }

@@ -4,12 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { FAQJsonLd } from "./JsonLd";
-
-interface FAQItem {
-  question: string;
-  answer: string;
-}
+import { FAQJsonLd, FAQItem } from "./JsonLd";
 
 export interface FAQSectionProps {
   title?: string;
