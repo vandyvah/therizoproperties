@@ -18,7 +18,11 @@ const footerLinks = {
     { href: "/guides/buyer-guide", label: "Property Buyer's Guide" },
     { href: "/guides/roi-methodology", label: "ROI Methodology" },
   ],
-  locations: ["Lagos", "Abuja", "Port Harcourt", "Ogun State"],
+  locations: [
+    { href: "/locations/lagos", label: "Lagos" },
+    { href: "/locations/abuja", label: "Abuja" },
+    { href: "/locations/port-harcourt", label: "Port Harcourt" },
+  ],
 };
 
 export function Footer() {
@@ -94,6 +98,24 @@ export function Footer() {
                 </li>
               ))}
             </ul>
+          </div>
+        </div>
+
+        {/* Locations Row */}
+        <div className="mt-10 pt-8 border-t border-ivory/10">
+          <h4 className="font-display text-lg font-semibold mb-4 text-ivory">
+            Locations
+          </h4>
+          <div className="flex flex-wrap gap-4">
+            {footerLinks.locations.map((link) => (
+              <Link
+                key={link.href}
+                to={link.href}
+                className="text-sm text-ivory/70 hover:text-gold transition-colors"
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
         </div>
 
