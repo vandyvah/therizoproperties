@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useCallback, useEffect } from "react";
+import { useState, useMemo, useRef, useCallback } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,7 @@ import { FloodMappingOverlay } from "@/components/calculator/FloodMappingOverlay
 import { InfrastructureTimeline } from "@/components/calculator/InfrastructureTimeline";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { useDebounce, formatWithSeparators, parseFormattedNumber } from "@/hooks/useDebounce";
 import { jsPDF } from "jspdf";
 import {
   BarChart,
@@ -108,28 +109,20 @@ const Calculator_Page = () => {
   
   const initialFormData: FormData = {
     strategy: "long-term",
-    purchasePrice: "85000000",
-    renovationCosts: "5000000",
-    monthlyRent: "600000",
-    airbnbNightlyRate: "75000",
+    purchasePrice: "85,000,000",
+    renovationCosts: "5,000,000",
+    monthlyRent: "600,000",
+    airbnbNightlyRate: "75,000",
     airbnbOccupancy: "55",
   };
 
   const [formData, setFormData] = useState<FormData>(initialFormData);
-  const [debouncedFormData, setDebouncedFormData] = useState<FormData>(initialFormData);
+  const debouncedFormData = useDebounce(formData, 150);
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isCalculating, setIsCalculating] = useState(false);
   const [hasCalculated, setHasCalculated] = useState(false);
-
-  // Debounce formData updates to prevent lag during typing
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedFormData(formData);
-    }, 150);
-    return () => clearTimeout(timer);
-  }, [formData]);
 
   const handleTabChange = () => {
     setTimeout(() => {
@@ -144,9 +137,15 @@ const Calculator_Page = () => {
       return;
     }
     
-    // Allow only numbers and commas for numeric fields
-    const sanitizedValue = value.replace(/[^0-9,]/g, "");
-    setFormData((prev) => ({ ...prev, [field]: sanitizedValue }));
+    // For occupancy, don't format with separators (it's a percentage)
+    if (field === "airbnbOccupancy") {
+      const sanitizedValue = value.replace(/[^0-9]/g, "");
+      setFormData((prev) => ({ ...prev, [field]: sanitizedValue }));
+    } else {
+      // Format with thousand separators for currency fields
+      const formattedValue = formatWithSeparators(value);
+      setFormData((prev) => ({ ...prev, [field]: formattedValue }));
+    }
     
     // Clear error when user starts typing
     if (errors[field as keyof FormErrors]) {
@@ -197,7 +196,7 @@ const Calculator_Page = () => {
   };
 
   const parseNumber = (value: string): number => {
-    return parseFloat(value.replace(/,/g, "")) || 0;
+    return parseFormattedNumber(value);
   };
 
   // Calculate results using debounced data to prevent typing lag
@@ -290,7 +289,6 @@ const Calculator_Page = () => {
 
   const handleReset = useCallback(() => {
     setFormData(initialFormData);
-    setDebouncedFormData(initialFormData);
     setErrors({});
     setTouched({});
     setHasCalculated(false);

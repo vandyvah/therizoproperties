@@ -1,10 +1,11 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Globe, Banknote, Calendar, TrendingUp, Info } from "lucide-react";
+import { Globe, Banknote, TrendingUp, Info } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useDebounce, formatWithSeparators, parseFormattedNumber } from "@/hooks/useDebounce";
 
 interface MortgageData {
   propertyPrice: string;
@@ -38,8 +39,8 @@ const formatForeignCurrency = (value: number, currency: "USD" | "GBP" | "EUR"): 
 
 export const DiasporaMortgageCalculator = () => {
   const initialData: MortgageData = {
-    propertyPrice: "150000000",
-    foreignIncome: "8000",
+    propertyPrice: "150,000,000",
+    foreignIncome: "8,000",
     currency: "USD",
     loanTermYears: "20",
     interestRate: "12",
@@ -47,37 +48,30 @@ export const DiasporaMortgageCalculator = () => {
   };
 
   const [data, setData] = useState<MortgageData>(initialData);
-  const [debouncedData, setDebouncedData] = useState<MortgageData>(initialData);
-
-  // Debounce data updates to prevent lag during typing
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedData(data);
-    }, 150);
-    return () => clearTimeout(timer);
-  }, [data]);
-
-  const parseNumber = (value: string): number => {
-    return parseFloat(value.replace(/,/g, "")) || 0;
-  };
+  const debouncedData = useDebounce(data, 150);
 
   const handleChange = (field: keyof MortgageData, value: string) => {
     if (field === "currency") {
       setData((prev) => ({ ...prev, [field]: value as "USD" | "GBP" | "EUR" }));
-    } else {
-      const sanitized = value.replace(/[^0-9.,]/g, "");
+    } else if (field === "loanTermYears" || field === "interestRate" || field === "downPaymentPercent") {
+      // Don't format small numbers like percentages and years
+      const sanitized = value.replace(/[^0-9.]/g, "");
       setData((prev) => ({ ...prev, [field]: sanitized }));
+    } else {
+      // Format with thousand separators for currency fields
+      const formattedValue = formatWithSeparators(value);
+      setData((prev) => ({ ...prev, [field]: formattedValue }));
     }
   };
 
   // Calculate results using debounced data to prevent typing lag
   const results = useMemo(() => {
-    const propertyPrice = parseNumber(debouncedData.propertyPrice);
-    const foreignMonthlyIncome = parseNumber(debouncedData.foreignIncome);
+    const propertyPrice = parseFormattedNumber(debouncedData.propertyPrice);
+    const foreignMonthlyIncome = parseFormattedNumber(debouncedData.foreignIncome);
     const rate = exchangeRates[debouncedData.currency];
-    const loanTerm = parseNumber(debouncedData.loanTermYears);
-    const annualInterest = parseNumber(debouncedData.interestRate) / 100;
-    const downPaymentPct = parseNumber(debouncedData.downPaymentPercent) / 100;
+    const loanTerm = parseFormattedNumber(debouncedData.loanTermYears);
+    const annualInterest = parseFormattedNumber(debouncedData.interestRate) / 100;
+    const downPaymentPct = parseFormattedNumber(debouncedData.downPaymentPercent) / 100;
 
     const monthlyIncomeNGN = foreignMonthlyIncome * rate;
     const annualIncomeNGN = monthlyIncomeNGN * 12;
