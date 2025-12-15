@@ -114,7 +114,7 @@ export default function ROIMethodology() {
           "ROI calculation real estate",
           "Nigerian property investment analysis"
         ]}
-        ogImage="https://therizo.com/og/og-roi-methodology.jpg"
+        ogImage="https://therizoproperties.com/og/og-roi-methodology.jpg"
       />
       <JsonLd data={createArticleSchema({
         headline: "ROI Calculation Methodology for Nigerian Real Estate Investments",

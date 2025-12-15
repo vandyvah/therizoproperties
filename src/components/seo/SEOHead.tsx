@@ -25,7 +25,7 @@ export function SEOHead({
   keywords = [],
   noindex = false,
 }: SEOHeadProps) {
-  const baseUrl = "https://therizo.com";
+  const baseUrl = "https://therizoproperties.com";
   const canonicalPath = canonical || canonicalUrl || "";
   const fullCanonical = canonicalPath.startsWith("http") ? canonicalPath : `${baseUrl}${canonicalPath}`;
   const fullTitle = title.includes("Therizo") ? title : `${title} | Therizo`;

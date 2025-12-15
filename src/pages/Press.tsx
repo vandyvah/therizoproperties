@@ -62,7 +62,7 @@ export default function Press() {
           "Therizo media kit",
           "real estate press release Nigeria"
         ]}
-        ogImage="https://therizo.com/og/og-press.jpg"
+        ogImage="https://therizoproperties.com/og/og-press.jpg"
       />
       <JsonLd data={createOrganizationSchema()} />
 
@@ -274,9 +274,9 @@ export default function Press() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button variant="gold" size="lg" asChild>
-              <a href="mailto:press@therizo.com">
+              <a href="mailto:press@therizoproperties.com">
                 <Mail className="mr-2" size={18} />
-                press@therizo.com
+                press@therizoproperties.com
               </a>
             </Button>
             <Button variant="outline" size="lg" className="border-ivory/30 text-ivory hover:bg-ivory/10" asChild>

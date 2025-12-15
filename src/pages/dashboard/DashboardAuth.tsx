@@ -104,7 +104,7 @@ export default function DashboardAuth() {
                     id="signin-email"
                     name="email"
                     type="email"
-                    placeholder="you@therizo.com"
+                    placeholder="you@therizoproperties.com"
                     required
                   />
                 </div>
@@ -148,7 +148,7 @@ export default function DashboardAuth() {
                     id="signup-email"
                     name="email"
                     type="email"
-                    placeholder="you@therizo.com"
+                    placeholder="you@therizoproperties.com"
                     required
                   />
                 </div>

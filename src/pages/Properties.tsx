@@ -118,8 +118,8 @@ const Properties = () => {
         title="Nigerian Properties for Sale | Verified Listings in Lagos & Abuja"
         description="Browse verified Nigerian properties with clean titles. Luxury homes, investment apartments, and development opportunities in Lagos, Abuja, and key growth markets."
         keywords="Nigerian properties for sale, Lagos real estate listings, Abuja property investment, Lekki homes for sale, Ikoyi luxury apartments, verified Nigerian property"
-        canonicalUrl="https://therizo.com/properties"
-        ogImage="https://therizo.com/og/og-properties.jpg"
+        canonicalUrl="/properties"
+        ogImage="https://therizoproperties.com/og/og-properties.jpg"
       />
       <JsonLd data={createFAQSchema(propertyFAQs)} />
       

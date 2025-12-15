@@ -63,9 +63,9 @@ export default function PortHarcourt() {
     "@type": "RealEstateAgent",
     "name": "Therizo Port Harcourt",
     "description": "Premium Port Harcourt real estate services - property investment, verified titles, and professional property management in GRA, Trans Amadi and across Rivers State.",
-    "url": "https://therizo.com/locations/port-harcourt",
-    "telephone": "+234-123-456-7890",
-    "email": "portharcourt@therizo.com",
+    "url": "https://therizoproperties.com/locations/port-harcourt",
+    "telephone": "+234-803-483-0087",
+    "email": "portharcourt@therizoproperties.com",
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Port Harcourt",
