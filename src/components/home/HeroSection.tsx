@@ -144,7 +144,7 @@ export function HeroSection() {
             {/* Brand Label - Refined elite styling */}
             <div className="flex items-center gap-4 mb-8 animate-fade-up">
               <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-gold to-gold" />
-              <span className="text-gold/90 text-xs font-medium tracking-[0.3em] uppercase">
+              <span className="text-gold/90 text-xs font-bold tracking-[0.3em] uppercase">
                 Therizo Property & Development
               </span>
               <div className="w-12 h-[1px] bg-gradient-to-l from-transparent via-gold to-gold" />
