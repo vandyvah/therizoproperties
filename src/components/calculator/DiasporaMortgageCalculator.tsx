@@ -110,10 +110,10 @@ export const DiasporaMortgageCalculator = () => {
           <Globe className="w-6 h-6 text-gold" />
         </div>
         <div>
-          <h3 className="font-display text-xl font-bold text-foreground">
+          <h3 className="font-display text-xl font-bold text-ink">
             Diaspora Mortgage Calculator
           </h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-slate">
             For foreign-income backed financing
           </p>
         </div>
@@ -123,32 +123,36 @@ export const DiasporaMortgageCalculator = () => {
         {/* Inputs */}
         <div className="space-y-4">
           <div>
-            <Label className="text-sm font-medium mb-2 block">Property Price (₦)</Label>
+            <Label className="text-sm font-medium text-ink mb-2 block">Property Price (₦)</Label>
             <Input
+              type="text"
+              inputMode="numeric"
               value={data.propertyPrice}
               onChange={(e) => handleChange("propertyPrice", e.target.value)}
-              className="bg-primary text-primary-foreground border-0 h-12"
+              className="bg-navy text-ivory border-0 h-12 placeholder:text-ivory/50 focus:ring-2 focus:ring-gold"
               placeholder="150,000,000"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <Label className="text-sm font-medium mb-2 block">Monthly Income</Label>
+              <Label className="text-sm font-medium text-ink mb-2 block">Monthly Income</Label>
               <Input
+                type="text"
+                inputMode="numeric"
                 value={data.foreignIncome}
                 onChange={(e) => handleChange("foreignIncome", e.target.value)}
-                className="bg-primary text-primary-foreground border-0 h-12"
+                className="bg-navy text-ivory border-0 h-12 placeholder:text-ivory/50 focus:ring-2 focus:ring-gold"
                 placeholder="8,000"
               />
             </div>
             <div>
-              <Label className="text-sm font-medium mb-2 block">Currency</Label>
+              <Label className="text-sm font-medium text-ink mb-2 block">Currency</Label>
               <Select value={data.currency} onValueChange={(v) => handleChange("currency", v)}>
-                <SelectTrigger className="bg-primary text-primary-foreground border-0 h-12">
+                <SelectTrigger className="bg-navy text-ivory border-0 h-12">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-warm-white border-sand">
                   <SelectItem value="USD">🇺🇸 USD</SelectItem>
                   <SelectItem value="GBP">🇬🇧 GBP</SelectItem>
                   <SelectItem value="EUR">🇪🇺 EUR</SelectItem>
@@ -159,31 +163,37 @@ export const DiasporaMortgageCalculator = () => {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <Label className="text-sm font-medium mb-2 block">Loan Term (Years)</Label>
+              <Label className="text-sm font-medium text-ink mb-2 block">Loan Term (Years)</Label>
               <Input
+                type="text"
+                inputMode="numeric"
                 value={data.loanTermYears}
                 onChange={(e) => handleChange("loanTermYears", e.target.value)}
-                className="bg-primary text-primary-foreground border-0 h-12"
+                className="bg-navy text-ivory border-0 h-12 placeholder:text-ivory/50 focus:ring-2 focus:ring-gold"
                 placeholder="20"
               />
             </div>
             <div>
-              <Label className="text-sm font-medium mb-2 block">Interest Rate (%)</Label>
+              <Label className="text-sm font-medium text-ink mb-2 block">Interest Rate (%)</Label>
               <Input
+                type="text"
+                inputMode="numeric"
                 value={data.interestRate}
                 onChange={(e) => handleChange("interestRate", e.target.value)}
-                className="bg-primary text-primary-foreground border-0 h-12"
+                className="bg-navy text-ivory border-0 h-12 placeholder:text-ivory/50 focus:ring-2 focus:ring-gold"
                 placeholder="12"
               />
             </div>
           </div>
 
           <div>
-            <Label className="text-sm font-medium mb-2 block">Down Payment (%)</Label>
+            <Label className="text-sm font-medium text-ink mb-2 block">Down Payment (%)</Label>
             <Input
+              type="text"
+              inputMode="numeric"
               value={data.downPaymentPercent}
               onChange={(e) => handleChange("downPaymentPercent", e.target.value)}
-              className="bg-primary text-primary-foreground border-0 h-12"
+              className="bg-navy text-ivory border-0 h-12 placeholder:text-ivory/50 focus:ring-2 focus:ring-gold"
               placeholder="30"
             />
           </div>
@@ -193,39 +203,39 @@ export const DiasporaMortgageCalculator = () => {
         <div className="space-y-4">
           <Card className={`p-4 border-l-4 ${results.isEligible ? "border-l-green-500 bg-green-500/5" : "border-l-amber-500 bg-amber-500/5"}`}>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-foreground">Eligibility Status</span>
+              <span className="text-sm font-medium text-ink">Eligibility Status</span>
               <span className={`text-xs px-2 py-1 rounded-full ${results.isEligible ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"}`}>
                 {results.isEligible ? "Likely Eligible" : "Review Required"}
               </span>
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-slate">
               Based on {formatForeignCurrency(results.foreignMonthlyIncome, data.currency)}/month income
             </p>
           </Card>
 
-          <Card className="p-4 bg-card border border-border">
+          <Card className="p-4 bg-warm-white border border-sand">
             <div className="flex items-center gap-2 mb-3">
               <Banknote className="w-4 h-4 text-gold" />
-              <span className="text-sm font-medium text-foreground">Monthly Payment</span>
+              <span className="text-sm font-medium text-ink">Monthly Payment</span>
             </div>
             <p className="text-2xl font-bold text-gold">{formatCurrency(results.monthlyPayment)}</p>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-slate mt-1">
               Income in NGN: {formatCurrency(results.monthlyIncomeNGN)}/month
             </p>
           </Card>
 
           <div className="grid grid-cols-2 gap-3">
-            <Card className="p-3 bg-card border border-border">
+            <Card className="p-3 bg-warm-white border border-sand">
               <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="w-4 h-4 text-muted-foreground" />
+                <TrendingUp className="w-4 h-4 text-slate" />
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger>
-                      <span className="text-xs text-muted-foreground flex items-center gap-1">
+                      <span className="text-xs text-slate flex items-center gap-1">
                         DTI Ratio <Info className="w-3 h-3" />
                       </span>
                     </TooltipTrigger>
-                    <TooltipContent>
+                    <TooltipContent className="bg-navy text-ivory border-0">
                       <p className="text-xs max-w-[200px]">
                         Debt-to-Income ratio. Most lenders require below 45%
                       </p>
@@ -238,32 +248,32 @@ export const DiasporaMortgageCalculator = () => {
               </p>
             </Card>
 
-            <Card className="p-3 bg-card border border-border">
-              <span className="text-xs text-muted-foreground">Down Payment</span>
-              <p className="text-lg font-bold text-foreground">{formatCurrency(results.downPayment)}</p>
+            <Card className="p-3 bg-warm-white border border-sand">
+              <span className="text-xs text-slate">Down Payment</span>
+              <p className="text-lg font-bold text-ink">{formatCurrency(results.downPayment)}</p>
             </Card>
           </div>
 
-          <Card className="p-3 bg-card border border-border">
+          <Card className="p-3 bg-warm-white border border-sand">
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Loan Amount</span>
-              <span className="font-medium text-foreground">{formatCurrency(results.loanAmount)}</span>
+              <span className="text-slate">Loan Amount</span>
+              <span className="font-medium text-ink">{formatCurrency(results.loanAmount)}</span>
             </div>
             <div className="flex justify-between text-sm mt-2">
-              <span className="text-muted-foreground">Total Interest</span>
-              <span className="font-medium text-foreground">{formatCurrency(results.totalInterest)}</span>
+              <span className="text-slate">Total Interest</span>
+              <span className="font-medium text-ink">{formatCurrency(results.totalInterest)}</span>
             </div>
-            <div className="flex justify-between text-sm mt-2 pt-2 border-t border-border">
-              <span className="text-muted-foreground font-medium">Total Payments</span>
-              <span className="font-bold text-foreground">{formatCurrency(results.totalPayments)}</span>
+            <div className="flex justify-between text-sm mt-2 pt-2 border-t border-sand">
+              <span className="text-slate font-medium">Total Payments</span>
+              <span className="font-bold text-ink">{formatCurrency(results.totalPayments)}</span>
             </div>
           </Card>
         </div>
       </div>
 
-      <div className="bg-primary/5 rounded-lg p-4 mt-4">
-        <p className="text-xs text-muted-foreground">
-          <strong>Note:</strong> This calculator provides estimates for diaspora clients with foreign-currency income. 
+      <div className="bg-navy/5 rounded-lg p-4 mt-4">
+        <p className="text-xs text-slate">
+          <strong className="text-ink">Note:</strong> This calculator provides estimates for diaspora clients with foreign-currency income. 
           Actual mortgage terms depend on bank policies, documentation, and credit assessment. 
           Contact Therizo for personalized financing guidance.
         </p>

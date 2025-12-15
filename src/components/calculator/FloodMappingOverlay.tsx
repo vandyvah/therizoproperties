@@ -119,23 +119,23 @@ export const FloodMappingOverlay = () => {
           <Droplets className="w-6 h-6 text-blue-500" />
         </div>
         <div>
-          <h3 className="font-display text-xl font-bold text-foreground">
+          <h3 className="font-display text-xl font-bold text-ink">
             Lagos Flood Risk Mapping
           </h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-slate">
             Historical flood data & drainage quality by area
           </p>
         </div>
       </div>
 
       <div>
-        <label className="text-sm font-medium mb-2 block">Select Area</label>
+        <label className="text-sm font-medium text-ink mb-2 block">Select Area</label>
         <Select value={selectedArea} onValueChange={setSelectedArea}>
-          <SelectTrigger className="bg-primary text-primary-foreground border-0 h-12 w-full md:w-64">
+          <SelectTrigger className="bg-navy text-ivory border-0 h-12 w-full md:w-64">
             <MapPin className="w-4 h-4 mr-2" />
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-warm-white border-sand">
             {Object.entries(lagosFloodData).map(([key, area]) => (
               <SelectItem key={key} value={key}>
                 {area.name}
@@ -150,7 +150,7 @@ export const FloodMappingOverlay = () => {
           {/* Risk Level Card */}
           <Card className={`p-5 border-l-4 ${data.riskLevel === "low" ? "border-l-green-500" : data.riskLevel === "medium" ? "border-l-amber-500" : "border-l-red-500"}`}>
             <div className="flex items-center justify-between mb-4">
-              <h4 className="font-semibold text-foreground">{data.name}</h4>
+              <h4 className="font-semibold text-ink">{data.name}</h4>
               <Badge className={riskColors[data.riskLevel]}>
                 {data.riskLevel.toUpperCase()} RISK
               </Badge>
@@ -158,15 +158,15 @@ export const FloodMappingOverlay = () => {
 
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Flood Risk Level</span>
+                <span className="text-sm text-slate">Flood Risk Level</span>
                 <div className="flex items-center gap-2">
                   <RiskIcon level={data.riskLevel} />
-                  <span className="font-medium text-foreground capitalize">{data.riskLevel}</span>
+                  <span className="font-medium text-ink capitalize">{data.riskLevel}</span>
                 </div>
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Drainage Quality</span>
+                <span className="text-sm text-slate">Drainage Quality</span>
                 <span className={`font-medium capitalize ${drainageColors[data.drainageQuality]}`}>
                   {data.drainageQuality}
                 </span>
@@ -175,21 +175,21 @@ export const FloodMappingOverlay = () => {
               <div className="flex items-center justify-between">
                 <TooltipProvider>
                   <Tooltip>
-                    <TooltipTrigger className="text-sm text-muted-foreground flex items-center gap-1">
+                    <TooltipTrigger className="text-sm text-slate flex items-center gap-1">
                       Historical Incidents <Info className="w-3 h-3" />
                     </TooltipTrigger>
-                    <TooltipContent>
+                    <TooltipContent className="bg-navy text-ivory border-0">
                       <p className="text-xs">Major flood events recorded in past 10 years</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
-                <span className="font-medium text-foreground">{data.historicalIncidents}</span>
+                <span className="font-medium text-ink">{data.historicalIncidents}</span>
               </div>
 
               {data.lastMajorFlood && (
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Last Major Flood</span>
-                  <span className="font-medium text-foreground">{data.lastMajorFlood}</span>
+                  <span className="text-sm text-slate">Last Major Flood</span>
+                  <span className="font-medium text-ink">{data.lastMajorFlood}</span>
                 </div>
               )}
             </div>
@@ -197,22 +197,22 @@ export const FloodMappingOverlay = () => {
 
           {/* Notes & Recommendation */}
           <div className="space-y-4">
-            <Card className="p-4 bg-card border border-border">
-              <h5 className="text-sm font-semibold text-foreground mb-2">Area Notes</h5>
-              <p className="text-sm text-muted-foreground">{data.notes}</p>
+            <Card className="p-4 bg-warm-white border border-sand">
+              <h5 className="text-sm font-semibold text-ink mb-2">Area Notes</h5>
+              <p className="text-sm text-slate">{data.notes}</p>
             </Card>
 
             <Card className="p-4 bg-gold/5 border border-gold/20">
               <h5 className="text-sm font-semibold text-gold mb-2">Investment Recommendation</h5>
-              <p className="text-sm text-foreground">{data.recommendation}</p>
+              <p className="text-sm text-ink">{data.recommendation}</p>
             </Card>
           </div>
         </div>
       )}
 
-      <div className="bg-primary/5 rounded-lg p-4">
-        <p className="text-xs text-muted-foreground">
-          <strong>Data Source:</strong> Historical flood records (2014-2024), Lagos State Drainage Infrastructure reports, 
+      <div className="bg-navy/5 rounded-lg p-4">
+        <p className="text-xs text-slate">
+          <strong className="text-ink">Data Source:</strong> Historical flood records (2014-2024), Lagos State Drainage Infrastructure reports, 
           and Therizo on-ground assessments. For property-specific flood risk analysis, contact our team.
         </p>
       </div>

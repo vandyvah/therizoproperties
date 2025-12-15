@@ -425,18 +425,19 @@ const Calculator_Page = () => {
     <div>
       <Label 
         htmlFor={id} 
-        className={`text-sm mb-2 block ${goldLabel ? 'text-gold' : 'font-medium text-foreground'}`}
+        className={`text-sm mb-2 block ${goldLabel ? 'text-gold' : 'font-medium text-ink'}`}
       >
         {label}
       </Label>
       <Input
         id={id}
         type="text"
+        inputMode="numeric"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onBlur={() => handleBlur(id)}
         placeholder={placeholder}
-        className={`bg-primary text-primary-foreground border-0 h-12 text-base placeholder:text-primary-foreground/50 ${
+        className={`bg-navy text-ivory border-0 h-12 text-base placeholder:text-ivory/50 focus:ring-2 focus:ring-gold ${
           errors[id as keyof FormErrors] && touched[id] ? 'ring-2 ring-destructive' : ''
         }`}
       />
@@ -452,12 +453,12 @@ const Calculator_Page = () => {
   return (
     <Layout>
       {/* Header */}
-      <section className="pt-28 pb-12 bg-background">
+      <section className="pt-28 pb-12 bg-ivory">
         <div className="container-wide text-center">
-          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-4">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-navy mb-4">
             Therizo ROI Calculator
           </h1>
-          <p className="text-base sm:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg text-slate max-w-3xl mx-auto leading-relaxed">
             Before you commit capital, run the numbers. Estimate your potential returns in
             Nigerian Naira (₦) for both long-term rental and Airbnb strategies.
           </p>
@@ -465,13 +466,13 @@ const Calculator_Page = () => {
       </section>
 
       {/* Calculator Tools Tabs */}
-      <section className="pb-16 bg-background" ref={contentRef}>
+      <section className="pb-16 bg-ivory" ref={contentRef}>
         <div className="container-wide">
           <Tabs defaultValue="roi" className="space-y-8" onValueChange={handleTabChange}>
             <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto gap-2 bg-transparent p-0">
               <TabsTrigger 
                 value="roi" 
-                className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-navy bg-card border border-border py-3"
+                className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-navy bg-warm-white border border-sand text-ink py-3"
               >
                 <Calculator className="w-4 h-4" />
                 <span className="hidden sm:inline">ROI Calculator</span>
@@ -479,7 +480,7 @@ const Calculator_Page = () => {
               </TabsTrigger>
               <TabsTrigger 
                 value="diaspora" 
-                className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-navy bg-card border border-border py-3"
+                className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-navy bg-warm-white border border-sand text-ink py-3"
               >
                 <Globe className="w-4 h-4" />
                 <span className="hidden sm:inline">Diaspora Mortgage</span>
@@ -487,7 +488,7 @@ const Calculator_Page = () => {
               </TabsTrigger>
               <TabsTrigger 
                 value="flood" 
-                className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-navy bg-card border border-border py-3"
+                className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-navy bg-warm-white border border-sand text-ink py-3"
               >
                 <Droplets className="w-4 h-4" />
                 <span className="hidden sm:inline">Flood Mapping</span>
@@ -495,7 +496,7 @@ const Calculator_Page = () => {
               </TabsTrigger>
               <TabsTrigger 
                 value="infrastructure" 
-                className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-navy bg-card border border-border py-3"
+                className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-navy bg-warm-white border border-sand text-ink py-3"
               >
                 <Building2 className="w-4 h-4" />
                 <span className="hidden sm:inline">Infrastructure</span>
@@ -510,10 +511,10 @@ const Calculator_Page = () => {
             <div className="space-y-8">
               {/* Strategy Toggle */}
               <div>
-                <Label className="text-sm font-medium text-foreground mb-3 block">
+                <Label className="text-sm font-medium text-ink mb-3 block">
                   Strategy
                 </Label>
-                <div className="inline-flex rounded-lg border border-border overflow-hidden">
+                <div className="inline-flex rounded-lg border border-sand overflow-hidden">
                   {[
                     { value: "long-term", label: "Long Term" },
                     { value: "airbnb", label: "Airbnb" },
@@ -522,10 +523,10 @@ const Calculator_Page = () => {
                     <button
                       key={option.value}
                       onClick={() => handleInputChange("strategy", option.value as Strategy)}
-                      className={`px-4 sm:px-6 py-2.5 text-sm font-medium transition-all border-r border-border last:border-r-0 ${
+                      className={`px-4 sm:px-6 py-2.5 text-sm font-medium transition-all border-r border-sand last:border-r-0 ${
                         formData.strategy === option.value
                           ? "bg-gold text-navy"
-                          : "bg-card text-foreground hover:bg-muted"
+                          : "bg-warm-white text-ink hover:bg-sand/30"
                       }`}
                     >
                       {option.label}
@@ -552,7 +553,7 @@ const Calculator_Page = () => {
 
               {/* Income Assumptions */}
               <div>
-                <h3 className="font-display text-lg font-semibold text-foreground mb-4">
+                <h3 className="font-display text-lg font-semibold text-ink mb-4">
                   Income Assumptions
                 </h3>
                 <div className="space-y-4">
@@ -584,7 +585,7 @@ const Calculator_Page = () => {
               <Button 
                 onClick={handleCalculate}
                 size="lg"
-                className={`w-full relative overflow-hidden bg-gradient-to-r from-gold via-amber-400 to-gold text-primary font-bold text-base tracking-wide shadow-lg shadow-gold/40 hover:shadow-xl hover:shadow-gold/50 transition-all duration-300 hover:scale-[1.02] ${
+                className={`w-full relative overflow-hidden bg-gradient-to-r from-gold via-amber-400 to-gold text-navy font-bold text-base tracking-wide shadow-lg shadow-gold/40 hover:shadow-xl hover:shadow-gold/50 transition-all duration-300 hover:scale-[1.02] ${
                   hasValidInputs && !isCalculating && !hasCalculated ? 'animate-pulse' : ''
                 }`}
                 disabled={!hasValidInputs || isCalculating}
@@ -611,7 +612,7 @@ const Calculator_Page = () => {
                 onClick={generatePDF}
                 variant="outline"
                 size="lg"
-                className="w-full"
+                className="w-full border-sand text-ink hover:bg-sand/30"
                 disabled={!hasValidInputs || !hasCalculated}
               >
                 <Download className="mr-2" size={18} />
@@ -623,7 +624,7 @@ const Calculator_Page = () => {
                 onClick={handleReset}
                 variant="ghost"
                 size="lg"
-                className="w-full text-muted-foreground hover:text-foreground"
+                className="w-full text-slate hover:text-ink"
               >
                 <RotateCcw className="mr-2" size={18} />
                 Reset Calculator
@@ -634,14 +635,14 @@ const Calculator_Page = () => {
             <div className="space-y-6">
               {!hasCalculated ? (
                 /* Placeholder before calculation */
-                <div className="flex flex-col items-center justify-center h-full min-h-[400px] bg-card rounded-lg border border-border p-8 text-center">
-                  <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
-                    <Calculator className="w-8 h-8 text-muted-foreground" />
+                <div className="flex flex-col items-center justify-center h-full min-h-[400px] bg-warm-white rounded-lg border border-sand p-8 text-center">
+                  <div className="w-16 h-16 rounded-full bg-sand/50 flex items-center justify-center mb-4">
+                    <Calculator className="w-8 h-8 text-slate" />
                   </div>
-                  <h3 className="font-display text-xl font-semibold text-foreground mb-2">
+                  <h3 className="font-display text-xl font-semibold text-ink mb-2">
                     Ready to Calculate
                   </h3>
-                  <p className="text-muted-foreground max-w-sm">
+                  <p className="text-slate max-w-sm">
                     Enter your investment details and click "Calculate Potential Returns" to see your ROI projections.
                   </p>
                 </div>
@@ -651,15 +652,15 @@ const Calculator_Page = () => {
                   {formData.strategy === "compare" ? (
                     <div className="grid md:grid-cols-2 gap-4 animate-fade-in">
                       {/* Long-Term Projection Card */}
-                      <div className="border-l-4 border-gold bg-card rounded-r-lg p-5 shadow-sm">
-                        <h3 className="font-display text-lg sm:text-xl font-bold text-foreground mb-4">
+                      <div className="border-l-4 border-gold bg-warm-white rounded-r-lg p-5 shadow-sm">
+                        <h3 className="font-display text-lg sm:text-xl font-bold text-ink mb-4">
                           Long-Term Projection
                         </h3>
 
                         <div className="space-y-3">
                           <div className="flex justify-between items-center">
                             <span className="text-gold text-sm">Total Investment</span>
-                            <span className="font-semibold text-foreground">
+                            <span className="font-semibold text-ink">
                               {formatCurrency(longTermResults.totalInvestment)}
                             </span>
                           </div>
@@ -671,9 +672,9 @@ const Calculator_Page = () => {
                           </div>
                         </div>
 
-                        <div className="mt-4 pt-4 border-t border-border">
+                        <div className="mt-4 pt-4 border-t border-sand">
                           <div className="flex justify-between items-end">
-                            <span className="font-display text-base font-semibold text-foreground">
+                            <span className="font-display text-base font-semibold text-ink">
                               Cash-on-Cash
                             </span>
                             <span className="font-display text-2xl sm:text-3xl font-bold text-gold">
@@ -681,7 +682,7 @@ const Calculator_Page = () => {
                             </span>
                           </div>
                           <div className="text-right mt-1">
-                            <span className="text-xs text-muted-foreground">
+                            <span className="text-xs text-slate">
                               Payback: {longTermResults.paybackPeriod.toFixed(1)} Years
                             </span>
                           </div>
@@ -689,29 +690,29 @@ const Calculator_Page = () => {
                       </div>
 
                       {/* Airbnb Projection Card */}
-                      <div className="border-l-4 border-primary bg-card rounded-r-lg p-5 shadow-sm">
-                        <h3 className="font-display text-lg sm:text-xl font-bold text-foreground mb-4">
+                      <div className="border-l-4 border-navy bg-warm-white rounded-r-lg p-5 shadow-sm">
+                        <h3 className="font-display text-lg sm:text-xl font-bold text-ink mb-4">
                           Airbnb Projection
                         </h3>
 
                         <div className="space-y-3">
                           <div className="flex justify-between items-center">
-                            <span className="text-muted-foreground text-sm">Total Investment</span>
-                            <span className="font-semibold text-foreground">
+                            <span className="text-slate text-sm">Total Investment</span>
+                            <span className="font-semibold text-ink">
                               {formatCurrency(airbnbResults.totalInvestment)}
                             </span>
                           </div>
                           <div className="flex justify-between items-center">
-                            <span className="text-muted-foreground text-sm">Net Annual Income</span>
+                            <span className="text-slate text-sm">Net Annual Income</span>
                             <span className="font-bold text-gold">
                               {formatCurrency(airbnbResults.netAnnualIncome)}
                             </span>
                           </div>
                         </div>
 
-                        <div className="mt-4 pt-4 border-t border-border">
+                        <div className="mt-4 pt-4 border-t border-sand">
                           <div className="flex justify-between items-end">
-                            <span className="font-display text-base font-semibold text-foreground">
+                            <span className="font-display text-base font-semibold text-ink">
                               Cash-on-Cash
                             </span>
                             <span className="font-display text-2xl sm:text-3xl font-bold text-gold">
@@ -719,7 +720,7 @@ const Calculator_Page = () => {
                             </span>
                           </div>
                           <div className="text-right mt-1">
-                            <span className="text-xs text-muted-foreground">
+                            <span className="text-xs text-slate">
                               Payback: {airbnbResults.paybackPeriod.toFixed(1)} Years
                             </span>
                           </div>
@@ -728,15 +729,15 @@ const Calculator_Page = () => {
                     </div>
                   ) : (
                     /* Single Projection Card for Long Term or Airbnb */
-                    <div className="border-l-4 border-gold bg-card rounded-r-lg p-6 shadow-sm animate-fade-in">
-                      <h3 className="font-display text-xl sm:text-2xl font-bold text-foreground mb-6">
+                    <div className="border-l-4 border-gold bg-warm-white rounded-r-lg p-6 shadow-sm animate-fade-in">
+                      <h3 className="font-display text-xl sm:text-2xl font-bold text-ink mb-6">
                         {projectionTitle}
                       </h3>
 
                       <div className="space-y-4">
                         <div className="flex justify-between items-center">
                           <span className="text-gold text-sm">Total Investment</span>
-                          <span className="font-semibold text-foreground text-lg">
+                          <span className="font-semibold text-ink text-lg">
                             {formatCurrency(currentResults.totalInvestment)}
                           </span>
                         </div>
@@ -748,9 +749,9 @@ const Calculator_Page = () => {
                         </div>
                       </div>
 
-                      <div className="mt-6 pt-6 border-t border-border">
+                      <div className="mt-6 pt-6 border-t border-sand">
                         <div className="flex justify-between items-end">
-                          <span className="font-display text-lg font-semibold text-foreground">
+                          <span className="font-display text-lg font-semibold text-ink">
                             Cash-on-Cash
                           </span>
                           <span className="font-display text-3xl sm:text-4xl font-bold text-gold">
@@ -758,7 +759,7 @@ const Calculator_Page = () => {
                           </span>
                         </div>
                         <div className="text-right mt-1">
-                          <span className="text-sm text-muted-foreground">
+                          <span className="text-sm text-slate">
                             Payback: {currentResults.paybackPeriod.toFixed(1)} Years
                           </span>
                         </div>
@@ -767,8 +768,8 @@ const Calculator_Page = () => {
                   )}
 
                   {/* Chart */}
-                  <div className="bg-card rounded-lg p-6 shadow-sm border border-border animate-fade-in" style={{ animationDelay: '0.1s' }}>
-                    <h4 className="font-display text-base font-semibold text-foreground mb-4">
+                  <div className="bg-warm-white rounded-lg p-6 shadow-sm border border-sand animate-fade-in" style={{ animationDelay: '0.1s' }}>
+                    <h4 className="font-display text-base font-semibold text-ink mb-4">
                       Annual Net Income vs Expenses
                     </h4>
                     <div className="h-64 sm:h-72">
@@ -823,21 +824,21 @@ const Calculator_Page = () => {
 
             {/* Diaspora Mortgage Tab */}
             <TabsContent value="diaspora" className="mt-0">
-              <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
+              <div className="bg-warm-white rounded-lg p-6 shadow-sm border border-sand">
                 <DiasporaMortgageCalculator />
               </div>
             </TabsContent>
 
             {/* Flood Mapping Tab */}
             <TabsContent value="flood" className="mt-0">
-              <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
+              <div className="bg-warm-white rounded-lg p-6 shadow-sm border border-sand">
                 <FloodMappingOverlay />
               </div>
             </TabsContent>
 
             {/* Infrastructure Timeline Tab */}
             <TabsContent value="infrastructure" className="mt-0">
-              <div className="bg-card rounded-lg p-6 shadow-sm border border-border">
+              <div className="bg-warm-white rounded-lg p-6 shadow-sm border border-sand">
                 <InfrastructureTimeline />
               </div>
             </TabsContent>
@@ -846,12 +847,12 @@ const Calculator_Page = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 sm:py-20 bg-primary">
+      <section className="py-16 sm:py-20 bg-navy">
         <div className="container-narrow text-center">
-          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-primary-foreground mb-4">
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-ivory mb-4">
             Discuss These Numbers with Therizo
           </h2>
-          <p className="text-base sm:text-lg text-primary-foreground/80 leading-relaxed mb-8 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-ivory/80 leading-relaxed mb-8 max-w-2xl mx-auto">
             Share your results with us and we will match you with properties
             that fit your risk tolerance, budget, and target returns.
           </p>
