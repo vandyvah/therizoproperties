@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useCallback } from "react";
+import { useState, useMemo, useRef, useCallback, useEffect } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -116,11 +116,20 @@ const Calculator_Page = () => {
   };
 
   const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [debouncedFormData, setDebouncedFormData] = useState<FormData>(initialFormData);
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isCalculating, setIsCalculating] = useState(false);
   const [hasCalculated, setHasCalculated] = useState(false);
+
+  // Debounce formData updates to prevent lag during typing
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedFormData(formData);
+    }, 150);
+    return () => clearTimeout(timer);
+  }, [formData]);
 
   const handleTabChange = () => {
     setTimeout(() => {
@@ -191,13 +200,13 @@ const Calculator_Page = () => {
     return parseFloat(value.replace(/,/g, "")) || 0;
   };
 
-  // Calculate results in real-time
+  // Calculate results using debounced data to prevent typing lag
   const { longTermResults, airbnbResults, hasValidInputs } = useMemo(() => {
-    const purchasePrice = parseNumber(formData.purchasePrice);
-    const renovationCosts = parseNumber(formData.renovationCosts);
-    const monthlyRent = parseNumber(formData.monthlyRent);
-    const airbnbNightlyRate = parseNumber(formData.airbnbNightlyRate);
-    const airbnbOccupancy = parseNumber(formData.airbnbOccupancy) / 100;
+    const purchasePrice = parseNumber(debouncedFormData.purchasePrice);
+    const renovationCosts = parseNumber(debouncedFormData.renovationCosts);
+    const monthlyRent = parseNumber(debouncedFormData.monthlyRent);
+    const airbnbNightlyRate = parseNumber(debouncedFormData.airbnbNightlyRate);
+    const airbnbOccupancy = parseNumber(debouncedFormData.airbnbOccupancy) / 100;
 
     const hasValidInputs = purchasePrice > 0;
     const totalInvestment = purchasePrice + renovationCosts;
@@ -243,7 +252,7 @@ const Calculator_Page = () => {
     };
 
     return { longTermResults, airbnbResults, hasValidInputs };
-  }, [formData]);
+  }, [debouncedFormData]);
 
   // Chart data
   const chartData = useMemo(() => {
@@ -261,8 +270,8 @@ const Calculator_Page = () => {
     ];
   }, [longTermResults, airbnbResults]);
 
-  const currentResults = formData.strategy === "airbnb" ? airbnbResults : longTermResults;
-  const projectionTitle = formData.strategy === "airbnb" ? "Airbnb Projection" : "Long-Term Projection";
+  const currentResults = debouncedFormData.strategy === "airbnb" ? airbnbResults : longTermResults;
+  const projectionTitle = debouncedFormData.strategy === "airbnb" ? "Airbnb Projection" : "Long-Term Projection";
 
   const handleCalculate = useCallback(async () => {
     if (!validateAll()) return;
@@ -281,6 +290,7 @@ const Calculator_Page = () => {
 
   const handleReset = useCallback(() => {
     setFormData(initialFormData);
+    setDebouncedFormData(initialFormData);
     setErrors({});
     setTouched({});
     setHasCalculated(false);
