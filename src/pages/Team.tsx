@@ -6,6 +6,7 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { JsonLd, createOrganizationSchema } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import bayoImage from "@/assets/team-bayo.jpg";
+import aishaImage from "@/assets/team-aisha.jpg";
 
 const founder = {
   name: "Victor",
@@ -37,7 +38,7 @@ const consultants = [
     location: "Abuja & Emerging Markets",
     bio: "Aisha focuses on Abuja and select mainland and emerging growth markets. She serves both end-users and investors, especially those looking for structured payment plans, affordable but documented housing, and developments with solid fundamentals. Her strength is clear communication and patient guidance through the full acquisition process.",
     initial: "A",
-    image: null,
+    image: aishaImage,
   },
 ];
 

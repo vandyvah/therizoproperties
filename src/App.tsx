@@ -13,6 +13,7 @@ import OurStandard from "./pages/OurStandard";
 import Team from "./pages/Team";
 import Contact from "./pages/Contact";
 import Properties from "./pages/Properties";
+import PropertyDetailPage from "./pages/PropertyDetail";
 import Vault from "./pages/Vault";
 import StyleGuide from "./pages/StyleGuide";
 import NotFound from "./pages/NotFound";
@@ -55,6 +56,7 @@ const App = () => (
               <Route path="/team" element={<Team />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/properties" element={<Properties />} />
+              <Route path="/properties/:id" element={<PropertyDetailPage />} />
               <Route path="/vault" element={<Vault />} />
               <Route path="/press" element={<Press />} />
               <Route path="/style-guide" element={<StyleGuide />} />
