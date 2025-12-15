@@ -29,9 +29,7 @@ const baseNavItems = [
   { href: "/dashboard/roi", label: "ROI Calculator", icon: Calculator },
 ];
 
-const adminNavItems = [
-  { href: "/dashboard/contacts", label: "Contact Enquiries", icon: Mail },
-];
+const adminNavItems: typeof baseNavItems = [];
 
 const superAdminNavItems = [
   { href: "/dashboard/users", label: "User Management", icon: ShieldCheck },
