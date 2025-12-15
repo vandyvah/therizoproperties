@@ -743,7 +743,7 @@ export type Database = {
         | "deal"
         | "viewing"
         | "roi"
-      app_role: "admin" | "spc" | "support"
+      app_role: "admin" | "spc" | "support" | "super_admin"
       check_status: "pending" | "in_progress" | "completed" | "failed"
       check_type:
         | "ownership_verified"
@@ -921,7 +921,7 @@ export const Constants = {
         "viewing",
         "roi",
       ],
-      app_role: ["admin", "spc", "support"],
+      app_role: ["admin", "spc", "support", "super_admin"],
       check_status: ["pending", "in_progress", "completed", "failed"],
       check_type: [
         "ownership_verified",
