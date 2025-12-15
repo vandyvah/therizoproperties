@@ -15,6 +15,10 @@ import Properties from "./pages/Properties";
 import Vault from "./pages/Vault";
 import StyleGuide from "./pages/StyleGuide";
 import NotFound from "./pages/NotFound";
+import Press from "./pages/Press";
+import TitleVerification from "./pages/guides/TitleVerification";
+import BuyerGuide from "./pages/guides/BuyerGuide";
+import ROIMethodology from "./pages/guides/ROIMethodology";
 import DashboardAuth from "./pages/dashboard/DashboardAuth";
 import DashboardHome from "./pages/dashboard/DashboardHome";
 import PropertiesList from "./pages/dashboard/PropertiesList";
@@ -47,7 +51,13 @@ const App = () => (
               <Route path="/contact" element={<Contact />} />
               <Route path="/properties" element={<Properties />} />
               <Route path="/vault" element={<Vault />} />
+              <Route path="/press" element={<Press />} />
               <Route path="/style-guide" element={<StyleGuide />} />
+              
+              {/* Guide Pages */}
+              <Route path="/guides/title-verification" element={<TitleVerification />} />
+              <Route path="/guides/buyer-guide" element={<BuyerGuide />} />
+              <Route path="/guides/roi-methodology" element={<ROIMethodology />} />
               
               {/* Dashboard Routes */}
               <Route path="/dashboard/auth" element={<DashboardAuth />} />
