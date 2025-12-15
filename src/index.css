@@ -52,8 +52,8 @@
     /* Text / Ink: #111827 */
     --ink: 222 47% 11%;
     
-    /* Muted Text / Slate: #6B7280 */
-    --slate: 220 9% 46%;
+    /* Muted Text / Slate: #6B7280 - darkened for better contrast */
+    --slate: 220 9% 40%;
     
     /* Semantic tokens */
     --background: 42 41% 94%;
@@ -72,7 +72,7 @@
     --secondary-foreground: 42 41% 94%;
 
     --muted: 38 19% 81%;
-    --muted-foreground: 220 9% 46%;
+    --muted-foreground: 220 9% 35%;
 
     --accent: 40 48% 60%;
     --accent-foreground: 213 71% 11%;
