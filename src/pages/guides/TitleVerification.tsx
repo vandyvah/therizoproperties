@@ -126,6 +126,7 @@ export default function TitleVerification() {
           "deed of assignment verification",
           "land registry search Nigeria"
         ]}
+        ogImage="https://therizo.com/og/og-title-verification.jpg"
       />
       <JsonLd data={createArticleSchema({
         headline: "How We Verify Nigerian Property Titles: A Complete Guide",

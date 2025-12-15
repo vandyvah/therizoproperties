@@ -464,6 +464,7 @@ const Calculator_Page = () => {
         description="Free ROI calculator for Nigerian real estate. Calculate rental yields, cap rates, and payback periods for Lagos, Abuja property investments. Compare long-term vs Airbnb strategies."
         canonicalUrl="/calculator"
         keywords="Nigerian property ROI calculator, Lagos rental yield calculator, Abuja real estate investment returns, property cap rate Nigeria, Airbnb vs rental income Nigeria"
+        ogImage="https://therizo.com/og/og-calculator.jpg"
       />
       <JsonLd data={createFAQSchema(calculatorFAQs)} />
       

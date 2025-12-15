@@ -43,6 +43,7 @@ const Index = () => {
         description="Discover verified Nigerian properties with clean titles and transparent pricing. Therizo serves serious buyers, diaspora investors, and developers in Lagos, Abuja & key growth markets."
         keywords="Nigerian real estate, Lagos property investment, Abuja real estate, diaspora property investment Nigeria, verified property titles Nigeria, luxury homes Lagos, investment properties Nigeria"
         canonicalUrl="https://therizo.com"
+        ogImage="https://therizo.com/og/og-home.jpg"
       />
       <JsonLd data={createOrganizationSchema()} />
       <JsonLd data={createRealEstateAgentSchema()} />

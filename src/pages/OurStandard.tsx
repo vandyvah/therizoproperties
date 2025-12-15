@@ -85,6 +85,7 @@ const OurStandard = () => {
         description="Learn how Therizo vets Nigerian properties. Our rigorous due diligence process includes title verification, price validation, and risk assessment to protect buyers."
         keywords="Nigerian property verification, title due diligence Nigeria, property vetting Lagos, real estate verification Abuja, safe property investment Nigeria"
         canonicalUrl="https://therizo.com/our-standard"
+        ogImage="https://therizo.com/og/og-standard.jpg"
       />
       <JsonLd data={createFAQSchema(standardFAQs)} />
       

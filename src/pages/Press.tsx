@@ -62,6 +62,7 @@ export default function Press() {
           "Therizo media kit",
           "real estate press release Nigeria"
         ]}
+        ogImage="https://therizo.com/og/og-press.jpg"
       />
       <JsonLd data={createOrganizationSchema()} />
 
