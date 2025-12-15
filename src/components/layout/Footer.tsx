@@ -156,7 +156,7 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-ivory/10 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-ivory/50">
             © {new Date().getFullYear()} Therizo Property and Development
-            Corporation. All rights reserved.
+            Corporation. A subsidiary of Therizo Group. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <Link to="/press" className="text-xs text-ivory/40 hover:text-gold transition-colors">
