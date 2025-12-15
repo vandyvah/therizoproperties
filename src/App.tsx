@@ -19,6 +19,9 @@ import Press from "./pages/Press";
 import TitleVerification from "./pages/guides/TitleVerification";
 import BuyerGuide from "./pages/guides/BuyerGuide";
 import ROIMethodology from "./pages/guides/ROIMethodology";
+import Lagos from "./pages/locations/Lagos";
+import Abuja from "./pages/locations/Abuja";
+import PortHarcourt from "./pages/locations/PortHarcourt";
 import DashboardAuth from "./pages/dashboard/DashboardAuth";
 import DashboardHome from "./pages/dashboard/DashboardHome";
 import PropertiesList from "./pages/dashboard/PropertiesList";
@@ -58,6 +61,11 @@ const App = () => (
               <Route path="/guides/title-verification" element={<TitleVerification />} />
               <Route path="/guides/buyer-guide" element={<BuyerGuide />} />
               <Route path="/guides/roi-methodology" element={<ROIMethodology />} />
+              
+              {/* Location Pages */}
+              <Route path="/locations/lagos" element={<Lagos />} />
+              <Route path="/locations/abuja" element={<Abuja />} />
+              <Route path="/locations/port-harcourt" element={<PortHarcourt />} />
               
               {/* Dashboard Routes */}
               <Route path="/dashboard/auth" element={<DashboardAuth />} />
