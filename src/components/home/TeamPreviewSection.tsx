@@ -10,22 +10,22 @@ const team = [
       "Leads strategy, capital allocation, and key partnerships. Personally oversees high-value and complex transactions.",
   },
   {
-    name: "Bayo",
-    role: "Senior Property Consultant",
+    name: "Mr. Adebayo",
+    role: "CFO / Admin",
     description:
-      "Specializes in Lagos Island corridors such as Lekki, Victoria Island, and surrounding estates.",
+      "A distinguished mathematician and accounting professional overseeing financial management and administrative processes.",
   },
   {
-    name: "Kelly",
-    role: "Senior Property Consultant",
+    name: "Mr Kelly",
+    role: "Vice President, Operations",
     description:
-      "Covers prime locations such as Ikoyi, Banana Island, and select luxury pockets in Lagos.",
+      "Oversees operations across FCT Abuja and the Northern Region, coordinating deal execution and consultant performance.",
   },
   {
-    name: "Aisha",
-    role: "Senior Property Consultant",
+    name: "Mrs Aisha",
+    role: "Vice President, Emerging Markets",
     description:
-      "Focuses on Abuja and key mainland and emerging markets with expertise in structured payment plans.",
+      "Leads expansion into FCT, Middle Belt, Ibadan, Port Harcourt, and emerging markets. Fluent in three major Nigerian languages.",
   },
 ];
 
