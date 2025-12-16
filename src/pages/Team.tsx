@@ -18,26 +18,26 @@ const founder = {
 
 const consultants = [
   {
-    name: "Bayo",
-    role: "Senior Property Consultant",
+    name: "Mr. Adebayo",
+    role: "CFO / Admin",
     location: "Lagos Island",
-    bio: "Bayo focuses on Lagos Island corridors such as Lekki, Ajah, and surrounding estates. He works with buyers, investors, and developers on mid-to-high value residential and mixed-use properties, with an emphasis on strong rental demand and practical design. Clients rely on him for realistic expectations, straight feedback, and diligent follow-up.",
-    initial: "B",
+    bio: "A distinguished mathematician and accounting professional, Mr. Adebayo brings analytical rigour and financial discipline to Therizo's operations. He oversees the firm's financial management, administrative processes, and ensures every transaction meets the highest standards of fiscal accountability and transparency.",
+    initial: "A",
     image: bayoImage,
   },
   {
-    name: "Kelly",
-    role: "National Operational Director",
+    name: "Mr Kelly",
+    role: "Vice President, Operations Director",
     location: "FCT Abuja / Northern Region",
-    bio: "Kelly oversees Therizo's operations across FCT Abuja and the Northern Region. He coordinates deal execution, manages consultant performance, and ensures operational standards are maintained across markets. With deep knowledge of the Abuja property landscape and northern investment corridors, he serves high-net-worth individuals, institutional clients, and diaspora investors seeking well-documented assets in Nigeria's political capital and emerging northern markets.",
+    bio: "Mr Kelly oversees Therizo's operations across FCT Abuja and the Northern Region. He coordinates deal execution, manages consultant performance, and ensures operational standards are maintained across markets. With deep knowledge of the Abuja property landscape and northern investment corridors, he serves high-net-worth individuals, institutional clients, and diaspora investors seeking well-documented assets in Nigeria's political capital and emerging northern markets.",
     initial: "K",
     image: kellyImage,
   },
   {
-    name: "Aisha",
-    role: "Senior Property Consultant",
-    location: "Abuja & Emerging Markets",
-    bio: "Aisha focuses on Abuja and select mainland and emerging growth markets. She serves both end-users and investors, especially those looking for structured payment plans, affordable but documented housing, and developments with solid fundamentals. Her strength is clear communication and patient guidance through the full acquisition process.",
+    name: "Mrs Aisha",
+    role: "Vice President, Emerging Markets and High-Volume Properties",
+    location: "FCT, Middle Belt, Ibadan, Port Harcourt & Emerging Markets",
+    bio: "Mrs Aisha leads Therizo's expansion into Nigeria's high-growth corridors, covering Inlands and Chief Lands in FCT, the Middle Belt Region, and emerging markets including Ibadan and Port Harcourt. Fluent in the three major Nigerian languages, she brings unmatched versatility across residential, commercial, and agricultural properties. Investors trust her to identify the right opportunities across diverse markets and deal structures.",
     initial: "A",
     image: aishaImage,
   },
@@ -115,13 +115,13 @@ const Team = () => {
         <div className="container-wide">
           <div className="max-w-3xl mb-16">
             <h2 className="font-display text-3xl md:text-4xl font-semibold text-ink mb-6">
-              Senior Property Consultants
+              Leadership Team
             </h2>
             <p className="text-lg text-slate">
-              Each senior consultant is responsible for a defined market and a
-              clear revenue target. They manage listings, viewings,
-              negotiations, and client communication from first contact to
-              completion.
+              Each member of our leadership team is responsible for defined
+              markets and clear objectives. They oversee operations, manage key
+              relationships, and ensure every client receives the firm's full
+              support from first contact to completion.
             </p>
           </div>
 
