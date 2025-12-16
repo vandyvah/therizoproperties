@@ -27,9 +27,9 @@ const consultants = [
   },
   {
     name: "Kelly",
-    role: "Senior Property Consultant",
-    location: "Ikoyi & Victoria Island",
-    bio: "Kelly covers Ikoyi, Banana Island, Victoria Island, and other prime luxury pockets. He works with high-net-worth individuals, family offices, and corporate clients looking for secure, trophy-level or income-producing assets. He is known for rigorous deal preparation and careful management of complex negotiations.",
+    role: "National Operational Director",
+    location: "FCT Abuja / Northern Region",
+    bio: "Kelly oversees Therizo's operations across FCT Abuja and the Northern Region. He coordinates deal execution, manages consultant performance, and ensures operational standards are maintained across markets. With deep knowledge of the Abuja property landscape and northern investment corridors, he serves high-net-worth individuals, institutional clients, and diaspora investors seeking well-documented assets in Nigeria's political capital and emerging northern markets.",
     initial: "K",
     image: kellyImage,
   },
