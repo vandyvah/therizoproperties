@@ -53,9 +53,9 @@ const Team = () => {
   return (
     <Layout>
       <SEOHead
-        title="Meet the Therizo Team | Nigerian Property Consultants"
-        description="Meet our experienced property consultants serving Lagos, Abuja, and key Nigerian markets. Trusted advisors for buyers, investors, and developers."
-        keywords="Nigerian real estate team, Lagos property consultants, Abuja real estate agents, Therizo team, Nigerian property experts"
+        title="Meet the Therizo Leadership Team | Nigerian Real Estate Experts"
+        description="Meet Therizo's executive team: CFO, Vice Presidents, and leadership driving real estate excellence across Lagos, Abuja, FCT, and Nigeria's emerging markets."
+        keywords="Nigerian real estate leadership, Therizo team, Lagos property experts, Abuja real estate, FCT property consultants, Nigerian investment advisors, emerging markets Nigeria"
         canonicalUrl="/team"
         ogImage="https://therizoproperties.com/og/og-team.jpg"
       />
