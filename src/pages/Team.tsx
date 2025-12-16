@@ -27,7 +27,7 @@ const consultants = [
   },
   {
     name: "Mr Kelly",
-    role: "Vice President, Operations Director",
+    role: "Vice President, Operations",
     location: "FCT Abuja / Northern Region",
     bio: "Mr Kelly oversees Therizo's operations across FCT Abuja and the Northern Region. He coordinates deal execution, manages consultant performance, and ensures operational standards are maintained across markets. With deep knowledge of the Abuja property landscape and northern investment corridors, he serves high-net-worth individuals, institutional clients, and diaspora investors seeking well-documented assets in Nigeria's political capital and emerging northern markets.",
     initial: "K",
