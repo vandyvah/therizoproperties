@@ -7,6 +7,7 @@ import { JsonLd, createOrganizationSchema } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import bayoImage from "@/assets/team-bayo.jpg";
 import aishaImage from "@/assets/team-aisha.jpg";
+import kellyImage from "@/assets/team-kelly.jpg";
 
 const founder = {
   name: "Victor",
@@ -30,7 +31,7 @@ const consultants = [
     location: "Ikoyi & Victoria Island",
     bio: "Kelly covers Ikoyi, Banana Island, Victoria Island, and other prime luxury pockets. He works with high-net-worth individuals, family offices, and corporate clients looking for secure, trophy-level or income-producing assets. He is known for rigorous deal preparation and careful management of complex negotiations.",
     initial: "K",
-    image: null,
+    image: kellyImage,
   },
   {
     name: "Aisha",
