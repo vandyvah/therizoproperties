@@ -7,7 +7,7 @@ import { JsonLd, createOrganizationSchema } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import bayoImage from "@/assets/team-bayo.jpg";
 import aishaImage from "@/assets/team-aisha.jpg";
-import kellyImage from "@/assets/team-kelly.jpg";
+import kellyImage from "@/assets/team-kelly.png";
 
 const founder = {
   name: "Victor",
