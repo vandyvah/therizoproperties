@@ -1,11 +1,17 @@
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
 
 const NotFound = () => {
   return (
     <Layout>
+      <SEOHead 
+        title="Page Not Found" 
+        description="The page you are looking for does not exist or has been moved."
+        noindex={true}
+      />
       <section className="min-h-[70vh] flex items-center justify-center bg-background">
         <div className="text-center px-4">
           <h1 className="font-display text-8xl font-bold text-primary mb-4">

@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, Check, Star, Home, MapPin, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
+import { SEOHead } from "@/components/seo/SEOHead";
 
 const colorSwatches = [
   { name: "Brand Navy", variable: "--navy", hex: "#081A2F", usage: "Primary (60-70%)" },
@@ -18,6 +19,11 @@ const colorSwatches = [
 export default function StyleGuide() {
   return (
     <div className="min-h-screen bg-ivory">
+      <SEOHead 
+        title="Style Guide" 
+        description="Therizo brand style guide - internal reference"
+        noindex={true}
+      />
       {/* Header */}
       <header className="bg-navy py-16">
         <div className="container-wide">

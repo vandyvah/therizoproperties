@@ -1,26 +1,43 @@
 # Therizo Property and Development Corporation
 # https://therizoproperties.com
+# Last updated: 2025-12-17
 
+# Default rules for all crawlers
 User-agent: *
 Allow: /
-
-# Crawl delay for polite crawling
 Crawl-delay: 1
 
-# Search engine specific rules
-User-agent: Googlebot
-Allow: /
+# Allow CSS and JS for proper rendering
+Allow: /src/
+Allow: /assets/
 
+# Block admin, dashboard, and private routes
+Disallow: /dashboard
+Disallow: /dashboard/
+Disallow: /style-guide
+Disallow: /vault
+
+# Bing-specific rules (Bingbot)
 User-agent: Bingbot
 Allow: /
+Crawl-delay: 1
 
+# Google-specific rules
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+# Social media crawlers
 User-agent: Twitterbot
 Allow: /
 
 User-agent: facebookexternalhit
 Allow: /
 
-# AI/LLM crawlers
+User-agent: LinkedInBot
+Allow: /
+
+# AI/LLM crawlers (allowed for discoverability)
 User-agent: GPTBot
 Allow: /
 
@@ -36,16 +53,14 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-# Block admin and private routes
-Disallow: /dashboard/
-Disallow: /dashboard/*
-Disallow: /style-guide
+User-agent: Google-Extended
+Allow: /
 
-# Dynamic sitemap (auto-updates with new properties)
-Sitemap: https://nvpxoxlnculbkmzkpstn.supabase.co/functions/v1/sitemap
-
-# Fallback static sitemap
+# Primary sitemap (canonical domain)
 Sitemap: https://therizoproperties.com/sitemap.xml
 
-# Host directive
+# Dynamic sitemap (auto-updates with properties)
+Sitemap: https://nvpxoxlnculbkmzkpstn.supabase.co/functions/v1/sitemap
+
+# Host directive (canonical domain)
 Host: https://therizoproperties.com
