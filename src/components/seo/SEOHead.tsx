@@ -88,14 +88,18 @@ export function SEOHead({
       updateMeta("bingbot", "index, follow");
     }
 
-    // Canonical URL
+    // Canonical URL - ensure clean URL without trailing slash (except root)
     let link = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
     if (!link) {
       link = document.createElement("link");
       link.setAttribute("rel", "canonical");
       document.head.appendChild(link);
     }
-    link.setAttribute("href", fullCanonical);
+    // Normalize canonical: remove trailing slash except for root
+    const normalizedCanonical = fullCanonical.endsWith('/') && fullCanonical !== 'https://therizoproperties.com/' 
+      ? fullCanonical.slice(0, -1) 
+      : fullCanonical;
+    link.setAttribute("href", normalizedCanonical);
 
     // Hreflang tags for international SEO
     document.querySelectorAll('link[hreflang]').forEach(el => el.remove());
@@ -105,7 +109,7 @@ export function SEOHead({
         const hreflangLink = document.createElement("link");
         hreflangLink.setAttribute("rel", "alternate");
         hreflangLink.setAttribute("hreflang", lang);
-        hreflangLink.setAttribute("href", fullCanonical);
+        hreflangLink.setAttribute("href", normalizedCanonical);
         document.head.appendChild(hreflangLink);
       });
     }
@@ -114,7 +118,7 @@ export function SEOHead({
     updateMeta("og:title", fullTitle, true);
     updateMeta("og:description", truncatedDescription, true);
     updateMeta("og:type", ogType, true);
-    updateMeta("og:url", fullCanonical, true);
+    updateMeta("og:url", normalizedCanonical, true);
     updateMeta("og:image", ogImage, true);
     updateMeta("og:image:width", "1200", true);
     updateMeta("og:image:height", "630", true);
@@ -141,9 +145,8 @@ export function SEOHead({
     updateMeta("twitter:image", ogImage);
     updateMeta("twitter:site", "@TherizoNG");
 
-    // Cleanup function
+    // Cleanup function - only remove hreflang tags, don't reset title (causes flickering)
     return () => {
-      document.title = "Therizo Properties | Premium Nigerian Real Estate";
       document.querySelectorAll('link[hreflang]').forEach(el => el.remove());
     };
   }, [fullTitle, truncatedDescription, fullCanonical, ogImage, ogType, publishedTime, modifiedTime, keywordsArray, noindex]);
