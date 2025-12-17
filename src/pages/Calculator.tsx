@@ -11,10 +11,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Send, Download, AlertCircle, Calculator, Globe, Droplets, Building2, Loader2, RotateCcw, Info, MapPin } from "lucide-react";
+import { Send, Download, AlertCircle, Calculator, Globe, Droplets, Building2, Loader2, RotateCcw, Info, MapPin, Plus, BarChart3 } from "lucide-react";
 import { DiasporaMortgageCalculator } from "@/components/calculator/DiasporaMortgageCalculator";
 import { FloodMappingOverlay } from "@/components/calculator/FloodMappingOverlay";
 import { InfrastructureTimeline } from "@/components/calculator/InfrastructureTimeline";
+import { PropertyComparison, SavedCalculation } from "@/components/calculator/PropertyComparison";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useDebounce, formatWithSeparators, parseFormattedNumber } from "@/hooks/useDebounce";
@@ -140,6 +141,8 @@ const Calculator_Page = () => {
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isCalculating, setIsCalculating] = useState(false);
   const [hasCalculated, setHasCalculated] = useState(false);
+  const [savedCalculations, setSavedCalculations] = useState<SavedCalculation[]>([]);
+  const [propertyName, setPropertyName] = useState("");
 
   const handleTabChange = () => {
     setTimeout(() => {
@@ -299,9 +302,56 @@ const Calculator_Page = () => {
     setErrors({});
     setTouched({});
     setHasCalculated(false);
+    setPropertyName("");
     toast({
       title: "Calculator Reset",
       description: "All inputs have been reset to defaults.",
+    });
+  }, [toast]);
+
+  const handleSaveToCompare = useCallback(() => {
+    if (!results.hasValidInputs || !hasCalculated) return;
+    
+    const name = propertyName.trim() || `Property ${savedCalculations.length + 1}`;
+    
+    const newCalculation: SavedCalculation = {
+      id: crypto.randomUUID(),
+      name,
+      location: formData.location,
+      strategy: formData.strategy,
+      totalInvestment: results.totalInvestment,
+      annualLongTermIncome: results.annualLongTermIncome,
+      roiLongTerm: results.roiLongTerm,
+      nightsBooked: results.nightsBooked,
+      annualAirbnbIncome: results.annualAirbnbIncome,
+      roiAirbnb: results.roiAirbnb,
+      annualCombinedIncome: results.annualCombinedIncome,
+      roiCombined: results.roiCombined,
+      createdAt: new Date(),
+    };
+
+    setSavedCalculations(prev => [...prev, newCalculation]);
+    setPropertyName("");
+    
+    toast({
+      title: "Property Saved",
+      description: `"${name}" has been added to your comparison list.`,
+    });
+  }, [results, hasCalculated, propertyName, formData, savedCalculations.length, toast]);
+
+  const handleRemoveFromCompare = useCallback((id: string) => {
+    setSavedCalculations(prev => prev.filter(calc => calc.id !== id));
+    toast({
+      title: "Removed",
+      description: "Property removed from comparison.",
+    });
+  }, [toast]);
+
+  const handleClearAllComparisons = useCallback(() => {
+    setSavedCalculations([]);
+    toast({
+      title: "Cleared",
+      description: "All saved comparisons have been removed.",
     });
   }, [toast]);
 
@@ -906,9 +956,56 @@ const Calculator_Page = () => {
                           </ResponsiveContainer>
                         </div>
                       </div>
+
+                      {/* Save to Compare Section */}
+                      <div className="bg-warm-white rounded-lg p-5 border border-sand animate-fade-in">
+                        <div className="flex flex-col sm:flex-row gap-3">
+                          <Input
+                            type="text"
+                            value={propertyName}
+                            onChange={(e) => setPropertyName(e.target.value)}
+                            placeholder="Name this property (optional)"
+                            className="flex-1 bg-ivory border-sand h-11"
+                          />
+                          <Button
+                            onClick={handleSaveToCompare}
+                            className="bg-navy text-ivory hover:bg-navy/90 h-11 px-6"
+                          >
+                            <Plus className="w-4 h-4 mr-2" />
+                            Save to Compare
+                          </Button>
+                        </div>
+                        {savedCalculations.length > 0 && (
+                          <p className="text-xs text-slate mt-2">
+                            {savedCalculations.length} {savedCalculations.length === 1 ? 'property' : 'properties'} saved for comparison
+                          </p>
+                        )}
+                      </div>
                     </>
                   )}
                 </div>
+              </div>
+
+              {/* Property Comparison Section */}
+              <div className="mt-12 pt-8 border-t border-sand">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center">
+                    <BarChart3 className="w-5 h-5 text-gold" />
+                  </div>
+                  <div>
+                    <h3 className="font-display text-xl font-bold text-ink">
+                      Property Comparison
+                    </h3>
+                    <p className="text-sm text-slate">
+                      Compare multiple properties side by side
+                    </p>
+                  </div>
+                </div>
+                <PropertyComparison
+                  savedCalculations={savedCalculations}
+                  onRemove={handleRemoveFromCompare}
+                  onClearAll={handleClearAllComparisons}
+                />
               </div>
             </TabsContent>
 
