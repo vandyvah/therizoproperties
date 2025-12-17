@@ -10,19 +10,19 @@ const team = [
       "Leads strategy, capital allocation, and key partnerships. Personally oversees high-value and complex transactions.",
   },
   {
-    name: "Mr. Adebayo",
+    name: "Mr. Solomon Adebayo",
     role: "CFO / Admin",
     description:
       "A distinguished mathematician and accounting professional overseeing financial management and administrative processes.",
   },
   {
-    name: "Mr Kelly",
+    name: "Mr Kelly Amiwero",
     role: "Vice President, Operations",
     description:
       "Oversees operations across FCT Abuja and the Northern Region, coordinating deal execution and consultant performance.",
   },
   {
-    name: "Mrs Aisha",
+    name: "Mrs Aisha Collins A.",
     role: "Vice President, Emerging Markets",
     description:
       "Leads expansion into FCT, Middle Belt, Ibadan, Port Harcourt, and emerging markets. Fluent in three major Nigerian languages.",
