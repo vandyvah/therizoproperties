@@ -2,3 +2,6 @@ project_id = "nvpxoxlnculbkmzkpstn"
 
 [functions.sitemap]
 verify_jwt = false
+
+[functions.bing-submit]
+verify_jwt = false
