@@ -161,7 +161,7 @@ export function HeroSection() {
             }}>
                 Prime Property for<br />
                 <span className="text-gold">
-                  Disciplined Capital.
+                  The Right Amount.
                 </span>
               </h1>
 
