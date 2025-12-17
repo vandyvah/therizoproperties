@@ -279,18 +279,90 @@ export default function SEOHealth() {
             </CardContent>
           </Card>
 
-          {/* Instructions */}
+          {/* GSC Setup Checklist */}
+          <Card className="border-gold/30 bg-gold/5">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CheckCircle className="text-gold" size={20} />
+                Google Search Console Setup Checklist
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div>
+                <h4 className="font-medium mb-3">Step 1: Verify Domain Ownership</h4>
+                <ol className="list-decimal list-inside space-y-2 text-sm text-slate">
+                  <li>Go to <a href="https://search.google.com/search-console" target="_blank" rel="noopener" className="text-gold hover:underline">Google Search Console</a></li>
+                  <li>Click "Add Property" → choose "URL prefix"</li>
+                  <li>Enter: <code className="bg-muted px-1 rounded">https://therizoproperties.com</code></li>
+                  <li>Select "HTML file" verification method</li>
+                  <li>HTML verification files are already deployed: <code className="bg-muted px-1 rounded">/google92982f5a15c6c4fe.html</code> and <code className="bg-muted px-1 rounded">/google2e061b228abc1074.html</code></li>
+                  <li>Click "Verify" in GSC</li>
+                </ol>
+              </div>
+
+              <div>
+                <h4 className="font-medium mb-3">Step 2: Submit Sitemaps</h4>
+                <ol className="list-decimal list-inside space-y-2 text-sm text-slate">
+                  <li>Go to Sitemaps section in GSC sidebar</li>
+                  <li>Submit static sitemap: <code className="bg-muted px-1 rounded">sitemap.xml</code></li>
+                  <li>Submit dynamic sitemap: <code className="bg-muted px-1 rounded text-xs">https://nvpxoxlnculbkmzkpstn.supabase.co/functions/v1/sitemap</code></li>
+                  <li>Wait for "Success" status (may take a few minutes)</li>
+                </ol>
+              </div>
+
+              <div>
+                <h4 className="font-medium mb-3">Step 3: Inspect Key URLs</h4>
+                <ol className="list-decimal list-inside space-y-2 text-sm text-slate">
+                  <li>Go to URL Inspection in GSC sidebar</li>
+                  <li>Test these priority URLs:
+                    <ul className="ml-6 mt-2 space-y-1 list-disc">
+                      <li><code className="bg-muted px-1 rounded">https://therizoproperties.com/</code> (Home)</li>
+                      <li><code className="bg-muted px-1 rounded">https://therizoproperties.com/properties</code></li>
+                      <li><code className="bg-muted px-1 rounded">https://therizoproperties.com/calculator</code></li>
+                      <li><code className="bg-muted px-1 rounded">https://therizoproperties.com/contact</code></li>
+                    </ul>
+                  </li>
+                  <li>Click "Test Live URL" for each</li>
+                  <li>Verify all show: <span className="text-green-600 font-medium">"Page is indexable"</span></li>
+                </ol>
+              </div>
+
+              <div>
+                <h4 className="font-medium mb-3">Step 4: Request Indexing (Optional)</h4>
+                <ol className="list-decimal list-inside space-y-2 text-sm text-slate">
+                  <li>After "Test Live URL" shows green, click "Request Indexing"</li>
+                  <li>This prioritizes the URL in Google's crawl queue</li>
+                  <li>Note: Indexing may take days to weeks depending on Google's schedule</li>
+                </ol>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* URL Inspection Guide */}
           <Card className="bg-muted/50">
             <CardContent className="pt-6">
-              <h4 className="font-medium mb-2">How to Verify in Google Search Console</h4>
-              <ol className="list-decimal list-inside space-y-1 text-sm text-slate">
-                <li>Go to Google Search Console → URL Inspection</li>
-                <li>Enter a public URL (e.g., https://therizoproperties.com/)</li>
-                <li>Click "Test Live URL" to see current crawl status</li>
-                <li>Verify: "Page is indexable", "Crawl allowed: Yes", "Indexing allowed: Yes"</li>
-                <li>Check "Google-selected canonical" matches your declared canonical</li>
-                <li>Review screenshot to ensure content renders correctly</li>
-              </ol>
+              <h4 className="font-medium mb-3">What to Look For in URL Inspection</h4>
+              <div className="grid md:grid-cols-2 gap-4 text-sm">
+                <div className="space-y-2">
+                  <p className="font-medium text-green-600">✓ Expected Results (Public Pages)</p>
+                  <ul className="space-y-1 text-slate">
+                    <li>• Crawl allowed: <strong>Yes</strong></li>
+                    <li>• Indexing allowed: <strong>Yes</strong></li>
+                    <li>• Page is indexable</li>
+                    <li>• No blocked resources</li>
+                    <li>• Canonical matches declared</li>
+                  </ul>
+                </div>
+                <div className="space-y-2">
+                  <p className="font-medium text-red-500">✗ Expected Results (Private Pages)</p>
+                  <ul className="space-y-1 text-slate">
+                    <li>• Indexing allowed: <strong>No</strong></li>
+                    <li>• Page has noindex directive</li>
+                    <li>• Excluded from sitemap</li>
+                    <li>• e.g., /dashboard, /vault, /seo-health</li>
+                  </ul>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
