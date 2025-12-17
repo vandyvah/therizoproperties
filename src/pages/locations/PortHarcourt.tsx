@@ -95,7 +95,7 @@ export default function PortHarcourt() {
         title="Port Harcourt Real Estate | Property Investment in GRA & Trans Amadi"
         description="Invest in Port Harcourt property with verified titles. Premium real estate in GRA, Trans Amadi, and Rivers State growth areas. Oil & gas industry rental demand. Expert guidance."
         canonical="/locations/port-harcourt"
-        ogImage="/og/og-port-harcourt.jpg"
+        ogImage="https://therizoproperties.com/og/og-port-harcourt.jpg"
         keywords={[
           "Port Harcourt real estate",
           "Port Harcourt property investment",

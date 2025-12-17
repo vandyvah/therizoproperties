@@ -95,7 +95,7 @@ export default function Abuja() {
         title="Abuja Real Estate | Property Investment in Maitama, Asokoro & Wuse"
         description="Invest in Abuja property with verified titles and stable returns. Premium real estate in Maitama, Asokoro, Wuse 2, and FCT growth corridors. Expert guidance for investors."
         canonical="/locations/abuja"
-        ogImage="/og/og-abuja.jpg"
+        ogImage="https://therizoproperties.com/og/og-abuja.jpg"
         keywords={[
           "Abuja real estate",
           "Abuja property investment",

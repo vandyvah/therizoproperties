@@ -95,7 +95,7 @@ export default function Lagos() {
         title="Lagos Real Estate | Property Investment in Lekki, Victoria Island & Ikoyi"
         description="Invest in Lagos property with verified titles and strong ROI. Premium real estate in Lekki, Victoria Island, Ikoyi, and emerging areas. Expert guidance for local and diaspora buyers."
         canonical="/locations/lagos"
-        ogImage="/og/og-lagos.jpg"
+        ogImage="https://therizoproperties.com/og/og-lagos.jpg"
         keywords={[
           "Lagos real estate",
           "Lagos property investment",
