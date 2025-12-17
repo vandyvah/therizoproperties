@@ -150,6 +150,209 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_clusters: {
+        Row: {
+          created_at: string
+          custom_content: string | null
+          description: string | null
+          featured_image_url: string | null
+          id: string
+          is_auto_generated: boolean
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          custom_content?: string | null
+          description?: string | null
+          featured_image_url?: string | null
+          id?: string
+          is_auto_generated?: boolean
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          custom_content?: string | null
+          description?: string | null
+          featured_image_url?: string | null
+          id?: string
+          is_auto_generated?: boolean
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      blog_internal_links: {
+        Row: {
+          created_at: string
+          id: string
+          source_post_id: string
+          target_post_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          source_post_id: string
+          target_post_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          source_post_id?: string
+          target_post_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blog_internal_links_source_post_id_fkey"
+            columns: ["source_post_id"]
+            isOneToOne: false
+            referencedRelation: "blog_posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "blog_internal_links_target_post_id_fkey"
+            columns: ["target_post_id"]
+            isOneToOne: false
+            referencedRelation: "blog_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      blog_post_images: {
+        Row: {
+          alt_text: string
+          caption: string | null
+          created_at: string
+          id: string
+          image_url: string
+          post_id: string
+          sort_order: number | null
+        }
+        Insert: {
+          alt_text: string
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_url: string
+          post_id: string
+          sort_order?: number | null
+        }
+        Update: {
+          alt_text?: string
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string
+          post_id?: string
+          sort_order?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blog_post_images_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "blog_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      blog_posts: {
+        Row: {
+          accuracy_confirmed: boolean
+          author_name: string
+          body_content: string
+          category: string
+          cluster_id: string | null
+          created_at: string
+          created_by_id: string | null
+          featured_image_alt: string
+          featured_image_caption: string | null
+          featured_image_url: string
+          id: string
+          no_filler_confirmed: boolean
+          originality_confirmed: boolean
+          primary_keyword: string
+          published_at: string | null
+          query_targets: string[]
+          slug: string
+          status: string
+          summary_answer: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+          word_count: number
+        }
+        Insert: {
+          accuracy_confirmed?: boolean
+          author_name: string
+          body_content: string
+          category: string
+          cluster_id?: string | null
+          created_at?: string
+          created_by_id?: string | null
+          featured_image_alt: string
+          featured_image_caption?: string | null
+          featured_image_url: string
+          id?: string
+          no_filler_confirmed?: boolean
+          originality_confirmed?: boolean
+          primary_keyword: string
+          published_at?: string | null
+          query_targets?: string[]
+          slug: string
+          status?: string
+          summary_answer: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          word_count?: number
+        }
+        Update: {
+          accuracy_confirmed?: boolean
+          author_name?: string
+          body_content?: string
+          category?: string
+          cluster_id?: string | null
+          created_at?: string
+          created_by_id?: string | null
+          featured_image_alt?: string
+          featured_image_caption?: string | null
+          featured_image_url?: string
+          id?: string
+          no_filler_confirmed?: boolean
+          originality_confirmed?: boolean
+          primary_keyword?: string
+          published_at?: string | null
+          query_targets?: string[]
+          slug?: string
+          status?: string
+          summary_answer?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          word_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blog_posts_cluster_id_fkey"
+            columns: ["cluster_id"]
+            isOneToOne: false
+            referencedRelation: "blog_clusters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "blog_posts_created_by_id_fkey"
+            columns: ["created_by_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clients: {
         Row: {
           assigned_consultant_id: string | null
