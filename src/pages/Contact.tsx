@@ -16,7 +16,7 @@ import { Mail, Phone, MapPin, Send, MessageSquare } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { SEOHead } from "@/components/seo/SEOHead";
-import { JsonLd, createOrganizationSchema, createFAQSchema } from "@/components/seo/JsonLd";
+import { JsonLd, createOrganizationSchema, createLocalBusinessSchema, createFAQSchema } from "@/components/seo/JsonLd";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 
@@ -36,6 +36,10 @@ const contactFAQs = [
   {
     question: "What information should I prepare before contacting Therizo?",
     answer: "Please share your budget range, preferred locations, property type, and timeline. This helps us match you with suitable properties and assign the right consultant to your needs."
+  },
+  {
+    question: "Do you work with diaspora investors outside Nigeria?",
+    answer: "Absolutely. We serve clients across the UK, Europe, North America, and the Middle East. Our team understands diaspora needs—verified properties, transparent pricing, and reliable local execution."
   }
 ];
 
@@ -111,56 +115,56 @@ const Contact = () => {
   return (
     <Layout>
       <SEOHead
-        title="Contact Therizo | Nigerian Property Consultation & Enquiries"
-        description="Get in touch with Therizo for Nigerian real estate consultation. Speak with senior property consultants in Lagos, Abuja & Port Harcourt. Same-day response for serious buyers."
-        keywords="contact Nigerian real estate agent, Lagos property consultant, Abuja real estate enquiry, diaspora property investment help, Nigerian property consultation"
+        title="Contact Therizo | Nigerian Property Consultation for Diaspora Investors"
+        description="Get in touch with Therizo for verified Nigerian property consultation. Senior consultants in Lagos, Abuja & Port Harcourt. Same-day response for diaspora investors and serious buyers."
+        keywords="contact Nigerian real estate agent, Lagos property consultant, Abuja real estate enquiry, diaspora property investment help, verified Nigerian properties consultation"
         canonicalUrl="/contact"
         ogImage="https://therizoproperties.com/og/og-contact.jpg"
       />
       <JsonLd data={createOrganizationSchema()} />
+      <JsonLd data={createLocalBusinessSchema()} />
       <JsonLd data={createFAQSchema(contactFAQs)} />
       
-      {/* Hero */}
-      <section className="pt-32 pb-16 bg-navy">
-        <div className="container-wide">
+      {/* Hero - Mobile optimized */}
+      <section className="pt-24 sm:pt-32 pb-12 sm:pb-16 bg-navy">
+        <div className="container-wide px-4 sm:px-6">
           <Breadcrumbs items={[{ label: "Contact", href: "/contact" }]} />
           <div className="max-w-3xl">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-sm bg-gold/20 flex items-center justify-center">
-                <MessageSquare className="text-gold" size={24} />
+            <div className="flex items-center gap-3 mb-4 sm:mb-6">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-sm bg-gold/20 flex items-center justify-center">
+                <MessageSquare className="text-gold" size={20} />
               </div>
-              <span className="text-gold font-medium">Get in Touch</span>
+              <span className="text-gold font-medium text-sm sm:text-base">Get in Touch</span>
             </div>
-            <h1 className="font-display text-4xl md:text-5xl font-semibold text-ivory mb-6">
+            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-semibold text-ivory mb-4 sm:mb-6">
               Contact Therizo
             </h1>
-            <p className="text-lg text-ivory/80 leading-relaxed">
+            <p className="text-base sm:text-lg text-ivory/80 leading-relaxed">
               Tell us what you are looking for and where you are in your
               property journey. A senior consultant will review your message and
-              respond with next steps, usually within a reasonable time window
-              depending on volume and time zones.
+              respond with next steps.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Contact Form & Info */}
-      <section className="section-padding bg-ivory">
-        <div className="container-wide">
-          <div className="grid lg:grid-cols-3 gap-12">
+      {/* Contact Form & Info - Mobile optimized */}
+      <section className="py-12 sm:section-padding bg-ivory">
+        <div className="container-wide px-4 sm:px-6">
+          <div className="grid lg:grid-cols-3 gap-8 lg:gap-12">
             {/* Form */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 order-2 lg:order-1">
               <Card className="border-sand shadow-md bg-warm-white">
-                <CardHeader>
-                  <CardTitle className="font-display text-2xl">
+                <CardHeader className="px-4 sm:px-6">
+                  <CardTitle className="font-display text-xl sm:text-2xl">
                     Send Us a Message
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-6">
+                <CardContent className="px-4 sm:px-6">
+                  <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                       <div>
-                        <Label htmlFor="fullName" className="mb-2 block">
+                        <Label htmlFor="fullName" className="mb-2 block text-sm">
                           Full Name *
                         </Label>
                         <Input
@@ -168,10 +172,11 @@ const Contact = () => {
                           name="fullName"
                           required
                           placeholder="Your full name"
+                          className="h-12 sm:h-10"
                         />
                       </div>
                       <div>
-                        <Label htmlFor="email" className="mb-2 block">
+                        <Label htmlFor="email" className="mb-2 block text-sm">
                           Email Address *
                         </Label>
                         <Input
@@ -180,28 +185,30 @@ const Contact = () => {
                           type="email"
                           required
                           placeholder="your@email.com"
+                          className="h-12 sm:h-10"
                         />
                       </div>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                       <div>
-                        <Label htmlFor="phone" className="mb-2 block">
-                          Phone / WhatsApp Number
+                        <Label htmlFor="phone" className="mb-2 block text-sm">
+                          Phone / WhatsApp
                         </Label>
                         <Input
                           id="phone"
                           name="phone"
                           type="tel"
                           placeholder="+234..."
+                          className="h-12 sm:h-10"
                         />
                       </div>
                       <div>
-                        <Label htmlFor="clientType" className="mb-2 block">
+                        <Label htmlFor="clientType" className="mb-2 block text-sm">
                           Are You *
                         </Label>
                         <Select name="clientType" required>
-                          <SelectTrigger>
+                          <SelectTrigger className="h-12 sm:h-10">
                             <SelectValue placeholder="Select your role" />
                           </SelectTrigger>
                           <SelectContent>
@@ -215,23 +222,24 @@ const Contact = () => {
                       </div>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                       <div>
-                        <Label htmlFor="budget" className="mb-2 block">
+                        <Label htmlFor="budget" className="mb-2 block text-sm">
                           Budget Range (₦)
                         </Label>
                         <Input
                           id="budget"
                           name="budget"
                           placeholder="e.g., 100M - 200M"
+                          className="h-12 sm:h-10"
                         />
                       </div>
                       <div>
-                        <Label htmlFor="preferredLocation" className="mb-2 block">
-                          Preferred Location(s)
+                        <Label htmlFor="preferredLocation" className="mb-2 block text-sm">
+                          Preferred Location
                         </Label>
                         <Select name="preferredLocation">
-                          <SelectTrigger>
+                          <SelectTrigger className="h-12 sm:h-10">
                             <SelectValue placeholder="Select location" />
                           </SelectTrigger>
                           <SelectContent>
@@ -246,7 +254,7 @@ const Contact = () => {
                     </div>
 
                     <div>
-                      <Label htmlFor="message" className="mb-2 block">
+                      <Label htmlFor="message" className="mb-2 block text-sm">
                         Message *
                       </Label>
                       <Textarea
@@ -254,7 +262,8 @@ const Contact = () => {
                         name="message"
                         required
                         placeholder="Briefly describe what you need and your timeline."
-                        rows={5}
+                        rows={4}
+                        className="min-h-[120px]"
                       />
                     </div>
 
@@ -263,7 +272,7 @@ const Contact = () => {
                       variant="gold"
                       size="lg"
                       disabled={isSubmitting}
-                      className="w-full md:w-auto"
+                      className="w-full sm:w-auto h-12 sm:h-11 text-base"
                     >
                       {isSubmitting ? (
                         "Submitting..."
@@ -279,54 +288,50 @@ const Contact = () => {
               </Card>
             </div>
 
-            {/* Contact Info */}
-            <div className="space-y-8">
+            {/* Contact Info - Mobile first */}
+            <div className="space-y-6 sm:space-y-8 order-1 lg:order-2">
               <Card className="border-sand bg-warm-white">
-                <CardHeader>
-                  <CardTitle className="font-display text-xl">
+                <CardHeader className="px-4 sm:px-6 pb-2 sm:pb-4">
+                  <CardTitle className="font-display text-lg sm:text-xl">
                     Prefer to Speak Directly?
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="px-4 sm:px-6 space-y-4">
                   <p className="text-sm text-muted-foreground">
-                    If you would rather talk first, you can reach us via:
+                    Reach us via phone or email:
                   </p>
                   <div className="space-y-3">
                     <a
                       href="tel:+2348034830087"
-                      className="flex items-center gap-3 text-foreground hover:text-gold transition-colors"
+                      className="flex items-center gap-3 text-foreground hover:text-gold transition-colors py-2"
                     >
-                      <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center shrink-0">
                         <Phone size={18} className="text-gold" />
                       </div>
-                      <span>+234 803 483 0087</span>
+                      <span className="text-sm sm:text-base">+234 803 483 0087</span>
                     </a>
                     <a
                       href="mailto:hello@therizoproperties.com"
-                      className="flex items-center gap-3 text-foreground hover:text-gold transition-colors"
+                      className="flex items-center gap-3 text-foreground hover:text-gold transition-colors py-2"
                     >
-                      <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center shrink-0">
                         <Mail size={18} className="text-gold" />
                       </div>
-                      <span>hello@therizoproperties.com</span>
+                      <span className="text-sm sm:text-base break-all">hello@therizoproperties.com</span>
                     </a>
                   </div>
-                  <p className="text-xs text-slate pt-4 border-t border-sand">
-                    Please share your name, location, and a short summary of
-                    what you need before the call, so we can prepare.
-                  </p>
                 </CardContent>
               </Card>
 
               <Card className="border-sand bg-warm-white">
-                <CardHeader>
-                  <CardTitle className="font-display text-xl">
+                <CardHeader className="px-4 sm:px-6 pb-2 sm:pb-4">
+                  <CardTitle className="font-display text-lg sm:text-xl">
                     Where We Operate
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="px-4 sm:px-6">
                   <p className="text-sm text-slate mb-4">
-                    Therizo is focused on Nigeria, with core activity in:
+                    Therizo serves verified Nigerian properties in:
                   </p>
                   <ul className="space-y-2">
                     {operatingLocations.map((loc) => (
@@ -343,10 +348,32 @@ const Contact = () => {
                     ))}
                   </ul>
                   <p className="text-xs text-slate mt-4 pt-4 border-t border-sand">
-                    We also serve diaspora clients across the UK, Europe, North
-                    America, and the Middle East who need a disciplined local
-                    partner.
+                    We also serve diaspora investors across the UK, Europe, North
+                    America, and the Middle East.
                   </p>
+                </CardContent>
+              </Card>
+
+              {/* Headquarters Card */}
+              <Card className="border-sand bg-warm-white">
+                <CardHeader className="px-4 sm:px-6 pb-2 sm:pb-4">
+                  <CardTitle className="font-display text-lg sm:text-xl">
+                    Headquarters
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="px-4 sm:px-6">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center shrink-0">
+                      <MapPin size={18} className="text-gold" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-foreground">
+                        Suite C1, Plot 759<br />
+                        Kubwa Extension, F15<br />
+                        Abuja, Nigeria
+                      </p>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </div>
@@ -354,26 +381,29 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="section-padding bg-muted/50">
-        <div className="container-wide">
-          <div className="max-w-3xl mx-auto text-center mb-12">
-            <h2 className="font-display text-2xl md:text-3xl font-semibold text-ink mb-4">
+      {/* FAQ Section - Mobile optimized */}
+      <section className="py-12 sm:section-padding bg-muted/50">
+        <div className="container-wide px-4 sm:px-6">
+          <div className="max-w-3xl mx-auto text-center mb-8 sm:mb-12">
+            <h2 className="font-display text-xl sm:text-2xl md:text-3xl font-semibold text-ink mb-3 sm:mb-4">
               Contact FAQs
             </h2>
+            <p className="text-sm sm:text-base text-slate">
+              Common questions from diaspora investors and property buyers
+            </p>
           </div>
           <FAQSection faqs={contactFAQs} />
         </div>
       </section>
 
-      {/* Closing CTA */}
-      <section className="section-padding bg-ivory">
-        <div className="container-narrow text-center">
-          <p className="text-lg text-slate leading-relaxed mb-6">
+      {/* Closing CTA - Mobile optimized */}
+      <section className="py-12 sm:section-padding bg-ivory">
+        <div className="container-narrow px-4 sm:px-6 text-center">
+          <p className="text-base sm:text-lg text-slate leading-relaxed mb-4 sm:mb-6">
             Real estate decisions carry weight.
           </p>
-          <p className="text-xl text-ink font-medium">
-            If you want clear answers, realistic numbers, and properties that
+          <p className="text-lg sm:text-xl text-ink font-medium">
+            If you want clear answers, realistic numbers, and verified properties that
             can stand scrutiny, we are ready to speak with you.
           </p>
         </div>

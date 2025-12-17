@@ -75,21 +75,92 @@ export function createOrganizationSchema() {
   };
 }
 
+// Helper function to create LocalBusiness schema
+export function createLocalBusinessSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": "https://therizoproperties.com/#localbusiness",
+    name: "Therizo Property and Development Corporation",
+    description: "Premium Nigerian real estate firm serving diaspora investors with verified properties, clean titles, and disciplined due diligence across Lagos, Abuja, and Port Harcourt.",
+    url: "https://therizoproperties.com",
+    telephone: "+234 803 483 0087",
+    email: "hello@therizoproperties.com",
+    priceRange: "₦₦₦₦",
+    image: "https://therizoproperties.com/og/og-home.jpg",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Suite C1, Plot 759, Kubwa Extension, F15",
+      addressLocality: "Abuja",
+      addressRegion: "FCT",
+      postalCode: "",
+      addressCountry: "NG",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 9.0765,
+      longitude: 7.3986,
+    },
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        opens: "09:00",
+        closes: "18:00",
+      },
+    ],
+    areaServed: [
+      { "@type": "City", name: "Lagos" },
+      { "@type": "City", name: "Abuja" },
+      { "@type": "City", name: "Port Harcourt" },
+      { "@type": "State", name: "Ogun State" },
+    ],
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Nigerian Property Services",
+      itemListElement: [
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Property Title Verification",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Diaspora Investment Advisory",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Premium Property Sales",
+          },
+        },
+      ],
+    },
+  };
+}
+
 // Helper function to create RealEstateAgent schema
 export function createRealEstateAgentSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "RealEstateAgent",
     name: "Therizo Property and Development Corporation",
-    description: "Boutique real estate firm specializing in verified Nigerian properties with clean titles and transparent pricing.",
+    description: "Boutique real estate firm specializing in verified Nigerian properties with clean titles and transparent pricing for diaspora investors.",
     url: "https://therizoproperties.com",
     telephone: "+234 803 483 0087",
     email: "hello@therizoproperties.com",
     priceRange: "₦₦₦",
     address: {
       "@type": "PostalAddress",
-      addressLocality: "Lagos",
-      addressRegion: "Lagos State",
+      streetAddress: "Suite C1, Plot 759, Kubwa Extension, F15",
+      addressLocality: "Abuja",
+      addressRegion: "FCT",
       addressCountry: "NG",
     },
     areaServed: [
