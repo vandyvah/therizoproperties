@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.bing-submit]
 verify_jwt = false
+
+[functions.indexnow]
+verify_jwt = false
