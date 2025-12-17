@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Loader2, Calendar, MapPin } from "lucide-react";
+import { ViewingForm } from "@/components/dashboard/ViewingForm";
 
 type ViewingStatus = "scheduled" | "completed" | "cancelled" | "no_show";
 
@@ -40,12 +41,24 @@ const statusColors: Record<ViewingStatus, string> = {
 };
 
 export default function ViewingsList() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [viewings, setViewings] = useState<Viewing[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     fetchViewings();
   }, []);
+
+  // Check for ?new=true query param to open form
+  useEffect(() => {
+    if (searchParams.get("new") === "true") {
+      setShowForm(true);
+      // Remove the query param after opening
+      searchParams.delete("new");
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams]);
 
   const fetchViewings = async () => {
     try {
@@ -94,11 +107,9 @@ export default function ViewingsList() {
             <h1 className="font-display text-3xl font-semibold text-foreground">Viewings</h1>
             <p className="text-muted-foreground mt-1">Schedule and track property viewings</p>
           </div>
-          <Button asChild>
-            <Link to="/dashboard/viewings/new">
-              <Plus size={16} className="mr-2" />
-              Schedule Viewing
-            </Link>
+          <Button onClick={() => setShowForm(true)}>
+            <Plus size={16} className="mr-2" />
+            Schedule Viewing
           </Button>
         </div>
 
@@ -211,6 +222,12 @@ export default function ViewingsList() {
           </CardContent>
         </Card>
       </div>
+
+      <ViewingForm
+        open={showForm}
+        onClose={() => setShowForm(false)}
+        onSuccess={fetchViewings}
+      />
     </DashboardLayout>
   );
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
@@ -47,6 +47,7 @@ const clientTypeLabels: Record<ClientType, string> = {
 };
 
 export default function ClientsList() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -56,6 +57,15 @@ export default function ClientsList() {
   useEffect(() => {
     fetchClients();
   }, []);
+
+  // Check for ?new=true query param to open form
+  useEffect(() => {
+    if (searchParams.get("new") === "true") {
+      setShowForm(true);
+      searchParams.delete("new");
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams]);
 
   const fetchClients = async () => {
     try {

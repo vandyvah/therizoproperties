@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Loader2, Eye, TrendingUp } from "lucide-react";
+import { DealForm } from "@/components/dashboard/DealForm";
 
 type DealStatus = "in_progress" | "under_contract" | "closed" | "cancelled";
 
@@ -45,13 +46,24 @@ const statusColors: Record<DealStatus, string> = {
 };
 
 export default function DealsList() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [deals, setDeals] = useState<Deal[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     fetchDeals();
   }, []);
+
+  // Check for ?new=true query param to open form
+  useEffect(() => {
+    if (searchParams.get("new") === "true") {
+      setShowForm(true);
+      searchParams.delete("new");
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams]);
 
   const fetchDeals = async () => {
     try {
@@ -108,11 +120,9 @@ export default function DealsList() {
             <h1 className="font-display text-3xl font-semibold text-foreground">Deals</h1>
             <p className="text-muted-foreground mt-1">Track transactions and commissions</p>
           </div>
-          <Button asChild>
-            <Link to="/dashboard/deals/new">
-              <Plus size={16} className="mr-2" />
-              Create Deal
-            </Link>
+          <Button onClick={() => setShowForm(true)}>
+            <Plus size={16} className="mr-2" />
+            Create Deal
           </Button>
         </div>
 
@@ -208,6 +218,12 @@ export default function DealsList() {
           </CardContent>
         </Card>
       </div>
+
+      <DealForm
+        open={showForm}
+        onClose={() => setShowForm(false)}
+        onSuccess={fetchDeals}
+      />
     </DashboardLayout>
   );
 }

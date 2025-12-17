@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Loader2, Eye, Calculator } from "lucide-react";
+import { ROIForm } from "@/components/dashboard/ROIForm";
 
 type ROIStrategy = "long_term_rental" | "airbnb" | "compare";
 
@@ -39,12 +40,23 @@ const strategyLabels: Record<ROIStrategy, string> = {
 };
 
 export default function ROIList() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [calculations, setCalculations] = useState<ROICalculation[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     fetchCalculations();
   }, []);
+
+  // Check for ?new=true query param to open form
+  useEffect(() => {
+    if (searchParams.get("new") === "true") {
+      setShowForm(true);
+      searchParams.delete("new");
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams]);
 
   const fetchCalculations = async () => {
     try {
@@ -99,11 +111,9 @@ export default function ROIList() {
               Saved investment return analyses
             </p>
           </div>
-          <Button asChild>
-            <Link to="/dashboard/roi/new">
-              <Plus size={16} className="mr-2" />
-              New Calculation
-            </Link>
+          <Button onClick={() => setShowForm(true)}>
+            <Plus size={16} className="mr-2" />
+            New Calculation
           </Button>
         </div>
 
@@ -172,6 +182,12 @@ export default function ROIList() {
           </CardContent>
         </Card>
       </div>
+
+      <ROIForm
+        open={showForm}
+        onClose={() => setShowForm(false)}
+        onSuccess={fetchCalculations}
+      />
     </DashboardLayout>
   );
 }
