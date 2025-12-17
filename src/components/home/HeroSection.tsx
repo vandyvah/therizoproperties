@@ -159,7 +159,7 @@ export function HeroSection() {
               <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-ivory leading-[1.05] mb-6 animate-fade-up tracking-tight" style={{
               animationDelay: "0.1s"
             }}>
-                Premium Lagos Real Estate<br />
+                Premium Real Estate<br />
                 <span className="text-gold">
                   For Diaspora Investors.
                 </span>
