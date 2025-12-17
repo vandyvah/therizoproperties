@@ -13,6 +13,7 @@ interface SEOHeadProps {
   keywords?: string | string[];
   noindex?: boolean;
   pinterestDomainVerify?: string; // Pinterest Rich Pins verification token
+  pinterestImage?: string; // Pinterest-optimized vertical image (1000x1500)
 }
 
 // Hreflang configuration for international SEO
@@ -39,6 +40,7 @@ export function SEOHead({
   keywords = [],
   noindex = false,
   pinterestDomainVerify,
+  pinterestImage,
 }: SEOHeadProps) {
   const location = useLocation();
   const baseUrl = "https://therizoproperties.com";
@@ -152,11 +154,24 @@ export function SEOHead({
       updateMeta("p:domain_verify", pinterestDomainVerify);
     }
 
+    // Pinterest-optimized image (vertical format)
+    if (pinterestImage) {
+      updateMeta("og:image:alt", fullTitle, true);
+      // Add Pinterest-specific image meta
+      let pinterestMeta = document.querySelector('meta[property="pinterest:image"]');
+      if (!pinterestMeta) {
+        pinterestMeta = document.createElement("meta");
+        pinterestMeta.setAttribute("property", "pinterest:image");
+        document.head.appendChild(pinterestMeta);
+      }
+      pinterestMeta.setAttribute("content", pinterestImage);
+    }
+
     // Cleanup function - only remove hreflang tags, don't reset title (causes flickering)
     return () => {
       document.querySelectorAll('link[hreflang]').forEach(el => el.remove());
     };
-  }, [fullTitle, truncatedDescription, fullCanonical, ogImage, ogType, publishedTime, modifiedTime, keywordsArray, noindex, pinterestDomainVerify]);
+  }, [fullTitle, truncatedDescription, fullCanonical, ogImage, ogType, publishedTime, modifiedTime, keywordsArray, noindex, pinterestDomainVerify, pinterestImage]);
 
   return null;
 }
