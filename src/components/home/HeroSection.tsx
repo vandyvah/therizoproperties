@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Newspaper, X, Star, Crown } from "lucide-react";
+import { ArrowRight, Newspaper, X, Star, Crown, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -150,7 +150,7 @@ export function HeroSection() {
               <div className="flex items-center gap-4 mb-8 animate-fade-up">
                 <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-gold to-gold" />
                 <span className="text-gold/90 text-xs font-bold tracking-[0.3em] uppercase">
-                  Therizo Property & Development
+                  Verified Nigerian Properties
                 </span>
                 <div className="w-12 h-[1px] bg-gradient-to-l from-transparent via-gold to-gold" />
               </div>
@@ -159,16 +159,32 @@ export function HeroSection() {
               <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-ivory leading-[1.05] mb-6 animate-fade-up tracking-tight" style={{
               animationDelay: "0.1s"
             }}>
-                Prime Property for<br />
+                Premium Lagos Real Estate<br />
                 <span className="text-gold">
-                  The Right Amount.
+                  For Diaspora Investors.
                 </span>
               </h1>
 
               {/* Subheadline - Refined, confident */}
-              <p className="text-lg sm:text-xl text-ivory/70 leading-relaxed mb-10 max-w-lg animate-fade-up font-light tracking-wide" style={{
+              <p className="text-lg sm:text-xl text-ivory/70 leading-relaxed mb-6 max-w-lg animate-fade-up font-light tracking-wide" style={{
               animationDelay: "0.2s"
-            }}>Vetted Nigerian Properties with verified titles and transparent returns—before you commit a single naira.</p>
+            }}>Verified Nigerian properties with clean titles, documented ownership, and disciplined returns—trusted by diaspora investors worldwide.</p>
+
+              {/* Credibility Block */}
+              <div className="flex flex-wrap gap-6 mb-10 animate-fade-up" style={{ animationDelay: "0.25s" }}>
+                <div className="flex items-center gap-2 text-ivory/80 text-sm">
+                  <CheckCircle className="h-4 w-4 text-gold" />
+                  <span>Title Verification</span>
+                </div>
+                <div className="flex items-center gap-2 text-ivory/80 text-sm">
+                  <CheckCircle className="h-4 w-4 text-gold" />
+                  <span>Transparent Numbers</span>
+                </div>
+                <div className="flex items-center gap-2 text-ivory/80 text-sm">
+                  <CheckCircle className="h-4 w-4 text-gold" />
+                  <span>Deal Discipline</span>
+                </div>
+              </div>
 
               {/* CTA Buttons - Elite, refined styling */}
               <div className="flex flex-col sm:flex-row items-start gap-4 animate-fade-up" style={{

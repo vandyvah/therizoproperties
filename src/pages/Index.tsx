@@ -39,9 +39,9 @@ const Index = () => {
   return (
     <Layout>
       <SEOHead
-        title="Therizo | Premium Nigerian Real Estate & Property Investment"
-        description="Discover verified Nigerian properties with clean titles and transparent pricing. Therizo serves serious buyers, diaspora investors, and developers in Lagos, Abuja & key growth markets."
-        keywords="Nigerian real estate, Lagos property investment, Abuja real estate, diaspora property investment Nigeria, verified property titles Nigeria, luxury homes Lagos, investment properties Nigeria"
+        title="Verified Nigerian Properties for Diaspora Investors | Therizo"
+        description="Premium Lagos real estate with clean titles and documented ownership. Therizo serves diaspora investors with verified Nigerian properties, transparent numbers, and disciplined due diligence."
+        keywords="verified Nigerian properties, diaspora investors, premium Lagos real estate, clean title Nigeria, documented ownership, diaspora property investment, Lagos property, Abuja real estate"
         canonicalUrl="/"
         ogImage="https://therizoproperties.com/og/og-home.jpg"
       />
