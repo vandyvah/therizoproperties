@@ -35,6 +35,12 @@ import DealsList from "./pages/dashboard/DealsList";
 import ROIList from "./pages/dashboard/ROIList";
 import Settings from "./pages/dashboard/Settings";
 import UserManagement from "./pages/dashboard/UserManagement";
+import BlogPostsList from "./pages/dashboard/BlogPostsList";
+import BlogPostEdit from "./pages/dashboard/BlogPostEdit";
+import BlogClustersList from "./pages/dashboard/BlogClustersList";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
+import BlogCluster from "./pages/BlogCluster";
 import SEOHealth from "./pages/SEOHealth";
 
 const queryClient = new QueryClient();
@@ -72,6 +78,12 @@ const App = () => (
               <Route path="/locations/abuja" element={<Abuja />} />
               <Route path="/locations/port-harcourt" element={<PortHarcourt />} />
               
+              {/* Blog Pages */}
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/blog/cluster/:slug" element={<BlogCluster />} />
+              <Route path="/locations/port-harcourt" element={<PortHarcourt />} />
+              
               {/* Dashboard Routes */}
               <Route path="/dashboard/auth" element={<DashboardAuth />} />
               <Route path="/dashboard" element={<DashboardHome />} />
@@ -82,6 +94,10 @@ const App = () => (
               <Route path="/dashboard/viewings" element={<ViewingsList />} />
               <Route path="/dashboard/deals" element={<DealsList />} />
               <Route path="/dashboard/roi" element={<ROIList />} />
+              <Route path="/dashboard/blog" element={<BlogPostsList />} />
+              <Route path="/dashboard/blog/new" element={<BlogPostEdit />} />
+              <Route path="/dashboard/blog/:id/edit" element={<BlogPostEdit />} />
+              <Route path="/dashboard/blog/clusters" element={<BlogClustersList />} />
               
               <Route path="/dashboard/users" element={<UserManagement />} />
               <Route path="/dashboard/settings" element={<Settings />} />

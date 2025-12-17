@@ -12,6 +12,7 @@ const navLinks = [
   { href: "/vault", label: "The Vault", icon: Lock, exclusive: true },
   { href: "/calculator", label: "ROI Calculator" },
   { href: "/our-standard", label: "Our Standard" },
+  { href: "/blog", label: "Blog" },
   { href: "/team", label: "Team" },
   { href: "/contact", label: "Contact" },
 ];

@@ -145,8 +145,9 @@ export default function BlogClustersList() {
   };
 
   return (
-    <DashboardLayout title="Blog Clusters">
+    <DashboardLayout>
       <div className="space-y-6">
+        <h1 className="text-2xl font-display font-semibold">Blog Clusters</h1>
         {/* Header */}
         <div className="flex justify-between items-center">
           <p className="text-muted-foreground">
