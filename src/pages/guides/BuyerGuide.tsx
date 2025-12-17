@@ -126,24 +126,24 @@ export default function BuyerGuide() {
   return (
     <Layout>
       <SEOHead
-        title="Complete Guide to Buying Property in Nigeria (2025)"
-        description="Step-by-step guide to buying property in Nigeria. Learn about due diligence, transaction costs, documentation, and how to avoid common pitfalls. Expert advice from Therizo."
+        title="Diaspora Buyer's Guide: How to Buy Property in Nigeria (2025)"
+        description="Complete step-by-step guide for diaspora investors buying verified Nigerian properties. Learn due diligence, title verification, transaction costs, and how to avoid common pitfalls."
         canonical="/guides/buyer-guide"
         keywords={[
-          "buy property Nigeria",
-          "Nigerian real estate guide",
+          "diaspora property investment Nigeria",
+          "buy property Nigeria guide",
+          "Nigerian real estate diaspora",
           "Lagos property buying guide",
-          "how to buy land Nigeria",
-          "property purchase process Nigeria",
-          "real estate investment Nigeria",
-          "Abuja property guide"
+          "verified Nigerian properties",
+          "title verification Nigeria",
+          "clean title Nigeria"
         ]}
         ogImage="https://therizoproperties.com/og/og-buyer-guide.jpg"
         pinterestImage="https://therizoproperties.com/pinterest/pin-buyer-guide.jpg"
       />
       <JsonLd data={createArticleSchema({
-        headline: "Complete Guide to Buying Property in Nigeria",
-        description: "Everything you need to know about buying property in Nigeria - from requirements to completion.",
+        headline: "Diaspora Buyer's Guide: How to Buy Property in Nigeria",
+        description: "Complete guide for diaspora investors purchasing verified Nigerian properties with clean titles.",
         author: "Therizo Property and Development Corporation",
         datePublished: "2025-01-15",
         dateModified: "2025-12-15",
@@ -155,7 +155,7 @@ export default function BuyerGuide() {
           <Breadcrumbs
             items={[
               { label: "Guides", href: "/guides" },
-              { label: "Buyer's Guide" },
+              { label: "Diaspora Buyer's Guide" },
             ]}
             className="mb-8 text-ivory/60"
           />
@@ -164,15 +164,15 @@ export default function BuyerGuide() {
               <div className="w-12 h-12 rounded-sm bg-gold/20 flex items-center justify-center">
                 <BookOpen className="text-gold" size={24} />
               </div>
-              <span className="text-gold font-medium">Property Buyer's Guide</span>
+              <span className="text-gold font-medium">Diaspora Buyer's Guide</span>
             </div>
             <h1 className="font-display text-4xl md:text-5xl font-semibold text-ivory mb-6">
-              Complete Guide to Buying Property in Nigeria
+              How to Buy Verified Nigerian Property as a Diaspora Investor
             </h1>
             <p className="text-lg text-ivory/80 leading-relaxed">
-              A comprehensive, step-by-step guide to purchasing property in Nigeria. 
-              Whether you're a first-time buyer or diaspora investor, this guide 
-              covers everything from initial search to final handover.
+              A comprehensive, step-by-step guide for diaspora investors purchasing 
+              property in Nigeria. Learn how to verify titles, avoid pitfalls, 
+              and work with trusted partners like Therizo.
             </p>
             <div className="flex items-center gap-4 mt-6 text-sm text-ivory/60">
               <div className="flex items-center gap-2">
@@ -182,6 +182,26 @@ export default function BuyerGuide() {
               <span>•</span>
               <span>15 min read</span>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Quick Answer Box */}
+      <section className="py-8 bg-gold/10 border-b border-gold/20">
+        <div className="container-wide">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="font-display text-lg font-semibold text-ink mb-3 flex items-center gap-2">
+              <CheckCircle className="h-5 w-5 text-gold" />
+              Quick Answer
+            </h2>
+            <p className="text-slate leading-relaxed">
+              To buy property in Nigeria as a diaspora investor: (1) Define your budget and goals, 
+              (2) Work with a verified agent like Therizo who pre-screens properties, 
+              (3) Conduct thorough title verification through legal partners, 
+              (4) Negotiate with market data, (5) Complete documentation with proper legal oversight, 
+              and (6) Perfect your title post-purchase. Budget 10-15% extra for transaction costs. 
+              The entire process typically takes 3-6 months.
+            </p>
           </div>
         </div>
       </section>
@@ -284,25 +304,60 @@ export default function BuyerGuide() {
 
       {/* FAQ Section */}
       <FAQSection
-        title="Buyer FAQs"
-        subtitle="Common questions from property buyers in Nigeria"
+        title="Diaspora Investor FAQs"
+        subtitle="Common questions from diaspora buyers investing in Nigerian property"
         items={faqs}
         className="bg-ivory"
       />
+
+      {/* Related Reading */}
+      <section className="section-padding bg-muted/50">
+        <div className="container-wide">
+          <h2 className="font-display text-2xl font-semibold text-ink mb-8 text-center">
+            Related Guides for Diaspora Investors
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <Link to="/guides/title-verification" className="p-6 bg-warm-white rounded-sm border border-sand hover:border-gold/30 transition-colors group">
+              <h3 className="font-display font-semibold text-ink mb-2 group-hover:text-gold transition-colors">
+                Title Verification Guide
+              </h3>
+              <p className="text-sm text-slate">
+                Learn how to verify property titles and avoid documentation fraud in Nigeria.
+              </p>
+            </Link>
+            <Link to="/guides/roi-methodology" className="p-6 bg-warm-white rounded-sm border border-sand hover:border-gold/30 transition-colors group">
+              <h3 className="font-display font-semibold text-ink mb-2 group-hover:text-gold transition-colors">
+                ROI Methodology
+              </h3>
+              <p className="text-sm text-slate">
+                Understand how we calculate investment returns for Nigerian properties.
+              </p>
+            </Link>
+            <Link to="/calculator" className="p-6 bg-warm-white rounded-sm border border-sand hover:border-gold/30 transition-colors group">
+              <h3 className="font-display font-semibold text-ink mb-2 group-hover:text-gold transition-colors">
+                ROI Calculator
+              </h3>
+              <p className="text-sm text-slate">
+                Calculate potential returns on your Nigerian property investment.
+              </p>
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* CTA */}
       <section className="section-padding bg-navy">
         <div className="container-narrow text-center">
           <h2 className="font-display text-3xl md:text-4xl font-semibold text-ivory mb-6">
-            Ready to Start Your Property Search?
+            Ready to Invest in Verified Nigerian Properties?
           </h2>
           <p className="text-lg text-ivory/80 leading-relaxed mb-10 max-w-2xl mx-auto">
-            Work with a team that follows this process rigorously. Every property 
-            we present has been verified and priced fairly.
+            Work with a team that serves diaspora investors with disciplined due diligence. 
+            Every property we present has clean titles and documented ownership.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button variant="gold" size="lg" asChild>
-              <Link to="/properties">Browse Properties</Link>
+              <Link to="/properties">Browse Verified Properties</Link>
             </Button>
             <Button variant="outline" size="lg" className="border-ivory/30 text-ivory hover:bg-ivory/10" asChild>
               <Link to="/contact">Speak with a Consultant</Link>

@@ -20,9 +20,17 @@ import {
   Eye,
   AlertTriangle,
   CheckCircle2,
-  Loader2
+  Loader2,
+  ImagePlus
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface BlogCluster {
   id: string;
@@ -60,6 +68,11 @@ export function BlogPostEditor({ postId, onSave }: BlogPostEditorProps) {
   const [clusters, setClusters] = useState<BlogCluster[]>([]);
   const [clusterPosts, setClusterPosts] = useState<{ id: string; title: string }[]>([]);
   const [showPublishChecklist, setShowPublishChecklist] = useState(false);
+  const [showInlineImageDialog, setShowInlineImageDialog] = useState(false);
+  const [inlineImageUrl, setInlineImageUrl] = useState("");
+  const [inlineImageAlt, setInlineImageAlt] = useState("");
+  const [inlineImageCaption, setInlineImageCaption] = useState("");
+  const [uploadingInlineImage, setUploadingInlineImage] = useState(false);
   
   // Form state
   const [title, setTitle] = useState("");
@@ -468,10 +481,118 @@ export function BlogPostEditor({ postId, onSave }: BlogPostEditorProps) {
           {/* Body Content */}
           <Card>
             <CardHeader>
-              <CardTitle>Content *</CardTitle>
-              <CardDescription>
-                Use Markdown. Include ## for H2 headings, ### for H3. Minimum 700 words.
-              </CardDescription>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Content *</CardTitle>
+                  <CardDescription>
+                    Use Markdown. Include ## for H2 headings, ### for H3. Minimum 700 words.
+                  </CardDescription>
+                </div>
+                <Dialog open={showInlineImageDialog} onOpenChange={setShowInlineImageDialog}>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      <ImagePlus className="h-4 w-4 mr-2" />
+                      Insert Image
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Insert Image</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                      {inlineImageUrl ? (
+                        <div className="relative">
+                          <img
+                            src={inlineImageUrl}
+                            alt={inlineImageAlt || "Preview"}
+                            className="w-full h-40 object-cover rounded-md"
+                          />
+                          <Button
+                            variant="destructive"
+                            size="icon"
+                            className="absolute top-2 right-2"
+                            onClick={() => setInlineImageUrl("")}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ) : (
+                        <label className="block border-2 border-dashed rounded-md p-8 text-center cursor-pointer hover:border-primary transition-colors">
+                          {uploadingInlineImage ? (
+                            <Loader2 className="h-8 w-8 mx-auto animate-spin text-muted-foreground" />
+                          ) : (
+                            <>
+                              <Upload className="h-8 w-8 mx-auto text-muted-foreground" />
+                              <p className="text-sm text-muted-foreground mt-2">Click to upload</p>
+                            </>
+                          )}
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={async (e) => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              setUploadingInlineImage(true);
+                              const fileExt = file.name.split(".").pop();
+                              const fileName = `${Date.now()}.${fileExt}`;
+                              const filePath = `inline/${fileName}`;
+                              const { error: uploadError } = await supabase.storage
+                                .from("blog-images")
+                                .upload(filePath, file);
+                              if (uploadError) {
+                                toast.error("Failed to upload image");
+                                setUploadingInlineImage(false);
+                                return;
+                              }
+                              const { data: { publicUrl } } = supabase.storage
+                                .from("blog-images")
+                                .getPublicUrl(filePath);
+                              setInlineImageUrl(publicUrl);
+                              setUploadingInlineImage(false);
+                            }}
+                          />
+                        </label>
+                      )}
+                      <div>
+                        <Label htmlFor="inlineAlt">Alt Text *</Label>
+                        <Input
+                          id="inlineAlt"
+                          value={inlineImageAlt}
+                          onChange={(e) => setInlineImageAlt(e.target.value)}
+                          placeholder="Describe the image for accessibility"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="inlineCaption">Caption (optional)</Label>
+                        <Input
+                          id="inlineCaption"
+                          value={inlineImageCaption}
+                          onChange={(e) => setInlineImageCaption(e.target.value)}
+                          placeholder="Image caption"
+                        />
+                      </div>
+                      <Button
+                        className="w-full"
+                        disabled={!inlineImageUrl || !inlineImageAlt}
+                        onClick={() => {
+                          const markdown = inlineImageCaption
+                            ? `\n\n![${inlineImageAlt}](${inlineImageUrl})\n*${inlineImageCaption}*\n\n`
+                            : `\n\n![${inlineImageAlt}](${inlineImageUrl})\n\n`;
+                          setBodyContent(bodyContent + markdown);
+                          setInlineImageUrl("");
+                          setInlineImageAlt("");
+                          setInlineImageCaption("");
+                          setShowInlineImageDialog(false);
+                          toast.success("Image inserted");
+                        }}
+                      >
+                        Insert into Content
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
             </CardHeader>
             <CardContent>
               <Textarea
