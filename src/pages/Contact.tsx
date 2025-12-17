@@ -293,13 +293,13 @@ const Contact = () => {
                   </p>
                   <div className="space-y-3">
                     <a
-                      href="tel:+2341234567890"
+                      href="tel:+2348034830087"
                       className="flex items-center gap-3 text-foreground hover:text-gold transition-colors"
                     >
                       <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
                         <Phone size={18} className="text-gold" />
                       </div>
-                      <span>+234 123 456 7890</span>
+                      <span>+234 803 483 0087</span>
                     </a>
                     <a
                       href="mailto:hello@therizoproperties.com"

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Send, Download, AlertCircle, Calculator, Globe, Droplets, Building2, Loader2, RotateCcw } from "lucide-react";
+import { Send, Download, AlertCircle, Calculator, Globe, Droplets, Building2, Loader2, RotateCcw, Info } from "lucide-react";
 import { DiasporaMortgageCalculator } from "@/components/calculator/DiasporaMortgageCalculator";
 import { FloodMappingOverlay } from "@/components/calculator/FloodMappingOverlay";
 import { InfrastructureTimeline } from "@/components/calculator/InfrastructureTimeline";
@@ -27,8 +27,8 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { JsonLd, createFAQSchema } from "@/components/seo/JsonLd";
 
 const calculatorFAQs = [
-  { question: "How accurate are the ROI calculations?", answer: "Our calculations use standard investment metrics (cap rate, cash-on-cash return, payback period) based on the numbers you enter. Actual returns depend on market conditions, expenses, and occupancy rates." },
-  { question: "What's included in operating expenses?", answer: "We estimate 2% of property value for taxes, insurance, and maintenance, plus a 10% management fee on rental income." },
+  { question: "How accurate are the ROI calculations?", answer: "Our calculations show gross ROI based on the numbers you enter. Actual returns depend on market conditions, expenses, and occupancy rates." },
+  { question: "What is gross ROI?", answer: "Gross ROI is your annual income divided by total investment, before deducting taxes, repairs, management fees, and other operating expenses." },
 ];
 
 type Strategy = "long-term" | "airbnb" | "compare";
@@ -36,28 +36,18 @@ type Strategy = "long-term" | "airbnb" | "compare";
 interface FormData {
   strategy: Strategy;
   purchasePrice: string;
-  renovationCosts: string;
+  renovationCost: string;
   monthlyRent: string;
-  airbnbNightlyRate: string;
-  airbnbOccupancy: string;
+  nightlyRate: string;
+  occupancyRate: string;
 }
 
 interface FormErrors {
   purchasePrice?: string;
-  renovationCosts?: string;
+  renovationCost?: string;
   monthlyRent?: string;
-  airbnbNightlyRate?: string;
-  airbnbOccupancy?: string;
-}
-
-interface Results {
-  totalInvestment: number;
-  grossAnnualIncome: number;
-  annualExpenses: number;
-  netAnnualIncome: number;
-  capRate: number;
-  cashOnCash: number;
-  paybackPeriod: number;
+  nightlyRate?: string;
+  occupancyRate?: string;
 }
 
 // Validation schema
@@ -66,19 +56,19 @@ const calculatorSchema = z.object({
     const num = parseFloat(val.replace(/,/g, ""));
     return !isNaN(num) && num > 0;
   }, "Purchase price must be greater than 0"),
-  renovationCosts: z.string().refine(val => {
+  renovationCost: z.string().refine(val => {
     const num = parseFloat(val.replace(/,/g, ""));
     return !isNaN(num) && num >= 0;
-  }, "Renovation costs must be 0 or greater"),
+  }, "Renovation cost must be 0 or greater"),
   monthlyRent: z.string().refine(val => {
     const num = parseFloat(val.replace(/,/g, ""));
     return !isNaN(num) && num >= 0;
   }, "Monthly rent must be 0 or greater"),
-  airbnbNightlyRate: z.string().refine(val => {
+  nightlyRate: z.string().refine(val => {
     const num = parseFloat(val.replace(/,/g, ""));
     return !isNaN(num) && num >= 0;
   }, "Nightly rate must be 0 or greater"),
-  airbnbOccupancy: z.string().refine(val => {
+  occupancyRate: z.string().refine(val => {
     const num = parseFloat(val.replace(/,/g, ""));
     return !isNaN(num) && num >= 0 && num <= 100;
   }, "Occupancy must be between 0 and 100"),
@@ -107,17 +97,18 @@ const Calculator_Page = () => {
   const { toast } = useToast();
   const contentRef = useRef<HTMLElement>(null);
   
+  // Default example values as specified
   const initialFormData: FormData = {
-    strategy: "long-term",
-    purchasePrice: "85,000,000",
-    renovationCosts: "5,000,000",
+    strategy: "compare",
+    purchasePrice: "60,000,000",
+    renovationCost: "10,000,000",
     monthlyRent: "600,000",
-    airbnbNightlyRate: "75,000",
-    airbnbOccupancy: "55",
+    nightlyRate: "150,000",
+    occupancyRate: "65",
   };
 
   const [formData, setFormData] = useState<FormData>(initialFormData);
-  const debouncedFormData = useDebounce(formData, 150);
+  const debouncedFormData = useDebounce(formData, 250);
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -131,16 +122,18 @@ const Calculator_Page = () => {
   };
 
   const handleInputChange = (field: keyof FormData, value: string) => {
-    // For strategy field, don't sanitize - just set the value directly
     if (field === "strategy") {
       setFormData((prev) => ({ ...prev, [field]: value as Strategy }));
       return;
     }
     
     // For occupancy, don't format with separators (it's a percentage)
-    if (field === "airbnbOccupancy") {
+    if (field === "occupancyRate") {
       const sanitizedValue = value.replace(/[^0-9]/g, "");
-      setFormData((prev) => ({ ...prev, [field]: sanitizedValue }));
+      // Clamp to 0-100
+      const numValue = parseInt(sanitizedValue) || 0;
+      const clampedValue = Math.min(numValue, 100).toString();
+      setFormData((prev) => ({ ...prev, [field]: sanitizedValue ? clampedValue : "" }));
     } else {
       // Format with thousand separators for currency fields
       const formattedValue = formatWithSeparators(value);
@@ -195,97 +188,80 @@ const Calculator_Page = () => {
     }
   };
 
-  const parseNumber = (value: string): number => {
-    return parseFormattedNumber(value);
-  };
+  // Calculate results using debounced data - CORRECT FORMULAS
+  const results = useMemo(() => {
+    const purchasePrice = parseFormattedNumber(debouncedFormData.purchasePrice);
+    const renovationCost = parseFormattedNumber(debouncedFormData.renovationCost);
+    const monthlyRent = parseFormattedNumber(debouncedFormData.monthlyRent);
+    const nightlyRate = parseFormattedNumber(debouncedFormData.nightlyRate);
+    const occupancyRate = parseFormattedNumber(debouncedFormData.occupancyRate);
 
-  // Calculate results using debounced data to prevent typing lag
-  const { longTermResults, airbnbResults, hasValidInputs } = useMemo(() => {
-    const purchasePrice = parseNumber(debouncedFormData.purchasePrice);
-    const renovationCosts = parseNumber(debouncedFormData.renovationCosts);
-    const monthlyRent = parseNumber(debouncedFormData.monthlyRent);
-    const airbnbNightlyRate = parseNumber(debouncedFormData.airbnbNightlyRate);
-    const airbnbOccupancy = parseNumber(debouncedFormData.airbnbOccupancy) / 100;
+    // 1) Total Investment
+    const totalInvestment = purchasePrice + renovationCost;
+
+    // 2) Long-Term Rental Annual Income
+    const annualLongTermIncome = monthlyRent * 12;
+
+    // 3) Gross ROI (Long-Term)
+    const roiLongTerm = totalInvestment > 0 ? (annualLongTermIncome / totalInvestment) * 100 : 0;
+
+    // 4) Airbnb Nights Booked
+    const nightsBooked = 365 * (occupancyRate / 100);
+
+    // 5) Airbnb Annual Income
+    const annualAirbnbIncome = nightsBooked * nightlyRate;
+
+    // 6) Gross ROI (Airbnb)
+    const roiAirbnb = totalInvestment > 0 ? (annualAirbnbIncome / totalInvestment) * 100 : 0;
+
+    // 7) Combined Annual Income + ROI
+    const annualCombinedIncome = annualLongTermIncome + annualAirbnbIncome;
+    const roiCombined = totalInvestment > 0 ? (annualCombinedIncome / totalInvestment) * 100 : 0;
 
     const hasValidInputs = purchasePrice > 0;
-    const totalInvestment = purchasePrice + renovationCosts;
-    const managementFee = 0.1; // 10%
-    const annualExpenseBase = totalInvestment * 0.02; // 2% of total for taxes/insurance/maintenance
 
-    // Long-term rental calculation
-    const ltGrossAnnualIncome = monthlyRent * 12;
-    const ltManagementCost = ltGrossAnnualIncome * managementFee;
-    const ltAnnualExpenses = annualExpenseBase + ltManagementCost;
-    const ltNetAnnualIncome = ltGrossAnnualIncome - ltAnnualExpenses;
-    const ltCapRate = purchasePrice > 0 ? (ltNetAnnualIncome / purchasePrice) * 100 : 0;
-    const ltCashOnCash = totalInvestment > 0 ? (ltNetAnnualIncome / totalInvestment) * 100 : 0;
-    const ltPaybackPeriod = ltNetAnnualIncome > 0 ? totalInvestment / ltNetAnnualIncome : 0;
-
-    const longTermResults: Results = {
+    return {
       totalInvestment,
-      grossAnnualIncome: ltGrossAnnualIncome,
-      annualExpenses: ltAnnualExpenses,
-      netAnnualIncome: ltNetAnnualIncome,
-      capRate: ltCapRate,
-      cashOnCash: ltCashOnCash,
-      paybackPeriod: ltPaybackPeriod,
+      annualLongTermIncome,
+      roiLongTerm,
+      nightsBooked,
+      annualAirbnbIncome,
+      roiAirbnb,
+      annualCombinedIncome,
+      roiCombined,
+      hasValidInputs,
     };
-
-    // Airbnb calculation
-    const abGrossAnnualIncome = airbnbNightlyRate * 365 * airbnbOccupancy;
-    const abManagementCost = abGrossAnnualIncome * managementFee;
-    const abAnnualExpenses = annualExpenseBase + abManagementCost;
-    const abNetAnnualIncome = abGrossAnnualIncome - abAnnualExpenses;
-    const abCapRate = purchasePrice > 0 ? (abNetAnnualIncome / purchasePrice) * 100 : 0;
-    const abCashOnCash = totalInvestment > 0 ? (abNetAnnualIncome / totalInvestment) * 100 : 0;
-    const abPaybackPeriod = abNetAnnualIncome > 0 ? totalInvestment / abNetAnnualIncome : 0;
-
-    const airbnbResults: Results = {
-      totalInvestment,
-      grossAnnualIncome: abGrossAnnualIncome,
-      annualExpenses: abAnnualExpenses,
-      netAnnualIncome: abNetAnnualIncome,
-      capRate: abCapRate,
-      cashOnCash: abCashOnCash,
-      paybackPeriod: abPaybackPeriod,
-    };
-
-    return { longTermResults, airbnbResults, hasValidInputs };
   }, [debouncedFormData]);
 
   // Chart data
   const chartData = useMemo(() => {
     return [
       {
-        name: "Long Term",
-        Income: longTermResults.netAnnualIncome,
-        Expenses: longTermResults.annualExpenses,
+        name: "Long-Term",
+        "Annual Income": results.annualLongTermIncome,
+        "Gross ROI %": results.roiLongTerm,
       },
       {
         name: "Airbnb",
-        Income: airbnbResults.netAnnualIncome,
-        Expenses: airbnbResults.annualExpenses,
+        "Annual Income": results.annualAirbnbIncome,
+        "Gross ROI %": results.roiAirbnb,
       },
     ];
-  }, [longTermResults, airbnbResults]);
-
-  const currentResults = debouncedFormData.strategy === "airbnb" ? airbnbResults : longTermResults;
-  const projectionTitle = debouncedFormData.strategy === "airbnb" ? "Airbnb Projection" : "Long-Term Projection";
+  }, [results]);
 
   const handleCalculate = useCallback(async () => {
     if (!validateAll()) return;
     
     setIsCalculating(true);
-    // Simulate calculation time for UX
-    await new Promise(resolve => setTimeout(resolve, 800));
+    await new Promise(resolve => setTimeout(resolve, 600));
     setHasCalculated(true);
     setIsCalculating(false);
     
     toast({
       title: "Calculation Complete",
-      description: "Your ROI projections are ready.",
+      description: "Your gross ROI projections are ready.",
     });
-  }, [validateAll, toast]);
+  }, [toast]);
 
   const handleReset = useCallback(() => {
     setFormData(initialFormData);
@@ -294,7 +270,7 @@ const Calculator_Page = () => {
     setHasCalculated(false);
     toast({
       title: "Calculator Reset",
-      description: "All inputs have been cleared.",
+      description: "All inputs have been reset to defaults.",
     });
   }, [toast]);
 
@@ -305,7 +281,7 @@ const Calculator_Page = () => {
     const pageWidth = doc.internal.pageSize.getWidth();
     
     // Header
-    doc.setFillColor(26, 38, 52); // Navy
+    doc.setFillColor(8, 26, 47); // Navy
     doc.rect(0, 0, pageWidth, 45, 'F');
     
     doc.setTextColor(255, 255, 255);
@@ -318,7 +294,7 @@ const Calculator_Page = () => {
     doc.text(`Generated: ${new Date().toLocaleDateString()}`, 20, 35);
     
     // Investment Details Section
-    doc.setTextColor(26, 38, 52);
+    doc.setTextColor(8, 26, 47);
     doc.setFontSize(16);
     doc.setFont("helvetica", "bold");
     doc.text("Investment Details", 20, 60);
@@ -332,88 +308,95 @@ const Calculator_Page = () => {
     const rightCol = 120;
     
     doc.text("Property Purchase Price:", leftCol, y);
-    doc.text(formatCurrency(parseNumber(formData.purchasePrice)), rightCol, y);
+    doc.text(formatCurrency(parseFormattedNumber(formData.purchasePrice)), rightCol, y);
     y += 10;
     
     doc.text("Renovation & Fit-Out:", leftCol, y);
-    doc.text(formatCurrency(parseNumber(formData.renovationCosts)), rightCol, y);
+    doc.text(formatCurrency(parseFormattedNumber(formData.renovationCost)), rightCol, y);
     y += 10;
     
     doc.text("Total Investment:", leftCol, y);
     doc.setFont("helvetica", "bold");
-    doc.text(formatCurrency(currentResults.totalInvestment), rightCol, y);
+    doc.text(formatCurrency(results.totalInvestment), rightCol, y);
     doc.setFont("helvetica", "normal");
     y += 20;
     
-    // Results Section
-    doc.setTextColor(26, 38, 52);
-    doc.setFontSize(16);
+    // Long-Term Results
+    doc.setTextColor(8, 26, 47);
+    doc.setFontSize(14);
     doc.setFont("helvetica", "bold");
-    doc.text(projectionTitle, 20, y);
-    y += 15;
+    doc.text("Long-Term Rental", 20, y);
+    y += 12;
     
     doc.setFontSize(11);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(80, 80, 80);
-    
-    doc.text("Gross Annual Income:", leftCol, y);
-    doc.text(formatCurrency(currentResults.grossAnnualIncome), rightCol, y);
-    y += 10;
-    
-    doc.text("Annual Expenses:", leftCol, y);
-    doc.text(formatCurrency(currentResults.annualExpenses), rightCol, y);
-    y += 10;
-    
-    doc.text("Net Annual Income:", leftCol, y);
-    doc.setTextColor(180, 145, 60); // Gold
+    doc.text("Annual Income:", leftCol, y);
+    doc.text(formatCurrency(results.annualLongTermIncome), rightCol, y);
+    y += 8;
+    doc.text("Gross ROI:", leftCol, y);
+    doc.setTextColor(199, 168, 106); // Gold
     doc.setFont("helvetica", "bold");
-    doc.text(formatCurrency(currentResults.netAnnualIncome), rightCol, y);
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(80, 80, 80);
+    doc.text(`${results.roiLongTerm.toFixed(2)}%`, rightCol, y);
     y += 15;
     
-    // Key Metrics Box
-    doc.setFillColor(245, 245, 245);
-    doc.roundedRect(leftCol - 5, y, pageWidth - 35, 40, 3, 3, 'F');
+    // Airbnb Results
+    doc.setTextColor(8, 26, 47);
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text("Airbnb", 20, y);
     y += 12;
     
-    doc.setTextColor(26, 38, 52);
-    doc.setFontSize(12);
-    doc.text("Cap Rate:", leftCol, y);
-    doc.setFont("helvetica", "bold");
-    doc.text(`${currentResults.capRate.toFixed(2)}%`, leftCol + 50, y);
+    doc.setFontSize(11);
     doc.setFont("helvetica", "normal");
-    
-    doc.text("Cash-on-Cash:", rightCol - 20, y);
-    doc.setTextColor(180, 145, 60);
+    doc.setTextColor(80, 80, 80);
+    doc.text("Nights Booked/Year:", leftCol, y);
+    doc.text(`${results.nightsBooked.toFixed(0)} nights`, rightCol, y);
+    y += 8;
+    doc.text("Annual Income:", leftCol, y);
+    doc.text(formatCurrency(results.annualAirbnbIncome), rightCol, y);
+    y += 8;
+    doc.text("Gross ROI:", leftCol, y);
+    doc.setTextColor(199, 168, 106);
     doc.setFont("helvetica", "bold");
-    doc.text(`${currentResults.cashOnCash.toFixed(1)}%`, rightCol + 45, y);
-    doc.setFont("helvetica", "normal");
+    doc.text(`${results.roiAirbnb.toFixed(2)}%`, rightCol, y);
     y += 15;
     
-    doc.setTextColor(26, 38, 52);
-    doc.text("Payback Period:", leftCol, y);
+    // Combined Results
+    doc.setTextColor(8, 26, 47);
+    doc.setFontSize(14);
     doc.setFont("helvetica", "bold");
-    doc.text(`${currentResults.paybackPeriod.toFixed(1)} Years`, leftCol + 50, y);
-    y += 30;
+    doc.text("Combined Strategy", 20, y);
+    y += 12;
+    
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(80, 80, 80);
+    doc.text("Total Annual Income:", leftCol, y);
+    doc.text(formatCurrency(results.annualCombinedIncome), rightCol, y);
+    y += 8;
+    doc.text("Gross ROI:", leftCol, y);
+    doc.setTextColor(199, 168, 106);
+    doc.setFont("helvetica", "bold");
+    doc.text(`${results.roiCombined.toFixed(2)}%`, rightCol, y);
+    y += 20;
     
     // Disclaimer
     doc.setFontSize(9);
     doc.setTextColor(120, 120, 120);
     doc.setFont("helvetica", "italic");
-    const disclaimer = "Disclaimer: These figures are projections based on the numbers entered. They are not financial advice or a guarantee of returns. Market conditions, regulation, and unforeseen costs can change outcomes.";
+    const disclaimer = "Disclaimer: This is gross ROI (before taxes, vacancy beyond occupancy estimate, repairs, management fees, and FX risk). Use it to compare scenarios. Actual returns depend on market conditions and operating expenses.";
     const splitDisclaimer = doc.splitTextToSize(disclaimer, pageWidth - 40);
     doc.text(splitDisclaimer, leftCol, y);
     
     // Footer
-    doc.setFillColor(180, 145, 60); // Gold
+    doc.setFillColor(199, 168, 106); // Gold
     doc.rect(0, 280, pageWidth, 17, 'F');
-    doc.setTextColor(26, 38, 52);
+    doc.setTextColor(8, 26, 47);
     doc.setFontSize(10);
     doc.setFont("helvetica", "bold");
     doc.text("Therizo Property & Development Corporation", pageWidth / 2, 290, { align: "center" });
     
-    // Save
     doc.save("therizo-roi-report.pdf");
     
     toast({
@@ -428,7 +411,8 @@ const Calculator_Page = () => {
     value, 
     onChange, 
     placeholder,
-    goldLabel = false 
+    goldLabel = false,
+    suffix = ""
   }: { 
     id: keyof FormData; 
     label: string; 
@@ -436,6 +420,7 @@ const Calculator_Page = () => {
     onChange: (value: string) => void;
     placeholder?: string;
     goldLabel?: boolean;
+    suffix?: string;
   }) => (
     <div>
       <Label 
@@ -444,18 +429,25 @@ const Calculator_Page = () => {
       >
         {label}
       </Label>
-      <Input
-        id={id}
-        type="text"
-        inputMode="numeric"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onBlur={() => handleBlur(id)}
-        placeholder={placeholder}
-        className={`bg-navy text-ivory border-0 h-12 text-base placeholder:text-ivory/50 focus:ring-2 focus:ring-gold ${
-          errors[id as keyof FormErrors] && touched[id] ? 'ring-2 ring-destructive' : ''
-        }`}
-      />
+      <div className="relative">
+        <Input
+          id={id}
+          type="text"
+          inputMode="numeric"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onBlur={() => handleBlur(id)}
+          placeholder={placeholder}
+          className={`bg-navy text-ivory border-0 h-12 text-base placeholder:text-ivory/50 focus:ring-2 focus:ring-gold ${
+            suffix ? 'pr-12' : ''
+          } ${errors[id as keyof FormErrors] && touched[id] ? 'ring-2 ring-destructive' : ''}`}
+        />
+        {suffix && (
+          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-ivory/50 text-sm">
+            {suffix}
+          </span>
+        )}
+      </div>
       {errors[id as keyof FormErrors] && touched[id] && (
         <div className="flex items-center gap-1.5 mt-1.5 text-destructive text-sm">
           <AlertCircle className="w-4 h-4" />
@@ -469,9 +461,9 @@ const Calculator_Page = () => {
     <Layout>
       <SEOHead
         title="Nigerian Property ROI Calculator | Rental Yield & Investment Returns"
-        description="Free ROI calculator for Nigerian real estate. Calculate rental yields, cap rates, and payback periods for Lagos, Abuja property investments. Compare long-term vs Airbnb strategies."
+        description="Free ROI calculator for Nigerian real estate. Calculate rental yields and gross returns for Lagos, Abuja property investments. Compare long-term vs Airbnb strategies."
         canonicalUrl="/calculator"
-        keywords="Nigerian property ROI calculator, Lagos rental yield calculator, Abuja real estate investment returns, property cap rate Nigeria, Airbnb vs rental income Nigeria"
+        keywords="Nigerian property ROI calculator, Lagos rental yield calculator, Abuja real estate investment returns, property investment Nigeria, Airbnb vs rental income Nigeria"
         ogImage="https://therizoproperties.com/og/og-calculator.jpg"
       />
       <JsonLd data={createFAQSchema(calculatorFAQs)} />
@@ -483,7 +475,7 @@ const Calculator_Page = () => {
             Therizo ROI Calculator
           </h1>
           <p className="text-base sm:text-lg text-slate max-w-3xl mx-auto leading-relaxed">
-            Before you commit capital, run the numbers. Estimate your potential returns in
+            Before you commit capital, run the numbers. Estimate your potential gross returns in
             Nigerian Naira (₦) for both long-term rental and Airbnb strategies.
           </p>
         </div>
@@ -530,320 +522,292 @@ const Calculator_Page = () => {
 
             {/* ROI Calculator Tab */}
             <TabsContent value="roi" className="mt-0">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
-            {/* Left Column - Form */}
-            <div className="space-y-8">
-              {/* Strategy Toggle */}
-              <div>
-                <Label className="text-sm font-medium text-ink mb-3 block">
-                  Strategy
-                </Label>
-                <div className="inline-flex rounded-lg border border-sand overflow-hidden">
-                  {[
-                    { value: "long-term", label: "Long Term" },
-                    { value: "airbnb", label: "Airbnb" },
-                    { value: "compare", label: "Compare" },
-                  ].map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={() => handleInputChange("strategy", option.value as Strategy)}
-                      className={`px-4 sm:px-6 py-2.5 text-sm font-medium transition-all border-r border-sand last:border-r-0 ${
-                        formData.strategy === option.value
-                          ? "bg-gold text-navy"
-                          : "bg-warm-white text-ink hover:bg-sand/30"
-                      }`}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Property Purchase Price */}
-              <InputField
-                id="purchasePrice"
-                label="Property Purchase Price (₦)"
-                value={formData.purchasePrice}
-                onChange={(value) => handleInputChange("purchasePrice", value)}
-              />
-
-              {/* Renovation */}
-              <InputField
-                id="renovationCosts"
-                label="Renovation & Fit-Out (₦)"
-                value={formData.renovationCosts}
-                onChange={(value) => handleInputChange("renovationCosts", value)}
-              />
-
-              {/* Income Assumptions */}
-              <div>
-                <h3 className="font-display text-lg font-semibold text-ink mb-4">
-                  Income Assumptions
-                </h3>
-                <div className="space-y-4">
-                  <InputField
-                    id="monthlyRent"
-                    label="Monthly Rent (Long Term)"
-                    value={formData.monthlyRent}
-                    onChange={(value) => handleInputChange("monthlyRent", value)}
-                    goldLabel
-                  />
-                  <InputField
-                    id="airbnbNightlyRate"
-                    label="Nightly Rate (Airbnb)"
-                    value={formData.airbnbNightlyRate}
-                    onChange={(value) => handleInputChange("airbnbNightlyRate", value)}
-                    goldLabel
-                  />
-                  <InputField
-                    id="airbnbOccupancy"
-                    label="Occupancy Rate (%)"
-                    value={formData.airbnbOccupancy}
-                    onChange={(value) => handleInputChange("airbnbOccupancy", value)}
-                    goldLabel
-                  />
-                </div>
-              </div>
-
-              {/* Calculate Button - Prominent styling */}
-              <Button 
-                onClick={handleCalculate}
-                size="lg"
-                className={`w-full relative overflow-hidden bg-gradient-to-r from-gold via-amber-400 to-gold text-navy font-bold text-base tracking-wide shadow-lg shadow-gold/40 hover:shadow-xl hover:shadow-gold/50 transition-all duration-300 hover:scale-[1.02] ${
-                  hasValidInputs && !isCalculating && !hasCalculated ? 'animate-pulse' : ''
-                }`}
-                disabled={!hasValidInputs || isCalculating}
-              >
-                {/* Glossy overlay */}
-                <span className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-transparent pointer-events-none" />
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full hover:translate-x-full transition-transform duration-700 pointer-events-none" />
-                
-                {isCalculating ? (
-                  <span className="relative z-10 flex items-center justify-center">
-                    <Loader2 className="mr-2 animate-spin" size={20} />
-                    Calculating...
-                  </span>
-                ) : (
-                  <span className="relative z-10 flex items-center justify-center">
-                    <Calculator className="mr-2" size={20} />
-                    Calculate Potential Returns
-                  </span>
-                )}
-              </Button>
-
-              {/* Download PDF Button */}
-              <Button 
-                onClick={generatePDF}
-                variant="outline"
-                size="lg"
-                className="w-full border-sand text-ink hover:bg-sand/30"
-                disabled={!hasValidInputs || !hasCalculated}
-              >
-                <Download className="mr-2" size={18} />
-                Download PDF Report
-              </Button>
-
-              {/* Reset Button */}
-              <Button 
-                onClick={handleReset}
-                variant="ghost"
-                size="lg"
-                className="w-full text-slate hover:text-ink"
-              >
-                <RotateCcw className="mr-2" size={18} />
-                Reset Calculator
-              </Button>
-            </div>
-
-            {/* Right Column - Results */}
-            <div className="space-y-6">
-              {!hasCalculated ? (
-                /* Placeholder before calculation */
-                <div className="flex flex-col items-center justify-center h-full min-h-[400px] bg-warm-white rounded-lg border border-sand p-8 text-center">
-                  <div className="w-16 h-16 rounded-full bg-sand/50 flex items-center justify-center mb-4">
-                    <Calculator className="w-8 h-8 text-slate" />
+              <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+                {/* Left Column - Form */}
+                <div className="space-y-8">
+                  {/* Strategy Toggle */}
+                  <div>
+                    <Label className="text-sm font-medium text-ink mb-3 block">
+                      Strategy
+                    </Label>
+                    <div className="inline-flex rounded-lg border border-sand overflow-hidden">
+                      {[
+                        { value: "long-term", label: "Long Term" },
+                        { value: "airbnb", label: "Airbnb" },
+                        { value: "compare", label: "Compare Both" },
+                      ].map((option) => (
+                        <button
+                          key={option.value}
+                          onClick={() => handleInputChange("strategy", option.value as Strategy)}
+                          className={`px-4 sm:px-6 py-2.5 text-sm font-medium transition-all border-r border-sand last:border-r-0 ${
+                            formData.strategy === option.value
+                              ? "bg-gold text-navy"
+                              : "bg-warm-white text-ink hover:bg-sand/30"
+                          }`}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                  <h3 className="font-display text-xl font-semibold text-ink mb-2">
-                    Ready to Calculate
-                  </h3>
-                  <p className="text-slate max-w-sm">
-                    Enter your investment details and click "Calculate Potential Returns" to see your ROI projections.
-                  </p>
+
+                  {/* Property Purchase Price */}
+                  <InputField
+                    id="purchasePrice"
+                    label="Property Purchase Price (₦)"
+                    value={formData.purchasePrice}
+                    onChange={(value) => handleInputChange("purchasePrice", value)}
+                    placeholder="60,000,000"
+                  />
+
+                  {/* Renovation */}
+                  <InputField
+                    id="renovationCost"
+                    label="Renovation & Fit-Out (₦)"
+                    value={formData.renovationCost}
+                    onChange={(value) => handleInputChange("renovationCost", value)}
+                    placeholder="10,000,000"
+                  />
+
+                  {/* Income Assumptions */}
+                  <div>
+                    <h3 className="font-display text-lg font-semibold text-ink mb-4">
+                      Income Assumptions
+                    </h3>
+                    <div className="space-y-4">
+                      <InputField
+                        id="monthlyRent"
+                        label="Long-Term Monthly Rent (₦/month)"
+                        value={formData.monthlyRent}
+                        onChange={(value) => handleInputChange("monthlyRent", value)}
+                        placeholder="600,000"
+                        goldLabel
+                      />
+                      <InputField
+                        id="nightlyRate"
+                        label="Airbnb Nightly Rate (₦/night)"
+                        value={formData.nightlyRate}
+                        onChange={(value) => handleInputChange("nightlyRate", value)}
+                        placeholder="150,000"
+                        goldLabel
+                      />
+                      <InputField
+                        id="occupancyRate"
+                        label="Airbnb Occupancy Rate (%)"
+                        value={formData.occupancyRate}
+                        onChange={(value) => handleInputChange("occupancyRate", value)}
+                        placeholder="65"
+                        goldLabel
+                      />
+                      <p className="text-xs text-slate">Days per year: 365 (fixed)</p>
+                    </div>
+                  </div>
+
+                  {/* Calculate Button */}
+                  <Button 
+                    onClick={handleCalculate}
+                    size="lg"
+                    className={`w-full relative overflow-hidden bg-gradient-to-r from-gold via-amber-400 to-gold text-navy font-bold text-base tracking-wide shadow-lg shadow-gold/40 hover:shadow-xl hover:shadow-gold/50 transition-all duration-300 hover:scale-[1.02] ${
+                      results.hasValidInputs && !isCalculating && !hasCalculated ? 'animate-pulse' : ''
+                    }`}
+                    disabled={!results.hasValidInputs || isCalculating}
+                  >
+                    <span className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-transparent pointer-events-none" />
+                    {isCalculating ? (
+                      <span className="relative z-10 flex items-center justify-center">
+                        <Loader2 className="mr-2 animate-spin" size={20} />
+                        Calculating...
+                      </span>
+                    ) : (
+                      <span className="relative z-10 flex items-center justify-center">
+                        <Calculator className="mr-2" size={20} />
+                        Calculate
+                      </span>
+                    )}
+                  </Button>
+
+                  {/* Download PDF Button */}
+                  <Button 
+                    onClick={generatePDF}
+                    variant="outline"
+                    size="lg"
+                    className="w-full border-sand text-ink hover:bg-sand/30"
+                    disabled={!results.hasValidInputs || !hasCalculated}
+                  >
+                    <Download className="mr-2" size={18} />
+                    Download PDF Report
+                  </Button>
+
+                  {/* Reset Button */}
+                  <Button 
+                    onClick={handleReset}
+                    variant="ghost"
+                    size="lg"
+                    className="w-full text-slate hover:text-ink"
+                  >
+                    <RotateCcw className="mr-2" size={18} />
+                    Reset Calculator
+                  </Button>
                 </div>
-              ) : (
-                <>
-                  {/* Compare View - Side by Side */}
-                  {formData.strategy === "compare" ? (
-                    <div className="grid md:grid-cols-2 gap-4 animate-fade-in">
-                      {/* Long-Term Projection Card */}
-                      <div className="border-l-4 border-gold bg-warm-white rounded-r-lg p-5 shadow-sm">
-                        <h3 className="font-display text-lg sm:text-xl font-bold text-ink mb-4">
-                          Long-Term Projection
-                        </h3>
 
-                        <div className="space-y-3">
-                          <div className="flex justify-between items-center">
-                            <span className="text-gold text-sm">Total Investment</span>
-                            <span className="font-semibold text-ink">
-                              {formatCurrency(longTermResults.totalInvestment)}
-                            </span>
-                          </div>
-                          <div className="flex justify-between items-center">
-                            <span className="text-gold text-sm">Net Annual Income</span>
-                            <span className="font-bold text-gold">
-                              {formatCurrency(longTermResults.netAnnualIncome)}
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="mt-4 pt-4 border-t border-sand">
-                          <div className="flex justify-between items-end">
-                            <span className="font-display text-base font-semibold text-ink">
-                              Cash-on-Cash
-                            </span>
-                            <span className="font-display text-2xl sm:text-3xl font-bold text-gold">
-                              {longTermResults.cashOnCash.toFixed(1)}%
-                            </span>
-                          </div>
-                          <div className="text-right mt-1">
-                            <span className="text-xs text-slate">
-                              Payback: {longTermResults.paybackPeriod.toFixed(1)} Years
-                            </span>
-                          </div>
-                        </div>
+                {/* Right Column - Results */}
+                <div className="space-y-6">
+                  {!hasCalculated ? (
+                    <div className="flex flex-col items-center justify-center h-full min-h-[400px] bg-warm-white rounded-lg border border-sand p-8 text-center">
+                      <div className="w-16 h-16 rounded-full bg-sand/50 flex items-center justify-center mb-4">
+                        <Calculator className="w-8 h-8 text-slate" />
                       </div>
-
-                      {/* Airbnb Projection Card */}
-                      <div className="border-l-4 border-navy bg-warm-white rounded-r-lg p-5 shadow-sm">
-                        <h3 className="font-display text-lg sm:text-xl font-bold text-ink mb-4">
-                          Airbnb Projection
-                        </h3>
-
-                        <div className="space-y-3">
-                          <div className="flex justify-between items-center">
-                            <span className="text-slate text-sm">Total Investment</span>
-                            <span className="font-semibold text-ink">
-                              {formatCurrency(airbnbResults.totalInvestment)}
-                            </span>
-                          </div>
-                          <div className="flex justify-between items-center">
-                            <span className="text-slate text-sm">Net Annual Income</span>
-                            <span className="font-bold text-gold">
-                              {formatCurrency(airbnbResults.netAnnualIncome)}
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="mt-4 pt-4 border-t border-sand">
-                          <div className="flex justify-between items-end">
-                            <span className="font-display text-base font-semibold text-ink">
-                              Cash-on-Cash
-                            </span>
-                            <span className="font-display text-2xl sm:text-3xl font-bold text-gold">
-                              {airbnbResults.cashOnCash.toFixed(1)}%
-                            </span>
-                          </div>
-                          <div className="text-right mt-1">
-                            <span className="text-xs text-slate">
-                              Payback: {airbnbResults.paybackPeriod.toFixed(1)} Years
-                            </span>
-                          </div>
-                        </div>
-                      </div>
+                      <h3 className="font-display text-xl font-semibold text-ink mb-2">
+                        Ready to Calculate
+                      </h3>
+                      <p className="text-slate max-w-sm">
+                        Enter your investment details and click "Calculate" to see your gross ROI projections.
+                      </p>
                     </div>
                   ) : (
-                    /* Single Projection Card for Long Term or Airbnb */
-                    <div className="border-l-4 border-gold bg-warm-white rounded-r-lg p-6 shadow-sm animate-fade-in">
-                      <h3 className="font-display text-xl sm:text-2xl font-bold text-ink mb-6">
-                        {projectionTitle}
-                      </h3>
+                    <>
+                      {/* Result Cards */}
+                      <div className={`grid gap-4 animate-fade-in ${formData.strategy === "compare" ? "md:grid-cols-2" : ""}`}>
+                        
+                        {/* Long-Term Rental Card */}
+                        {(formData.strategy === "long-term" || formData.strategy === "compare") && (
+                          <div className="border-l-4 border-gold bg-warm-white rounded-r-lg p-5 shadow-sm">
+                            <h3 className="font-display text-lg font-bold text-ink mb-4">
+                              Long-Term Rental
+                            </h3>
+                            <div className="space-y-3">
+                              <div className="flex justify-between items-center">
+                                <span className="text-slate text-sm">Total Investment</span>
+                                <span className="font-semibold text-ink">
+                                  {formatCurrency(results.totalInvestment)}
+                                </span>
+                              </div>
+                              <div className="flex justify-between items-center">
+                                <span className="text-slate text-sm">Annual Income</span>
+                                <span className="font-semibold text-ink">
+                                  {formatCurrency(results.annualLongTermIncome)}
+                                </span>
+                              </div>
+                              <div className="flex justify-between items-center pt-3 border-t border-sand">
+                                <span className="font-display font-semibold text-ink">Gross ROI</span>
+                                <span className="font-display text-2xl font-bold text-gold">
+                                  {results.roiLongTerm.toFixed(2)}%
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
 
-                      <div className="space-y-4">
-                        <div className="flex justify-between items-center">
-                          <span className="text-gold text-sm">Total Investment</span>
-                          <span className="font-semibold text-ink text-lg">
-                            {formatCurrency(currentResults.totalInvestment)}
-                          </span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-gold text-sm">Net Annual Income</span>
-                          <span className="font-bold text-gold text-lg">
-                            {formatCurrency(currentResults.netAnnualIncome)}
-                          </span>
-                        </div>
+                        {/* Airbnb Card */}
+                        {(formData.strategy === "airbnb" || formData.strategy === "compare") && (
+                          <div className="border-l-4 border-navy bg-warm-white rounded-r-lg p-5 shadow-sm">
+                            <h3 className="font-display text-lg font-bold text-ink mb-4">
+                              Airbnb
+                            </h3>
+                            <div className="space-y-3">
+                              <div className="flex justify-between items-center">
+                                <span className="text-slate text-sm">Nights Booked/Year</span>
+                                <span className="font-semibold text-ink">
+                                  {results.nightsBooked.toFixed(0)} nights
+                                </span>
+                              </div>
+                              <div className="flex justify-between items-center">
+                                <span className="text-slate text-sm">Annual Income</span>
+                                <span className="font-semibold text-ink">
+                                  {formatCurrency(results.annualAirbnbIncome)}
+                                </span>
+                              </div>
+                              <div className="flex justify-between items-center pt-3 border-t border-sand">
+                                <span className="font-display font-semibold text-ink">Gross ROI</span>
+                                <span className="font-display text-2xl font-bold text-gold">
+                                  {results.roiAirbnb.toFixed(2)}%
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
 
-                      <div className="mt-6 pt-6 border-t border-sand">
-                        <div className="flex justify-between items-end">
-                          <span className="font-display text-lg font-semibold text-ink">
-                            Cash-on-Cash
-                          </span>
-                          <span className="font-display text-3xl sm:text-4xl font-bold text-gold">
-                            {currentResults.cashOnCash.toFixed(1)}%
-                          </span>
+                      {/* Combined Strategy Card */}
+                      {formData.strategy === "compare" && (
+                        <div className="border-2 border-gold bg-gradient-to-r from-gold/5 to-transparent rounded-lg p-5 shadow-sm animate-fade-in">
+                          <h3 className="font-display text-lg font-bold text-ink mb-4">
+                            Combined Strategy
+                          </h3>
+                          <div className="space-y-3">
+                            <div className="flex justify-between items-center">
+                              <span className="text-slate text-sm">Total Annual Income</span>
+                              <span className="font-semibold text-ink">
+                                {formatCurrency(results.annualCombinedIncome)}
+                              </span>
+                            </div>
+                            <div className="flex justify-between items-center pt-3 border-t border-gold/30">
+                              <span className="font-display font-semibold text-ink">Gross ROI</span>
+                              <span className="font-display text-3xl font-bold text-gold">
+                                {results.roiCombined.toFixed(2)}%
+                              </span>
+                            </div>
+                          </div>
                         </div>
-                        <div className="text-right mt-1">
-                          <span className="text-sm text-slate">
-                            Payback: {currentResults.paybackPeriod.toFixed(1)} Years
-                          </span>
+                      )}
+
+                      {/* Assumptions Note */}
+                      <div className="bg-muted/50 rounded-lg p-4 border border-sand animate-fade-in flex items-start gap-3">
+                        <Info className="w-5 h-5 text-slate shrink-0 mt-0.5" />
+                        <p className="text-sm text-slate leading-relaxed">
+                          <strong>Assumptions:</strong> This is gross ROI (before taxes, vacancy beyond occupancy estimate, repairs, management fees, and FX risk). Use it to compare scenarios.
+                        </p>
+                      </div>
+
+                      {/* Chart */}
+                      <div className="bg-warm-white rounded-lg p-6 shadow-sm border border-sand animate-fade-in">
+                        <h4 className="font-display text-base font-semibold text-ink mb-4">
+                          Annual Income Comparison
+                        </h4>
+                        <div className="h-64 sm:h-72">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={chartData} barCategoryGap="20%">
+                              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                              <XAxis 
+                                dataKey="name" 
+                                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+                                axisLine={{ stroke: 'hsl(var(--border))' }}
+                              />
+                              <YAxis 
+                                tickFormatter={(value) => formatShortCurrency(value)}
+                                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+                                axisLine={{ stroke: 'hsl(var(--border))' }}
+                                width={70}
+                              />
+                              <Tooltip 
+                                formatter={(value: number, name: string) => {
+                                  if (name === "Annual Income") return formatCurrency(value);
+                                  return `${value.toFixed(2)}%`;
+                                }}
+                                contentStyle={{
+                                  backgroundColor: 'hsl(var(--card))',
+                                  border: '1px solid hsl(var(--border))',
+                                  borderRadius: '8px',
+                                }}
+                                labelStyle={{ color: 'hsl(var(--foreground))' }}
+                              />
+                              <Legend 
+                                wrapperStyle={{ paddingTop: '16px' }}
+                                formatter={(value) => <span className="text-sm text-muted-foreground">{value}</span>}
+                              />
+                              <Bar 
+                                dataKey="Annual Income" 
+                                fill="hsl(var(--gold))" 
+                                radius={[4, 4, 0, 0]}
+                              />
+                            </BarChart>
+                          </ResponsiveContainer>
                         </div>
                       </div>
-                    </div>
+                    </>
                   )}
-
-                  {/* Chart */}
-                  <div className="bg-warm-white rounded-lg p-6 shadow-sm border border-sand animate-fade-in" style={{ animationDelay: '0.1s' }}>
-                    <h4 className="font-display text-base font-semibold text-ink mb-4">
-                      Annual Net Income vs Expenses
-                    </h4>
-                    <div className="h-64 sm:h-72">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={chartData} barCategoryGap="20%">
-                          <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                          <XAxis 
-                            dataKey="name" 
-                            tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
-                            axisLine={{ stroke: 'hsl(var(--border))' }}
-                          />
-                          <YAxis 
-                            tickFormatter={(value) => formatShortCurrency(value)}
-                            tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
-                            axisLine={{ stroke: 'hsl(var(--border))' }}
-                            width={60}
-                          />
-                          <Tooltip 
-                            formatter={(value: number) => formatCurrency(value)}
-                            contentStyle={{
-                              backgroundColor: 'hsl(var(--card))',
-                              border: '1px solid hsl(var(--border))',
-                              borderRadius: '8px',
-                            }}
-                            labelStyle={{ color: 'hsl(var(--foreground))' }}
-                          />
-                          <Legend 
-                            wrapperStyle={{ paddingTop: '16px' }}
-                            formatter={(value) => <span className="text-sm text-muted-foreground">{value}</span>}
-                          />
-                          <Bar 
-                            dataKey="Expenses" 
-                            fill="hsl(var(--primary))" 
-                            radius={[4, 4, 0, 0]}
-                            name="Expenses"
-                          />
-                          <Bar 
-                            dataKey="Income" 
-                            fill="hsl(var(--gold))" 
-                            radius={[4, 4, 0, 0]}
-                            name="Income"
-                          />
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
+                </div>
+              </div>
             </TabsContent>
 
             {/* Diaspora Mortgage Tab */}
@@ -860,7 +824,7 @@ const Calculator_Page = () => {
               </div>
             </TabsContent>
 
-            {/* Infrastructure Timeline Tab */}
+            {/* Infrastructure Tab */}
             <TabsContent value="infrastructure" className="mt-0">
               <div className="bg-warm-white rounded-lg p-6 shadow-sm border border-sand">
                 <InfrastructureTimeline />
@@ -871,25 +835,28 @@ const Calculator_Page = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 sm:py-20 bg-navy">
+      <section className="section-padding bg-navy text-ivory">
         <div className="container-narrow text-center">
-          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-ivory mb-4">
-            Discuss These Numbers with Therizo
+          <h2 className="font-display text-2xl md:text-3xl font-semibold mb-4">
+            Ready to Invest?
           </h2>
-          <p className="text-base sm:text-lg text-ivory/80 leading-relaxed mb-8 max-w-2xl mx-auto">
-            Share your results with us and we will match you with properties
-            that fit your risk tolerance, budget, and target returns.
+          <p className="text-ivory/80 mb-8 max-w-2xl mx-auto">
+            Share your ROI results with our team and let us help you find properties
+            that match your investment goals.
           </p>
-          <Button 
-            size="lg"
-            className="bg-gradient-to-r from-gold to-gold-light text-navy font-semibold px-8 py-6 text-base hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-all duration-300 hover:scale-105"
-            asChild
-          >
-            <Link to="/contact">
-              <Send size={18} className="mr-2" />
-              Send My ROI to a Senior Consultant
-            </Link>
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" variant="gold" asChild>
+              <Link to="/contact">
+                <Send className="mr-2" size={18} />
+                Contact Our Team
+              </Link>
+            </Button>
+            <Button size="lg" variant="hero-outline" asChild>
+              <Link to="/properties">
+                View Properties
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
     </Layout>

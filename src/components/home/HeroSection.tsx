@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import heroImage from "@/assets/hero-lagos.jpg";
+import { MiniROICalculator } from "./MiniROICalculator";
+
 interface Announcement {
   id: string;
   title: string;
@@ -139,76 +141,89 @@ export function HeroSection() {
         </div>}
 
       {/* Main Content */}
-      <div className="relative z-10 flex-1 flex items-center pt-20">
+      <div className="relative z-10 flex-1 flex items-center pt-20 pb-8">
         <div className="container-wide">
-          <div className="max-w-2xl">
-            {/* Brand Label - Refined elite styling */}
-            <div className="flex items-center gap-4 mb-8 animate-fade-up">
-              <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-gold to-gold" />
-              <span className="text-gold/90 text-xs font-bold tracking-[0.3em] uppercase">
-                Therizo Property & Development
-              </span>
-              <div className="w-12 h-[1px] bg-gradient-to-l from-transparent via-gold to-gold" />
-            </div>
+          <div className="grid lg:grid-cols-5 gap-8 lg:gap-12 items-center">
+            {/* Left Column - Text Content */}
+            <div className="lg:col-span-3">
+              {/* Brand Label - Refined elite styling */}
+              <div className="flex items-center gap-4 mb-8 animate-fade-up">
+                <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-gold to-gold" />
+                <span className="text-gold/90 text-xs font-bold tracking-[0.3em] uppercase">
+                  Therizo Property & Development
+                </span>
+                <div className="w-12 h-[1px] bg-gradient-to-l from-transparent via-gold to-gold" />
+              </div>
 
-            {/* Main Headline - Elite, authoritative */}
-            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-ivory leading-[1.05] mb-6 animate-fade-up tracking-tight" style={{
-            animationDelay: "0.1s"
-          }}>
-              Prime Property for<br />
-              <span className="text-gold">
-                Disciplined Capital.
-              </span>
-            </h1>
+              {/* Main Headline - Elite, authoritative */}
+              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-ivory leading-[1.05] mb-6 animate-fade-up tracking-tight" style={{
+              animationDelay: "0.1s"
+            }}>
+                Prime Property for<br />
+                <span className="text-gold">
+                  Disciplined Capital.
+                </span>
+              </h1>
 
-            {/* Subheadline - Refined, confident */}
-            <p className="text-lg sm:text-xl text-ivory/70 leading-relaxed mb-10 max-w-lg animate-fade-up font-light tracking-wide" style={{
-            animationDelay: "0.2s"
-          }}>Vetted Nigerian Properties with verified titles and transparent returns—before you commit a single naira.</p>
+              {/* Subheadline - Refined, confident */}
+              <p className="text-lg sm:text-xl text-ivory/70 leading-relaxed mb-10 max-w-lg animate-fade-up font-light tracking-wide" style={{
+              animationDelay: "0.2s"
+            }}>Vetted Nigerian Properties with verified titles and transparent returns—before you commit a single naira.</p>
 
-            {/* CTA Buttons - Elite, refined styling */}
-            <div className="flex flex-col sm:flex-row items-start gap-4 animate-fade-up" style={{
-            animationDelay: "0.3s"
-          }}>
-              <Button size="lg" variant="gold" className="px-10 py-6 text-sm tracking-wider uppercase" asChild>
-                <Link to="/properties">
-                  View Portfolio
-                </Link>
-              </Button>
-              <Button size="lg" variant="hero-outline" className="px-10 py-6 text-sm tracking-wider uppercase" asChild>
-                <Link to="/calculator">
-                  Calculate ROI
-                  <ArrowRight className="ml-3" size={16} />
-                </Link>
-              </Button>
-            </div>
-
-            {/* Private Client Inquiry - Exclusive CTA */}
-            <div className="mt-10 pt-8 border-t border-ivory/[0.06] animate-fade-up" style={{
-            animationDelay: "0.4s"
-          }}>
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                <Button size="lg" variant="gold-outline" className="px-8 py-5 text-xs tracking-[0.2em] uppercase" asChild>
-                  <Link to="/contact?inquiry=private">
-                    <Crown className="w-4 h-4 mr-3" />
-                    Private Client Inquiry
+              {/* CTA Buttons - Elite, refined styling */}
+              <div className="flex flex-col sm:flex-row items-start gap-4 animate-fade-up" style={{
+              animationDelay: "0.3s"
+            }}>
+                <Button size="lg" variant="gold" className="px-10 py-6 text-sm tracking-wider uppercase" asChild>
+                  <Link to="/properties">
+                    View Portfolio
                   </Link>
                 </Button>
-                <span className="text-ivory/40 text-xs tracking-wide">
-                  For investments above ₦500M
-                </span>
+                <Button size="lg" variant="hero-outline" className="px-10 py-6 text-sm tracking-wider uppercase" asChild>
+                  <Link to="/calculator">
+                    Calculate ROI
+                    <ArrowRight className="ml-3" size={16} />
+                  </Link>
+                </Button>
               </div>
+
+              {/* Private Client Inquiry - Exclusive CTA */}
+              <div className="mt-10 pt-8 border-t border-ivory/[0.06] animate-fade-up" style={{
+              animationDelay: "0.4s"
+            }}>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                  <Button size="lg" variant="gold-outline" className="px-8 py-5 text-xs tracking-[0.2em] uppercase" asChild>
+                    <Link to="/contact?inquiry=private">
+                      <Crown className="w-4 h-4 mr-3" />
+                      Private Client Inquiry
+                    </Link>
+                  </Button>
+                  <span className="text-ivory/40 text-xs tracking-wide">
+                    For investments above ₦500M
+                  </span>
+                </div>
+              </div>
+
+              {/* Latest News Button - Subtle, refined */}
+              <button onClick={fetchNews} disabled={loadingNews} className="mt-6 px-6 py-2.5 rounded-none bg-transparent border border-ivory/10 hover:border-gold/30 hover:bg-ivory/[0.02] transition-all duration-500 animate-fade-up group" style={{
+              animationDelay: "0.5s"
+            }}>
+                <span className="text-ivory/60 text-xs font-medium tracking-wider uppercase flex items-center gap-3 group-hover:text-ivory/80 transition-colors">
+                  <Newspaper className="w-3.5 h-3.5" />
+                  {loadingNews ? "Loading..." : "Latest Updates"}
+                </span>
+              </button>
             </div>
 
-            {/* Latest News Button - Subtle, refined */}
-            <button onClick={fetchNews} disabled={loadingNews} className="mt-6 px-6 py-2.5 rounded-none bg-transparent border border-ivory/10 hover:border-gold/30 hover:bg-ivory/[0.02] transition-all duration-500 animate-fade-up group" style={{
-            animationDelay: "0.5s"
-          }}>
-              <span className="text-ivory/60 text-xs font-medium tracking-wider uppercase flex items-center gap-3 group-hover:text-ivory/80 transition-colors">
-                <Newspaper className="w-3.5 h-3.5" />
-                {loadingNews ? "Loading..." : "Latest Updates"}
-              </span>
-            </button>
+            {/* Right Column - Mini Calculator */}
+            <div className="lg:col-span-2 animate-fade-up hidden lg:block" style={{ animationDelay: "0.4s" }}>
+              <MiniROICalculator />
+            </div>
+          </div>
+          
+          {/* Mobile Mini Calculator */}
+          <div className="lg:hidden mt-10 animate-fade-up" style={{ animationDelay: "0.5s" }}>
+            <MiniROICalculator />
           </div>
         </div>
       </div>
