@@ -198,6 +198,112 @@ export default function SEOHealth() {
             </CardContent>
           </Card>
 
+          {/* AI Discovery (GEO) */}
+          <Card className="border-purple-200 bg-purple-50/30">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Globe className="text-purple-600" size={20} />
+                AI Discovery & Citation Readiness (GEO)
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-slate">
+                Configuration for AI search assistants (ChatGPT, Perplexity, Claude) to fetch and cite content.
+              </p>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="font-medium mb-2">Allowed AI Crawlers (robots.txt)</h4>
+                  <div className="space-y-1">
+                    {["GPTBot", "ChatGPT-User", "OAI-SearchBot", "PerplexityBot", "Claude-Web", "Anthropic-AI", "CCBot", "Google-Extended"].map((bot) => (
+                      <div key={bot} className="flex items-center gap-2 text-sm">
+                        <CheckCircle className="text-green-600 shrink-0" size={14} />
+                        <code className="bg-muted px-1 rounded">{bot}</code>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <h4 className="font-medium mb-2">Citation-Ready Features</h4>
+                  <div className="space-y-1 text-sm">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="text-green-600 shrink-0" size={14} />
+                      <span>Semantic H1/H2 structure on all pages</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="text-green-600 shrink-0" size={14} />
+                      <span>FAQ sections with FAQPage schema</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="text-green-600 shrink-0" size={14} />
+                      <span>Organization & RealEstateAgent schemas</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="text-green-600 shrink-0" size={14} />
+                      <span>Clear entity signals (name, services, locations)</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="text-green-600 shrink-0" size={14} />
+                      <span>Content renders without JS delay</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Social Distribution */}
+          <Card className="border-pink-200 bg-pink-50/30">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <LinkIcon className="text-pink-600" size={20} />
+                Social Distribution (Reddit, Pinterest)
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="font-medium mb-2">Open Graph Tags (All Pages)</h4>
+                  <div className="space-y-1 text-sm">
+                    {["og:title", "og:description", "og:url", "og:type", "og:image (1200x630)", "og:site_name", "og:locale"].map((tag) => (
+                      <div key={tag} className="flex items-center gap-2">
+                        <CheckCircle className="text-green-600 shrink-0" size={14} />
+                        <code className="bg-muted px-1 rounded">{tag}</code>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <h4 className="font-medium mb-2">Twitter Cards (All Pages)</h4>
+                  <div className="space-y-1 text-sm">
+                    {["twitter:card (summary_large_image)", "twitter:title", "twitter:description", "twitter:image", "twitter:site (@TherizoNG)"].map((tag) => (
+                      <div key={tag} className="flex items-center gap-2">
+                        <CheckCircle className="text-green-600 shrink-0" size={14} />
+                        <code className="bg-muted px-1 rounded text-xs">{tag}</code>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="pt-4 border-t">
+                <h4 className="font-medium mb-2">Pinterest Rich Pins</h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="text-green-600 shrink-0" size={14} />
+                    <span>Open Graph metadata compatible with Rich Pins</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="text-amber-500 shrink-0" size={14} />
+                    <span>Domain verification: Add <code className="bg-muted px-1 rounded">pinterestDomainVerify</code> prop to SEOHead with your token</span>
+                  </div>
+                  <div className="text-xs text-slate mt-2">
+                    To enable Pinterest Rich Pins: Get your domain verification token from Pinterest Business settings,
+                    then pass it via the <code className="bg-muted px-1">pinterestDomainVerify</code> prop on the Home page SEOHead component.
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Structured Data */}
           <Card>
             <CardHeader>
