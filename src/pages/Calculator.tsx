@@ -4,7 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Send, Download, AlertCircle, Calculator, Globe, Droplets, Building2, Loader2, RotateCcw, Info } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Send, Download, AlertCircle, Calculator, Globe, Droplets, Building2, Loader2, RotateCcw, Info, MapPin } from "lucide-react";
 import { DiasporaMortgageCalculator } from "@/components/calculator/DiasporaMortgageCalculator";
 import { FloodMappingOverlay } from "@/components/calculator/FloodMappingOverlay";
 import { InfrastructureTimeline } from "@/components/calculator/InfrastructureTimeline";
@@ -31,10 +38,28 @@ const calculatorFAQs = [
   { question: "What is gross ROI?", answer: "Gross ROI is your annual income divided by total investment, before deducting taxes, repairs, management fees, and other operating expenses." },
 ];
 
+const LOCATIONS = [
+  "Lagos - Ikoyi",
+  "Lagos - Victoria Island",
+  "Lagos - Lekki Phase 1",
+  "Lagos - Lekki Phase 2",
+  "Lagos - Ajah",
+  "Lagos - Banana Island",
+  "Abuja - Maitama",
+  "Abuja - Asokoro",
+  "Abuja - Wuse",
+  "Abuja - Jabi",
+  "Port Harcourt",
+  "Ibadan",
+  "Ogun State",
+  "Other",
+];
+
 type Strategy = "long-term" | "airbnb" | "compare";
 
 interface FormData {
   strategy: Strategy;
+  location: string;
   purchasePrice: string;
   renovationCost: string;
   monthlyRent: string;
@@ -100,6 +125,7 @@ const Calculator_Page = () => {
   // Default example values as specified
   const initialFormData: FormData = {
     strategy: "compare",
+    location: "Lagos - Lekki Phase 1",
     purchasePrice: "60,000,000",
     renovationCost: "10,000,000",
     monthlyRent: "600,000",
@@ -124,6 +150,11 @@ const Calculator_Page = () => {
   const handleInputChange = (field: keyof FormData, value: string) => {
     if (field === "strategy") {
       setFormData((prev) => ({ ...prev, [field]: value as Strategy }));
+      return;
+    }
+    
+    if (field === "location") {
+      setFormData((prev) => ({ ...prev, [field]: value }));
       return;
     }
     
@@ -279,35 +310,69 @@ const Calculator_Page = () => {
 
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
     
-    // Header
+    // Header with enhanced branding
     doc.setFillColor(8, 26, 47); // Navy
-    doc.rect(0, 0, pageWidth, 45, 'F');
+    doc.rect(0, 0, pageWidth, 55, 'F');
+    
+    // Gold accent line
+    doc.setFillColor(199, 168, 106); // Gold
+    doc.rect(0, 55, pageWidth, 3, 'F');
     
     doc.setTextColor(255, 255, 255);
-    doc.setFontSize(24);
+    doc.setFontSize(28);
     doc.setFont("helvetica", "bold");
-    doc.text("Therizo ROI Report", 20, 25);
+    doc.text("THERIZO", 20, 25);
+    
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(199, 168, 106); // Gold
+    doc.text("Property & Development Corporation", 20, 35);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(255, 255, 255);
+    doc.text(`ROI Analysis Report  •  ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`, 20, 48);
+    
+    // Property Location Badge
+    doc.setFillColor(199, 168, 106);
+    doc.roundedRect(pageWidth - 80, 15, 60, 25, 2, 2, 'F');
+    doc.setTextColor(8, 26, 47);
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "bold");
+    doc.text("LOCATION", pageWidth - 50, 24, { align: "center" });
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+    const locationText = formData.location.length > 15 ? formData.location.substring(0, 14) + "..." : formData.location;
+    doc.text(locationText, pageWidth - 50, 33, { align: "center" });
+    
+    // Investment Details Section
+    let y = 75;
+    const leftCol = 20;
+    const rightCol = 130;
+    
+    doc.setFillColor(247, 243, 234); // Ivory background
+    doc.roundedRect(15, y - 10, pageWidth - 30, 55, 3, 3, 'F');
+    
+    doc.setTextColor(8, 26, 47);
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text("Investment Summary", leftCol, y);
+    y += 15;
     
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
-    doc.text(`Generated: ${new Date().toLocaleDateString()}`, 20, 35);
-    
-    // Investment Details Section
-    doc.setTextColor(8, 26, 47);
-    doc.setFontSize(16);
-    doc.setFont("helvetica", "bold");
-    doc.text("Investment Details", 20, 60);
-    
-    doc.setFontSize(11);
-    doc.setFont("helvetica", "normal");
     doc.setTextColor(80, 80, 80);
     
-    let y = 75;
-    const leftCol = 20;
-    const rightCol = 120;
+    doc.text("Property Location:", leftCol, y);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(8, 26, 47);
+    doc.text(formData.location, rightCol, y);
+    y += 10;
     
-    doc.text("Property Purchase Price:", leftCol, y);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(80, 80, 80);
+    doc.text("Purchase Price:", leftCol, y);
     doc.text(formatCurrency(parseFormattedNumber(formData.purchasePrice)), rightCol, y);
     y += 10;
     
@@ -317,9 +382,9 @@ const Calculator_Page = () => {
     
     doc.text("Total Investment:", leftCol, y);
     doc.setFont("helvetica", "bold");
+    doc.setTextColor(199, 168, 106);
     doc.text(formatCurrency(results.totalInvestment), rightCol, y);
-    doc.setFont("helvetica", "normal");
-    y += 20;
+    y += 25;
     
     // Long-Term Results
     doc.setTextColor(8, 26, 47);
@@ -389,15 +454,25 @@ const Calculator_Page = () => {
     const splitDisclaimer = doc.splitTextToSize(disclaimer, pageWidth - 40);
     doc.text(splitDisclaimer, leftCol, y);
     
-    // Footer
-    doc.setFillColor(199, 168, 106); // Gold
-    doc.rect(0, 280, pageWidth, 17, 'F');
-    doc.setTextColor(8, 26, 47);
+    // Footer with enhanced branding
+    doc.setFillColor(8, 26, 47); // Navy
+    doc.rect(0, pageHeight - 25, pageWidth, 25, 'F');
+    
+    // Gold accent on footer
+    doc.setFillColor(199, 168, 106);
+    doc.rect(0, pageHeight - 25, pageWidth, 2, 'F');
+    
+    doc.setTextColor(255, 255, 255);
     doc.setFontSize(10);
     doc.setFont("helvetica", "bold");
-    doc.text("Therizo Property & Development Corporation", pageWidth / 2, 290, { align: "center" });
+    doc.text("Therizo Property & Development Corporation", pageWidth / 2, pageHeight - 14, { align: "center" });
     
-    doc.save("therizo-roi-report.pdf");
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(199, 168, 106);
+    doc.text("therizoproperties.com  •  +234 803 483 0087", pageWidth / 2, pageHeight - 6, { align: "center" });
+    
+    doc.save(`therizo-roi-report-${formData.location.replace(/\s/g, '-').toLowerCase()}.pdf`);
     
     toast({
       title: "PDF Generated",
@@ -549,6 +624,33 @@ const Calculator_Page = () => {
                         </button>
                       ))}
                     </div>
+                  </div>
+
+                  {/* Property Location */}
+                  <div>
+                    <Label className="text-sm font-medium text-ink mb-2 block">
+                      <MapPin className="w-4 h-4 inline mr-2" />
+                      Property Location
+                    </Label>
+                    <Select 
+                      value={formData.location} 
+                      onValueChange={(value) => handleInputChange("location", value)}
+                    >
+                      <SelectTrigger className="bg-navy text-ivory border-0 h-12">
+                        <SelectValue placeholder="Select location" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-navy border-navy/50">
+                        {LOCATIONS.map((loc) => (
+                          <SelectItem 
+                            key={loc} 
+                            value={loc}
+                            className="text-ivory hover:bg-gold/20 focus:bg-gold/20 focus:text-ivory"
+                          >
+                            {loc}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   {/* Property Purchase Price */}
