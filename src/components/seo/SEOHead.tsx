@@ -12,6 +12,7 @@ interface SEOHeadProps {
   modifiedTime?: string;
   keywords?: string | string[];
   noindex?: boolean;
+  pinterestDomainVerify?: string; // Pinterest Rich Pins verification token
 }
 
 // Hreflang configuration for international SEO
@@ -37,6 +38,7 @@ export function SEOHead({
   modifiedTime,
   keywords = [],
   noindex = false,
+  pinterestDomainVerify,
 }: SEOHeadProps) {
   const location = useLocation();
   const baseUrl = "https://therizoproperties.com";
@@ -145,11 +147,16 @@ export function SEOHead({
     updateMeta("twitter:image", ogImage);
     updateMeta("twitter:site", "@TherizoNG");
 
+    // Pinterest Rich Pins domain verification
+    if (pinterestDomainVerify) {
+      updateMeta("p:domain_verify", pinterestDomainVerify);
+    }
+
     // Cleanup function - only remove hreflang tags, don't reset title (causes flickering)
     return () => {
       document.querySelectorAll('link[hreflang]').forEach(el => el.remove());
     };
-  }, [fullTitle, truncatedDescription, fullCanonical, ogImage, ogType, publishedTime, modifiedTime, keywordsArray, noindex]);
+  }, [fullTitle, truncatedDescription, fullCanonical, ogImage, ogType, publishedTime, modifiedTime, keywordsArray, noindex, pinterestDomainVerify]);
 
   return null;
 }
