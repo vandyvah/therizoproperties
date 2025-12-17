@@ -136,7 +136,7 @@ const Team = () => {
                     <img
                       src={consultant.image}
                       alt={consultant.name}
-                      className="w-20 h-20 md:w-24 md:h-24 mx-auto rounded-full object-cover object-top mb-4 border-2 border-gold/30"
+                      className="w-20 h-20 md:w-24 md:h-24 mx-auto rounded-full object-cover object-[center_20%] mb-4 border-2 border-gold/30"
                     />
                   ) : (
                     <div className="w-20 h-20 md:w-24 md:h-24 mx-auto rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center mb-4">
