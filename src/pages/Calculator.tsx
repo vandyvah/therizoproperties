@@ -16,6 +16,7 @@ import { DiasporaMortgageCalculator } from "@/components/calculator/DiasporaMort
 import { FloodMappingOverlay } from "@/components/calculator/FloodMappingOverlay";
 import { InfrastructureTimeline } from "@/components/calculator/InfrastructureTimeline";
 import { PropertyComparison, SavedCalculation } from "@/components/calculator/PropertyComparison";
+import { ROIInputField } from "@/components/calculator/ROIInputField";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useDebounce, formatWithSeparators, parseFormattedNumber } from "@/hooks/useDebounce";
@@ -150,7 +151,8 @@ const Calculator_Page = () => {
     }, 100);
   };
 
-  const handleInputChange = (field: keyof FormData, value: string) => {
+  // Handle input change - store RAW value while typing (no formatting)
+  const handleInputChange = useCallback((field: keyof FormData, value: string) => {
     if (field === "strategy") {
       setFormData((prev) => ({ ...prev, [field]: value as Strategy }));
       return;
@@ -161,29 +163,38 @@ const Calculator_Page = () => {
       return;
     }
     
-    // For occupancy, don't format with separators (it's a percentage)
+    // For occupancy, only allow digits and clamp to 0-100
     if (field === "occupancyRate") {
       const sanitizedValue = value.replace(/[^0-9]/g, "");
-      // Clamp to 0-100
       const numValue = parseInt(sanitizedValue) || 0;
       const clampedValue = Math.min(numValue, 100).toString();
       setFormData((prev) => ({ ...prev, [field]: sanitizedValue ? clampedValue : "" }));
     } else {
-      // Format with thousand separators for currency fields
-      const formattedValue = formatWithSeparators(value);
-      setFormData((prev) => ({ ...prev, [field]: formattedValue }));
+      // For currency fields: allow only digits and commas, don't reformat while typing
+      const sanitizedValue = value.replace(/[^0-9,]/g, "");
+      setFormData((prev) => ({ ...prev, [field]: sanitizedValue }));
     }
     
     // Clear error when user starts typing
     if (errors[field as keyof FormErrors]) {
       setErrors(prev => ({ ...prev, [field]: undefined }));
     }
-  };
+  }, [errors]);
 
-  const handleBlur = (field: keyof FormData) => {
+  // Handle blur - format value and validate
+  const handleFieldBlur = useCallback((field: keyof FormData) => {
     setTouched(prev => ({ ...prev, [field]: true }));
+    
+    // Format currency fields on blur
+    if (field !== "strategy" && field !== "location" && field !== "occupancyRate") {
+      setFormData(prev => ({
+        ...prev,
+        [field]: formatWithSeparators(prev[field])
+      }));
+    }
+    
     validateField(field);
-  };
+  }, []);
 
   const validateField = (field: keyof FormData) => {
     try {
@@ -530,57 +541,7 @@ const Calculator_Page = () => {
     });
   };
 
-  const InputField = ({ 
-    id, 
-    label, 
-    value, 
-    onChange, 
-    placeholder,
-    goldLabel = false,
-    suffix = ""
-  }: { 
-    id: keyof FormData; 
-    label: string; 
-    value: string; 
-    onChange: (value: string) => void;
-    placeholder?: string;
-    goldLabel?: boolean;
-    suffix?: string;
-  }) => (
-    <div>
-      <Label 
-        htmlFor={id} 
-        className={`text-sm mb-2 block ${goldLabel ? 'text-gold' : 'font-medium text-ink'}`}
-      >
-        {label}
-      </Label>
-      <div className="relative">
-        <Input
-          id={id}
-          type="text"
-          inputMode="numeric"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          onBlur={() => handleBlur(id)}
-          placeholder={placeholder}
-          className={`bg-navy text-ivory border-0 h-12 text-base placeholder:text-ivory/50 focus:ring-2 focus:ring-gold ${
-            suffix ? 'pr-12' : ''
-          } ${errors[id as keyof FormErrors] && touched[id] ? 'ring-2 ring-destructive' : ''}`}
-        />
-        {suffix && (
-          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-ivory/50 text-sm">
-            {suffix}
-          </span>
-        )}
-      </div>
-      {errors[id as keyof FormErrors] && touched[id] && (
-        <div className="flex items-center gap-1.5 mt-1.5 text-destructive text-sm">
-          <AlertCircle className="w-4 h-4" />
-          <span>{errors[id as keyof FormErrors]}</span>
-        </div>
-      )}
-    </div>
-  );
+  // InputField component moved to src/components/calculator/ROIInputField.tsx
 
   return (
     <Layout>
@@ -704,21 +665,27 @@ const Calculator_Page = () => {
                   </div>
 
                   {/* Property Purchase Price */}
-                  <InputField
+                  <ROIInputField
                     id="purchasePrice"
                     label="Property Purchase Price (₦)"
                     value={formData.purchasePrice}
                     onChange={(value) => handleInputChange("purchasePrice", value)}
+                    onBlur={() => handleFieldBlur("purchasePrice")}
                     placeholder="60,000,000"
+                    error={errors.purchasePrice}
+                    touched={touched.purchasePrice}
                   />
 
                   {/* Renovation */}
-                  <InputField
+                  <ROIInputField
                     id="renovationCost"
                     label="Renovation & Fit-Out (₦)"
                     value={formData.renovationCost}
                     onChange={(value) => handleInputChange("renovationCost", value)}
+                    onBlur={() => handleFieldBlur("renovationCost")}
                     placeholder="10,000,000"
+                    error={errors.renovationCost}
+                    touched={touched.renovationCost}
                   />
 
                   {/* Income Assumptions */}
@@ -727,29 +694,38 @@ const Calculator_Page = () => {
                       Income Assumptions
                     </h3>
                     <div className="space-y-4">
-                      <InputField
+                      <ROIInputField
                         id="monthlyRent"
                         label="Long-Term Monthly Rent (₦/month)"
                         value={formData.monthlyRent}
                         onChange={(value) => handleInputChange("monthlyRent", value)}
+                        onBlur={() => handleFieldBlur("monthlyRent")}
                         placeholder="600,000"
                         goldLabel
+                        error={errors.monthlyRent}
+                        touched={touched.monthlyRent}
                       />
-                      <InputField
+                      <ROIInputField
                         id="nightlyRate"
                         label="Airbnb Nightly Rate (₦/night)"
                         value={formData.nightlyRate}
                         onChange={(value) => handleInputChange("nightlyRate", value)}
+                        onBlur={() => handleFieldBlur("nightlyRate")}
                         placeholder="150,000"
                         goldLabel
+                        error={errors.nightlyRate}
+                        touched={touched.nightlyRate}
                       />
-                      <InputField
+                      <ROIInputField
                         id="occupancyRate"
                         label="Airbnb Occupancy Rate (%)"
                         value={formData.occupancyRate}
                         onChange={(value) => handleInputChange("occupancyRate", value)}
+                        onBlur={() => handleFieldBlur("occupancyRate")}
                         placeholder="65"
                         goldLabel
+                        error={errors.occupancyRate}
+                        touched={touched.occupancyRate}
                       />
                       <p className="text-xs text-slate">Days per year: 365 (fixed)</p>
                     </div>
