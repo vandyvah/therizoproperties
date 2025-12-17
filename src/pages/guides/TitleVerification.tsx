@@ -127,6 +127,7 @@ export default function TitleVerification() {
           "land registry search Nigeria"
         ]}
         ogImage="https://therizoproperties.com/og/og-title-verification.jpg"
+        pinterestImage="https://therizoproperties.com/pinterest/pin-title-verification.jpg"
       />
       <JsonLd data={createArticleSchema({
         headline: "How We Verify Nigerian Property Titles: A Complete Guide",
