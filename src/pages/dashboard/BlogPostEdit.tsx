@@ -6,8 +6,11 @@ export default function BlogPostEdit() {
   const { id } = useParams();
 
   return (
-    <DashboardLayout title={id ? "Edit Post" : "New Post"}>
-      <BlogPostEditor postId={id} />
+    <DashboardLayout>
+      <div className="space-y-6">
+        <h1 className="text-2xl font-display font-semibold">{id ? "Edit Post" : "New Post"}</h1>
+        <BlogPostEditor postId={id} />
+      </div>
     </DashboardLayout>
   );
 }

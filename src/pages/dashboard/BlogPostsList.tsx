@@ -116,8 +116,9 @@ export default function BlogPostsList() {
   };
 
   return (
-    <DashboardLayout title="Blog Posts">
+    <DashboardLayout>
       <div className="space-y-6">
+        <h1 className="text-2xl font-display font-semibold">Blog Posts</h1>
         {/* Header */}
         <div className="flex flex-col sm:flex-row gap-4 justify-between">
           <div className="flex gap-2">

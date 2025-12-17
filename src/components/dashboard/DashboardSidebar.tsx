@@ -14,6 +14,7 @@ import {
   ChevronRight,
   Mail,
   ShieldCheck,
+  FileText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -29,8 +30,9 @@ const baseNavItems = [
   { href: "/dashboard/roi", label: "ROI Calculator", icon: Calculator },
 ];
 
-const adminNavItems: typeof baseNavItems = [];
-
+const adminNavItems = [
+  { href: "/dashboard/blog", label: "Blog", icon: FileText },
+];
 const superAdminNavItems = [
   { href: "/dashboard/users", label: "User Management", icon: ShieldCheck },
 ];
