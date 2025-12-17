@@ -18,26 +18,26 @@ const founder = {
 
 const consultants = [
   {
-    name: "Mr. Adebayo",
+    name: "Mr. Solomon Adebayo",
     role: "CFO / Admin",
     location: "Lagos Island",
-    bio: "A distinguished mathematician and accounting professional, Mr. Adebayo brings analytical rigour and financial discipline to Therizo's operations. He oversees the firm's financial management, administrative processes, and ensures every transaction meets the highest standards of fiscal accountability and transparency.",
-    initial: "A",
+    bio: "A distinguished mathematician and accounting professional, Mr. Solomon Adebayo brings analytical rigour and financial discipline to Therizo's operations. He oversees the firm's financial management, administrative processes, and ensures every transaction meets the highest standards of fiscal accountability and transparency.",
+    initial: "S",
     image: bayoImage,
   },
   {
-    name: "Mr Kelly",
+    name: "Mr Kelly Amiwero",
     role: "Vice President, Operations",
     location: "FCT Abuja / Northern Region",
-    bio: "Mr Kelly oversees Therizo's operations across FCT Abuja and the Northern Region. He coordinates deal execution, manages consultant performance, and ensures operational standards are maintained across markets. With deep knowledge of the Abuja property landscape and northern investment corridors, he serves high-net-worth individuals, institutional clients, and diaspora investors seeking well-documented assets in Nigeria's political capital and emerging northern markets.",
+    bio: "Mr Kelly Amiwero oversees Therizo's operations across FCT Abuja and the Northern Region. He coordinates deal execution, manages consultant performance, and ensures operational standards are maintained across markets. With deep knowledge of the Abuja property landscape and northern investment corridors, he serves high-net-worth individuals, institutional clients, and diaspora investors seeking well-documented assets in Nigeria's political capital and emerging northern markets.",
     initial: "K",
     image: kellyImage,
   },
   {
-    name: "Mrs Aisha",
+    name: "Mrs Aisha Collins A.",
     role: "Vice President, Emerging Markets and High-Volume Properties",
     location: "FCT, Middle Belt, Ibadan, Port Harcourt & Emerging Markets",
-    bio: "Mrs Aisha leads Therizo's expansion into Nigeria's high-growth corridors, covering Inlands and Chief Lands in FCT, the Middle Belt Region, and emerging markets including Ibadan and Port Harcourt. Fluent in the three major Nigerian languages, she brings unmatched versatility across residential, commercial, and agricultural properties. Investors trust her to identify the right opportunities across diverse markets and deal structures.",
+    bio: "Mrs Aisha Collins A. leads Therizo's expansion into Nigeria's high-growth corridors, covering Inlands and Chief Lands in FCT, the Middle Belt Region, and emerging markets including Ibadan and Port Harcourt. Fluent in the three major Nigerian languages, she brings unmatched versatility across residential, commercial, and agricultural properties. Investors trust her to identify the right opportunities across diverse markets and deal structures.",
     initial: "A",
     image: aishaImage,
   },
