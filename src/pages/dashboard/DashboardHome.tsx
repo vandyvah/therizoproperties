@@ -241,25 +241,25 @@ export default function DashboardHome() {
             </CardHeader>
             <CardContent className="grid grid-cols-2 gap-2">
               <Button variant="outline" size="sm" asChild>
-                <Link to="/dashboard/viewings">
+                <Link to="/dashboard/viewings?new=true">
                   <Calendar size={14} className="mr-2" />
                   Schedule Viewing
                 </Link>
               </Button>
               <Button variant="outline" size="sm" asChild>
-                <Link to="/dashboard/roi">
+                <Link to="/dashboard/roi?new=true">
                   <TrendingUp size={14} className="mr-2" />
                   ROI Calculation
                 </Link>
               </Button>
               <Button variant="outline" size="sm" asChild>
-                <Link to="/dashboard/clients">
+                <Link to="/dashboard/clients?new=true">
                   <Users size={14} className="mr-2" />
                   Add Client
                 </Link>
               </Button>
               <Button variant="outline" size="sm" asChild>
-                <Link to="/dashboard/deals">
+                <Link to="/dashboard/deals?new=true">
                   <HandshakeIcon size={14} className="mr-2" />
                   Create Deal
                 </Link>
