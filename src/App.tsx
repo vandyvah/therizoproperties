@@ -34,8 +34,8 @@ import ViewingsList from "./pages/dashboard/ViewingsList";
 import DealsList from "./pages/dashboard/DealsList";
 import ROIList from "./pages/dashboard/ROIList";
 import Settings from "./pages/dashboard/Settings";
-
 import UserManagement from "./pages/dashboard/UserManagement";
+import SEOHealth from "./pages/SEOHealth";
 
 const queryClient = new QueryClient();
 
@@ -60,6 +60,7 @@ const App = () => (
               <Route path="/vault" element={<Vault />} />
               <Route path="/press" element={<Press />} />
               <Route path="/style-guide" element={<StyleGuide />} />
+              <Route path="/seo-health" element={<SEOHealth />} />
               
               {/* Guide Pages */}
               <Route path="/guides/title-verification" element={<TitleVerification />} />
