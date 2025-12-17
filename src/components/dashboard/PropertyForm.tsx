@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -22,6 +22,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { PropertyMediaUpload } from "./PropertyMediaUpload";
 
 const propertySchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -51,9 +52,18 @@ interface PropertyFormProps {
 const CITIES = ["Lagos", "Abuja", "Port Harcourt", "Ogun State", "Kano", "Ibadan", "Enugu", "Other"];
 const PROPERTY_TYPES = ["Apartment", "Detached House", "Semi-Detached", "Terrace", "Penthouse", "Land", "Commercial", "Mixed-Use"];
 
+interface MediaFile {
+  id?: string;
+  file_url: string;
+  file_type: "image" | "video";
+  file_name: string;
+  file_size?: number;
+}
+
 export function PropertyForm({ open, onClose, onSuccess, initialData }: PropertyFormProps) {
   const { profile } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [pendingMedia, setPendingMedia] = useState<MediaFile[]>([]);
 
   const form = useForm<PropertyFormData>({
     resolver: zodResolver(propertySchema),
@@ -104,7 +114,7 @@ export function PropertyForm({ open, onClose, onSuccess, initialData }: Property
         if (error) throw error;
         toast.success("Property updated successfully");
       } else {
-        const { error } = await supabase.from("properties").insert({
+        const { data: newProperty, error } = await supabase.from("properties").insert({
           title: data.title,
           property_type: data.property_type,
           city: data.city,
@@ -120,8 +130,24 @@ export function PropertyForm({ open, onClose, onSuccess, initialData }: Property
           status: data.status,
           created_by_id: profile.id,
           assigned_consultant_id: profile.id,
-        });
+        }).select().single();
+        
         if (error) throw error;
+
+        // Save pending media to the new property
+        if (newProperty && pendingMedia.length > 0) {
+          for (const media of pendingMedia) {
+            await supabase.from("property_media").insert({
+              property_id: newProperty.id,
+              file_url: media.file_url,
+              file_type: media.file_type,
+              file_name: media.file_name,
+              file_size: media.file_size,
+              uploaded_by_id: profile.id,
+            });
+          }
+        }
+        
         toast.success("Property created successfully");
       }
 
@@ -275,6 +301,13 @@ export function PropertyForm({ open, onClose, onSuccess, initialData }: Property
             <div className="col-span-2">
               <Label htmlFor="description">Description</Label>
               <Textarea id="description" {...form.register("description")} rows={3} />
+            </div>
+
+            <div className="col-span-2">
+              <PropertyMediaUpload
+                propertyId={initialData?.id}
+                onMediaChange={setPendingMedia}
+              />
             </div>
           </div>
 
