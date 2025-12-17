@@ -31,7 +31,7 @@ export function SEOHead({
   description,
   canonical,
   canonicalUrl,
-  ogImage = "https://lovable.dev/opengraph-image-p98pqg.png",
+  ogImage = "https://therizoproperties.com/og/og-home.jpg",
   ogType = "website",
   publishedTime,
   modifiedTime,
@@ -49,6 +49,11 @@ export function SEOHead({
   
   const fullTitle = title.includes("Therizo") ? title : `${title} | Therizo`;
   const keywordsArray = typeof keywords === "string" ? keywords.split(",").map(k => k.trim()) : keywords;
+  
+  // Truncate description for SEO (max 160 chars)
+  const truncatedDescription = description.length > 160 
+    ? description.substring(0, 157) + "..." 
+    : description;
 
   useEffect(() => {
     // Update document title
@@ -66,18 +71,24 @@ export function SEOHead({
       meta.setAttribute("content", content);
     };
 
-    // Core SEO
-    updateMeta("description", description);
+    // Core SEO meta tags
+    updateMeta("description", truncatedDescription);
     if (keywordsArray.length > 0) {
       updateMeta("keywords", keywordsArray.join(", "));
     }
+    
+    // Robots meta - comprehensive directives for both Google and Bing
     if (noindex) {
       updateMeta("robots", "noindex, nofollow");
+      updateMeta("googlebot", "noindex, nofollow");
+      updateMeta("bingbot", "noindex, nofollow");
     } else {
-      updateMeta("robots", "index, follow");
+      updateMeta("robots", "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1");
+      updateMeta("googlebot", "index, follow");
+      updateMeta("bingbot", "index, follow");
     }
 
-    // Canonical
+    // Canonical URL
     let link = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
     if (!link) {
       link = document.createElement("link");
@@ -87,25 +98,27 @@ export function SEOHead({
     link.setAttribute("href", fullCanonical);
 
     // Hreflang tags for international SEO
-    // Remove existing hreflang tags first
     document.querySelectorAll('link[hreflang]').forEach(el => el.remove());
     
-    // Add hreflang tags for each configured language/region
-    hreflangConfig.forEach(({ lang }) => {
-      const hreflangLink = document.createElement("link");
-      hreflangLink.setAttribute("rel", "alternate");
-      hreflangLink.setAttribute("hreflang", lang);
-      hreflangLink.setAttribute("href", fullCanonical);
-      document.head.appendChild(hreflangLink);
-    });
+    if (!noindex) {
+      hreflangConfig.forEach(({ lang }) => {
+        const hreflangLink = document.createElement("link");
+        hreflangLink.setAttribute("rel", "alternate");
+        hreflangLink.setAttribute("hreflang", lang);
+        hreflangLink.setAttribute("href", fullCanonical);
+        document.head.appendChild(hreflangLink);
+      });
+    }
 
-    // Open Graph
+    // Open Graph tags
     updateMeta("og:title", fullTitle, true);
-    updateMeta("og:description", description, true);
+    updateMeta("og:description", truncatedDescription, true);
     updateMeta("og:type", ogType, true);
     updateMeta("og:url", fullCanonical, true);
     updateMeta("og:image", ogImage, true);
-    updateMeta("og:site_name", "Therizo Property and Development Corporation", true);
+    updateMeta("og:image:width", "1200", true);
+    updateMeta("og:image:height", "630", true);
+    updateMeta("og:site_name", "Therizo Properties", true);
     updateMeta("og:locale", "en_NG", true);
     
     // Additional og:locale:alternate for international targeting
@@ -124,18 +137,16 @@ export function SEOHead({
     // Twitter Cards
     updateMeta("twitter:card", "summary_large_image");
     updateMeta("twitter:title", fullTitle);
-    updateMeta("twitter:description", description);
+    updateMeta("twitter:description", truncatedDescription);
     updateMeta("twitter:image", ogImage);
     updateMeta("twitter:site", "@TherizoNG");
 
     // Cleanup function
     return () => {
-      // Reset to default on unmount
-      document.title = "Therizo Property and Development Corporation | Nigerian Real Estate";
-      // Remove hreflang tags on unmount
+      document.title = "Therizo Properties | Premium Nigerian Real Estate";
       document.querySelectorAll('link[hreflang]').forEach(el => el.remove());
     };
-  }, [fullTitle, description, fullCanonical, ogImage, ogType, publishedTime, modifiedTime, keywordsArray, noindex]);
+  }, [fullTitle, truncatedDescription, fullCanonical, ogImage, ogType, publishedTime, modifiedTime, keywordsArray, noindex]);
 
   return null;
 }
