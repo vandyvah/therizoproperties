@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { SEOHead } from "@/components/seo/SEOHead";
@@ -16,11 +16,12 @@ export default function DashboardAuth() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Redirect if already logged in
-  if (user && !loading) {
-    navigate("/dashboard");
-    return null;
-  }
+  // Redirect if already logged in - must be in useEffect to avoid render loops
+  useEffect(() => {
+    if (user && !loading) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [user, loading, navigate]);
 
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
