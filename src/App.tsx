@@ -38,10 +38,12 @@ import UserManagement from "./pages/dashboard/UserManagement";
 import BlogPostsList from "./pages/dashboard/BlogPostsList";
 import BlogPostEdit from "./pages/dashboard/BlogPostEdit";
 import BlogClustersList from "./pages/dashboard/BlogClustersList";
+import MaterialRequestsList from "./pages/dashboard/MaterialRequestsList";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import BlogCluster from "./pages/BlogCluster";
 import SEOHealth from "./pages/SEOHealth";
+import MaterialsSupply from "./pages/MaterialsSupply";
 
 const queryClient = new QueryClient();
 
@@ -65,6 +67,7 @@ const App = () => (
               <Route path="/properties/:id" element={<PropertyDetailPage />} />
               <Route path="/vault" element={<Vault />} />
               <Route path="/press" element={<Press />} />
+              <Route path="/materials-supply" element={<MaterialsSupply />} />
               <Route path="/style-guide" element={<StyleGuide />} />
               <Route path="/seo-health" element={<SEOHealth />} />
               
@@ -98,6 +101,7 @@ const App = () => (
               <Route path="/dashboard/blog/new" element={<BlogPostEdit />} />
               <Route path="/dashboard/blog/:id/edit" element={<BlogPostEdit />} />
               <Route path="/dashboard/blog/clusters" element={<BlogClustersList />} />
+              <Route path="/dashboard/material-requests" element={<MaterialRequestsList />} />
               
               <Route path="/dashboard/users" element={<UserManagement />} />
               <Route path="/dashboard/settings" element={<Settings />} />

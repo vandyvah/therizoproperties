@@ -15,6 +15,7 @@ import {
   Mail,
   ShieldCheck,
   FileText,
+  Package,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -32,6 +33,7 @@ const baseNavItems = [
 
 const adminNavItems = [
   { href: "/dashboard/blog", label: "Blog", icon: FileText },
+  { href: "/dashboard/material-requests", label: "Materials Supply", icon: Package },
 ];
 const superAdminNavItems = [
   { href: "/dashboard/users", label: "User Management", icon: ShieldCheck },
