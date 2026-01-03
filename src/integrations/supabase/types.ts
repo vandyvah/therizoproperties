@@ -692,6 +692,95 @@ export type Database = {
           },
         ]
       }
+      material_request_items: {
+        Row: {
+          category: string
+          id: string
+          notes: string | null
+          quantity_unit: string
+          request_id: string
+          specification: string
+        }
+        Insert: {
+          category: string
+          id?: string
+          notes?: string | null
+          quantity_unit: string
+          request_id: string
+          specification: string
+        }
+        Update: {
+          category?: string
+          id?: string
+          notes?: string | null
+          quantity_unit?: string
+          request_id?: string
+          specification?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "material_request_items_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "material_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      material_requests: {
+        Row: {
+          access_constraints: string | null
+          boq_file_url: string | null
+          company_name: string | null
+          created_at: string
+          delivery_timeline: string
+          email: string | null
+          full_name: string
+          id: string
+          internal_notes: string | null
+          payment_preference: string
+          phone: string
+          request_type: string
+          role: string
+          site_location: string
+          status: string
+        }
+        Insert: {
+          access_constraints?: string | null
+          boq_file_url?: string | null
+          company_name?: string | null
+          created_at?: string
+          delivery_timeline: string
+          email?: string | null
+          full_name: string
+          id?: string
+          internal_notes?: string | null
+          payment_preference: string
+          phone: string
+          request_type: string
+          role: string
+          site_location: string
+          status?: string
+        }
+        Update: {
+          access_constraints?: string | null
+          boq_file_url?: string | null
+          company_name?: string | null
+          created_at?: string
+          delivery_timeline?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          internal_notes?: string | null
+          payment_preference?: string
+          phone?: string
+          request_type?: string
+          role?: string
+          site_location?: string
+          status?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           active: boolean

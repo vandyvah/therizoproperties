@@ -10,6 +10,7 @@ const footerLinks = {
   ],
   services: [
     { href: "/properties", label: "Properties" },
+    { href: "/materials-supply", label: "Materials Supply" },
     { href: "/calculator", label: "ROI Calculator" },
     { href: "/contact", label: "Book Consultation" },
   ],

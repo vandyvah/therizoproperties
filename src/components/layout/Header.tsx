@@ -10,6 +10,7 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/properties", label: "Properties" },
   { href: "/vault", label: "The Vault", icon: Lock, exclusive: true },
+  { href: "/materials-supply", label: "Materials Supply" },
   { href: "/calculator", label: "ROI Calculator" },
   { href: "/our-standard", label: "Our Standard" },
   { href: "/blog", label: "Blog" },

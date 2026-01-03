@@ -71,6 +71,14 @@
     <priority>0.7</priority>
   </url>
   
+  <!-- Materials Supply -->
+  <url>
+    <loc>https://therizoproperties.com/materials-supply</loc>
+    <lastmod>2026-01-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
   <!-- Press -->
   <url>
     <loc>https://therizoproperties.com/press</loc>
