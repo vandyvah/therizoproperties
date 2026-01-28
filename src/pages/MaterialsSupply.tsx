@@ -301,7 +301,7 @@ BOQ attached / Items listed: ____`;
         title="Building Materials Supply in Abuja | Therizo Properties"
         description="Sand, gravel, cement, iron/rebar, and contractor-requested building materials delivered to site with verified specs and reliable scheduling."
         canonical="/materials-supply"
-        ogImage="/og/og-standard.jpg"
+        ogImage="/og/og-materials-supply.jpg"
       />
       <JsonLd
         data={{
