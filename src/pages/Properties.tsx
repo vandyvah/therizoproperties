@@ -2,14 +2,15 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
-import { MapPin, ArrowRight, Building } from "lucide-react";
-import property1 from "@/assets/property-1.jpg";
-import property2 from "@/assets/property-2.jpg";
-import property3 from "@/assets/property-3.jpg";
+import { MapPin, ArrowRight, Building, Loader2, Video } from "lucide-react";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { JsonLd, createFAQSchema } from "@/components/seo/JsonLd";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useCurrency } from "@/components/currency/CurrencySwitcher";
+import property1 from "@/assets/property-1.jpg";
 
 const propertyFAQs = [
   {
@@ -30,88 +31,50 @@ const propertyFAQs = [
   }
 ];
 
-const properties = [
-  {
-    id: 1,
-    title: "4-Bedroom Terrace in Lekki Phase 1",
-    location: "Lekki, Lagos",
-    description:
-      "Secure estate, strong rental demand, serviced. Modern finishing with spacious rooms and dedicated parking. Ideal for families or long-term rental investment.",
-    tag: "Exclusive Listing",
-    image: property1,
-    price: "₦180,000,000",
-    beds: 4,
-    baths: 5,
-    sqm: 320,
-  },
-  {
-    id: 2,
-    title: "Luxury Apartment in Ikoyi",
-    location: "Ikoyi, Lagos",
-    description:
-      "High-floor unit with panoramic city and water views. Premium finishing, smart home features, and access to world-class amenities including pool, gym, and concierge.",
-    tag: "New",
-    image: property2,
-    price: "₦320,000,000",
-    beds: 3,
-    baths: 4,
-    sqm: 250,
-  },
-  {
-    id: 3,
-    title: "Serviced Apartments in Abuja",
-    location: "Maitama, Abuja",
-    description:
-      "Ideal for corporate lets and Airbnb. Fully furnished units in a secure development with 24/7 power, security, and maintenance. Strong corporate tenant demand.",
-    tag: "Developer Direct",
-    image: property3,
-    price: "₦95,000,000",
-    beds: 2,
-    baths: 2,
-    sqm: 120,
-  },
-  {
-    id: 4,
-    title: "Waterfront Penthouse in Victoria Island",
-    location: "Victoria Island, Lagos",
-    description:
-      "Ultra-luxury penthouse with private terrace, unobstructed ocean views, and premium smart home integration. Boutique development with only 8 units.",
-    tag: "Premium",
-    image: property2,
-    price: "₦650,000,000",
-    beds: 4,
-    baths: 5,
-    sqm: 450,
-  },
-  {
-    id: 5,
-    title: "Smart Home in Ajah",
-    location: "Ajah, Lagos",
-    description:
-      "Contemporary 5-bedroom detached house with full smart home automation. Large compound, BQ, and excellent access to major roads.",
-    tag: "New Development",
-    image: property1,
-    price: "₦120,000,000",
-    beds: 5,
-    baths: 6,
-    sqm: 400,
-  },
-  {
-    id: 6,
-    title: "Investment Flats in Wuse",
-    location: "Wuse 2, Abuja",
-    description:
-      "Block of 6 units perfect for rental income. Established location with steady demand from diplomats and executives. Clean documentation.",
-    tag: "Investment",
-    image: property3,
-    price: "₦280,000,000",
-    beds: 12,
-    baths: 12,
-    sqm: 600,
-  },
-];
+type RiskRating = "low" | "medium" | "high";
+
+type PropertyMedia = {
+  file_url: string;
+  file_type: string;
+  sort_order: number | null;
+};
+
+type PublicProperty = {
+  id: string;
+  title: string;
+  city: string;
+  area: string | null;
+  status: string;
+  asking_price_ngn: number;
+  risk_rating: RiskRating;
+  property_type: string;
+  description: string | null;
+  property_media?: PropertyMedia[] | null;
+};
 
 const Properties = () => {
+  const { formatPrice } = useCurrency();
+
+  const {
+    data: listings,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["public-properties"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("properties")
+        .select(
+          "id, title, city, area, status, asking_price_ngn, risk_rating, property_type, description, property_media(file_url, file_type, sort_order)",
+        )
+        .eq("status", "listed")
+        .order("updated_at", { ascending: false });
+
+      if (error) throw error;
+      return (data || []) as PublicProperty[];
+    },
+  });
+
   return (
     <Layout>
       <SEOHead
@@ -149,53 +112,96 @@ const Properties = () => {
       {/* Properties Grid */}
       <section className="section-padding bg-ivory">
         <div className="container-wide">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {properties.map((property) => (
+          {isLoading ? (
+            <div className="flex items-center justify-center py-16">
+              <Loader2 className="h-6 w-6 animate-spin text-gold" />
+              <span className="ml-3 text-slate">Loading listings…</span>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {(listings || []).length === 0 ? (
+                <div className="col-span-full text-center py-16">
+                  <p className="text-slate">No listed properties available right now.</p>
+                </div>
+              ) : null}
+
+              {(isError ? [] : listings || []).map((property) => {
+                const media = (property.property_media || [])
+                  .slice()
+                  .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
+                const coverImage = media.find((m) => m.file_type === "image")?.file_url;
+                const hasVideo = media.some((m) => m.file_type === "video");
+                const location = property.area ? `${property.area}, ${property.city}` : property.city;
+
+                return (
               <article
                 key={property.id}
                 className="group bg-warm-white rounded-sm overflow-hidden border border-sand hover:shadow-lg transition-all duration-300"
               >
                 <div className="relative aspect-[4/3] overflow-hidden">
-                  <img
-                    src={property.image}
-                    alt={property.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
+                  {coverImage ? (
+                    <img
+                      src={coverImage}
+                      alt={property.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <img
+                      src={property1}
+                      alt={property.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                  )}
+
                   <Badge className="absolute top-4 left-4 bg-gold text-navy hover:bg-gold-dark">
-                    {property.tag}
+                    {property.risk_rating} risk
                   </Badge>
+
+                  {hasVideo ? (
+                    <div className="absolute top-4 right-4 flex items-center gap-2 rounded-sm bg-navy/80 px-3 py-2">
+                      <Video className="text-gold" size={16} />
+                      <span className="text-xs text-ivory">Video</span>
+                    </div>
+                  ) : null}
                 </div>
                 <div className="p-6">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
                     <MapPin size={14} />
-                    <span>{property.location}</span>
+                    <span>{location}</span>
                   </div>
                   <h3 className="font-display text-lg font-semibold text-ink mb-2 line-clamp-2">
                     {property.title}
                   </h3>
                   <p className="text-sm text-slate mb-4 line-clamp-2">
-                    {property.description}
+                    {property.description || `${property.property_type} in ${location}.`}
                   </p>
-                  <div className="flex items-center gap-4 text-xs text-slate mb-4 pb-4 border-b border-sand">
-                    <span>{property.beds} Beds</span>
-                    <span>{property.baths} Baths</span>
-                    <span>{property.sqm} sqm</span>
-                  </div>
                   <div className="flex items-center justify-between">
                     <span className="font-display text-xl font-semibold text-navy">
-                      {property.price}
+                      {formatPrice(property.asking_price_ngn)}
                     </span>
                     <Button variant="outline" size="sm" asChild>
-                      <Link to={`/calculator`}>
-                        View & ROI
+                      <Link to={`/properties/${property.id}`}>
+                        View
                         <ArrowRight size={14} className="ml-1" />
                       </Link>
                     </Button>
                   </div>
                 </div>
               </article>
-            ))}
-          </div>
+                );
+              })}
+            </div>
+          )}
+
+          {isError ? (
+            <div className="mt-8 rounded-sm border border-sand bg-warm-white p-6 text-center">
+              <p className="text-slate">
+                We couldn’t load the live listings right now. Please refresh and try again.
+              </p>
+            </div>
+          ) : null}
         </div>
       </section>
 

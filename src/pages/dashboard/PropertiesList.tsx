@@ -23,8 +23,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Plus, Search, Eye, Edit, Loader2 } from "lucide-react";
+import { Plus, Search, Eye, Edit, Loader2, Trash2 } from "lucide-react";
 import { PropertyForm } from "@/components/dashboard/PropertyForm";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 
 type PropertyStatus = "draft" | "under_review" | "listed" | "on_hold" | "sold";
 type RiskRating = "low" | "medium" | "high";
@@ -64,6 +75,8 @@ export default function PropertiesList() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [cityFilter, setCityFilter] = useState<string>("all");
   const [showForm, setShowForm] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<Pick<Property, "id" | "title"> | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     fetchProperties();
@@ -104,6 +117,69 @@ export default function PropertiesList() {
   });
 
   const uniqueCities = [...new Set(properties.map((p) => p.city))];
+
+  const extractStoragePathFromPublicUrl = (publicUrl: string) => {
+    // public URL format includes: /storage/v1/object/public/property-media/<path>
+    const parts = publicUrl.split("/property-media/");
+    return parts.length > 1 ? parts[1] : null;
+  };
+
+  const deleteProperty = async (propertyId: string) => {
+    setIsDeleting(true);
+    try {
+      // Block deletes if there are relational dependencies we can't safely cascade from the client.
+      const [leadsRes, dealsRes, viewingsRes, checksRes, roiRes] = await Promise.all([
+        supabase.from("leads").select("id", { head: true, count: "exact" }).eq("property_id", propertyId),
+        supabase.from("deals").select("id", { head: true, count: "exact" }).eq("property_id", propertyId),
+        supabase.from("viewings").select("id", { head: true, count: "exact" }).eq("property_id", propertyId),
+        supabase.from("due_diligence_checks").select("id", { head: true, count: "exact" }).eq("property_id", propertyId),
+        supabase.from("roi_calculations").select("id", { head: true, count: "exact" }).eq("property_id", propertyId),
+      ]);
+
+      const blockingCounts = [
+        { label: "leads", count: leadsRes.count ?? 0 },
+        { label: "deals", count: dealsRes.count ?? 0 },
+        { label: "viewings", count: viewingsRes.count ?? 0 },
+        { label: "due diligence checks", count: checksRes.count ?? 0 },
+        { label: "ROI calculations", count: roiRes.count ?? 0 },
+      ].filter((x) => x.count > 0);
+
+      if (blockingCounts.length > 0) {
+        toast.error(
+          `Can’t delete: this property has ${blockingCounts.map((x) => `${x.count} ${x.label}`).join(", ")}. Set status to Sold/On Hold instead.`,
+        );
+        return;
+      }
+
+      // Remove media files + rows
+      const { data: mediaRows } = await supabase
+        .from("property_media")
+        .select("id, file_url")
+        .eq("property_id", propertyId);
+
+      const mediaPaths = (mediaRows || [])
+        .map((m) => extractStoragePathFromPublicUrl(m.file_url))
+        .filter(Boolean) as string[];
+
+      if (mediaPaths.length > 0) {
+        // Best-effort: storage removal might fail depending on permissions; we still delete DB rows.
+        await supabase.storage.from("property-media").remove(mediaPaths);
+      }
+
+      await supabase.from("property_media").delete().eq("property_id", propertyId);
+      await supabase.from("property_documents").delete().eq("property_id", propertyId);
+
+      const { error: deleteError } = await supabase.from("properties").delete().eq("id", propertyId);
+      if (deleteError) throw deleteError;
+
+      toast.success("Property deleted");
+      await fetchProperties();
+    } catch (e: any) {
+      toast.error(e?.message || "Failed to delete property");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -235,6 +311,16 @@ export default function PropertiesList() {
                               </Link>
                             </Button>
                           )}
+                          {isAdmin && (
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => setDeleteTarget({ id: property.id, title: property.title })}
+                              aria-label={`Delete ${property.title}`}
+                            >
+                              <Trash2 size={16} />
+                            </Button>
+                          )}
                         </div>
                       </TableCell>
                     </TableRow>
@@ -251,6 +337,34 @@ export default function PropertiesList() {
         onClose={() => setShowForm(false)}
         onSuccess={fetchProperties}
       />
+
+      <AlertDialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => {
+          if (!open) setDeleteTarget(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete property?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete “{deleteTarget?.title}”. If it has linked leads/deals/viewings we’ll block the deletion.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                if (deleteTarget) void deleteProperty(deleteTarget.id);
+              }}
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Deleting…" : "Delete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </DashboardLayout>
   );
 }
