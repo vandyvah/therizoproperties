@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Plus, Search, Eye, Edit, Loader2, Trash2 } from "lucide-react";
+import { Plus, Search, Eye, Edit, Loader2, Trash2, User, Users } from "lucide-react";
 import { PropertyForm } from "@/components/dashboard/PropertyForm";
 import {
   AlertDialog,
@@ -36,6 +36,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type PropertyStatus = "draft" | "under_review" | "listed" | "on_hold" | "sold";
 type RiskRating = "low" | "medium" | "high";
@@ -49,8 +50,9 @@ interface Property {
   asking_price_ngn: number;
   risk_rating: RiskRating;
   assigned_consultant_id: string | null;
+  created_by_id: string | null;
   updated_at: string;
-  profiles?: { full_name: string } | null;
+  assigned_consultant?: { full_name: string } | null;
 }
 
 const statusColors: Record<PropertyStatus, string> = {
@@ -74,6 +76,7 @@ export default function PropertiesList() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [cityFilter, setCityFilter] = useState<string>("all");
+  const [ownershipFilter, setOwnershipFilter] = useState<"all" | "my">(isAdmin ? "all" : "my");
   const [showForm, setShowForm] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<Pick<Property, "id" | "title"> | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -86,11 +89,24 @@ export default function PropertiesList() {
     try {
       const { data, error } = await supabase
         .from("properties")
-        .select("id, title, city, area, status, asking_price_ngn, risk_rating, assigned_consultant_id, updated_at")
+        .select(`
+          id, title, city, area, status, asking_price_ngn, risk_rating, 
+          assigned_consultant_id, created_by_id, updated_at,
+          assigned_consultant:profiles!properties_assigned_consultant_id_fkey(full_name)
+        `)
         .order("updated_at", { ascending: false });
 
       if (error) throw error;
-      setProperties((data as Property[]) || []);
+      
+      // Transform the data to handle the joined profile
+      const transformed = (data || []).map(p => ({
+        ...p,
+        assigned_consultant: Array.isArray(p.assigned_consultant) 
+          ? p.assigned_consultant[0] || null 
+          : p.assigned_consultant,
+      })) as Property[];
+      
+      setProperties(transformed);
     } catch (error) {
       console.error("Error fetching properties:", error);
     } finally {
@@ -110,16 +126,22 @@ export default function PropertiesList() {
   const filteredProperties = properties.filter((property) => {
     const matchesSearch =
       property.title.toLowerCase().includes(search.toLowerCase()) ||
-      property.city.toLowerCase().includes(search.toLowerCase());
+      property.city.toLowerCase().includes(search.toLowerCase()) ||
+      (property.area?.toLowerCase().includes(search.toLowerCase()) ?? false);
     const matchesStatus = statusFilter === "all" || property.status === statusFilter;
     const matchesCity = cityFilter === "all" || property.city === cityFilter;
-    return matchesSearch && matchesStatus && matchesCity;
+    
+    // Ownership filter
+    const matchesOwnership = ownershipFilter === "all" || 
+      property.created_by_id === profile?.id || 
+      property.assigned_consultant_id === profile?.id;
+    
+    return matchesSearch && matchesStatus && matchesCity && matchesOwnership;
   });
 
   const uniqueCities = [...new Set(properties.map((p) => p.city))];
 
   const extractStoragePathFromPublicUrl = (publicUrl: string) => {
-    // public URL format includes: /storage/v1/object/public/property-media/<path>
     const parts = publicUrl.split("/property-media/");
     return parts.length > 1 ? parts[1] : null;
   };
@@ -127,7 +149,7 @@ export default function PropertiesList() {
   const deleteProperty = async (propertyId: string) => {
     setIsDeleting(true);
     try {
-      // Block deletes if there are relational dependencies we can't safely cascade from the client.
+      // Block deletes if there are relational dependencies
       const [leadsRes, dealsRes, viewingsRes, checksRes, roiRes] = await Promise.all([
         supabase.from("leads").select("id", { head: true, count: "exact" }).eq("property_id", propertyId),
         supabase.from("deals").select("id", { head: true, count: "exact" }).eq("property_id", propertyId),
@@ -146,8 +168,9 @@ export default function PropertiesList() {
 
       if (blockingCounts.length > 0) {
         toast.error(
-          `Can’t delete: this property has ${blockingCounts.map((x) => `${x.count} ${x.label}`).join(", ")}. Set status to Sold/On Hold instead.`,
+          `Can't delete: this property has ${blockingCounts.map((x) => `${x.count} ${x.label}`).join(", ")}. Set status to Sold/On Hold instead.`,
         );
+        setDeleteTarget(null);
         return;
       }
 
@@ -162,7 +185,6 @@ export default function PropertiesList() {
         .filter(Boolean) as string[];
 
       if (mediaPaths.length > 0) {
-        // Best-effort: storage removal might fail depending on permissions; we still delete DB rows.
         await supabase.storage.from("property-media").remove(mediaPaths);
       }
 
@@ -173,6 +195,7 @@ export default function PropertiesList() {
       if (deleteError) throw deleteError;
 
       toast.success("Property deleted");
+      setDeleteTarget(null);
       await fetchProperties();
     } catch (e: any) {
       toast.error(e?.message || "Failed to delete property");
@@ -180,6 +203,12 @@ export default function PropertiesList() {
       setIsDeleting(false);
     }
   };
+
+  // Count properties for tabs
+  const myPropertiesCount = properties.filter(
+    p => p.created_by_id === profile?.id || p.assigned_consultant_id === profile?.id
+  ).length;
+  const allPropertiesCount = properties.length;
 
   if (loading) {
     return (
@@ -206,13 +235,29 @@ export default function PropertiesList() {
           </Button>
         </div>
 
+        {/* Ownership Filter Tabs */}
+        <Tabs value={ownershipFilter} onValueChange={(v) => setOwnershipFilter(v as "all" | "my")}>
+          <TabsList>
+            <TabsTrigger value="my" className="flex items-center gap-2">
+              <User size={14} />
+              My Listings ({myPropertiesCount})
+            </TabsTrigger>
+            {isAdmin && (
+              <TabsTrigger value="all" className="flex items-center gap-2">
+                <Users size={14} />
+                All Listings ({allPropertiesCount})
+              </TabsTrigger>
+            )}
+          </TabsList>
+        </Tabs>
+
         <Card>
           <CardHeader>
             <div className="flex flex-col md:flex-row gap-4">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search properties..."
+                  placeholder="Search by title, city, or area..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   className="pl-9"
@@ -251,7 +296,7 @@ export default function PropertiesList() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Title</TableHead>
-                  <TableHead>City</TableHead>
+                  <TableHead>Location</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Price</TableHead>
                   <TableHead>Risk</TableHead>
@@ -264,7 +309,10 @@ export default function PropertiesList() {
                 {filteredProperties.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={8} className="text-center text-muted-foreground py-8">
-                      No properties found
+                      {ownershipFilter === "my" 
+                        ? "You don't have any properties yet. Click 'Add Property' to create one."
+                        : "No properties found"
+                      }
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -274,12 +322,14 @@ export default function PropertiesList() {
                         {property.title}
                       </TableCell>
                       <TableCell>
-                        {property.city}
-                        {property.area && (
-                          <span className="text-muted-foreground text-xs block">
-                            {property.area}
-                          </span>
-                        )}
+                        <div>
+                          <span>{property.city}</span>
+                          {property.area && (
+                            <span className="text-muted-foreground text-xs block">
+                              {property.area}
+                            </span>
+                          )}
+                        </div>
                       </TableCell>
                       <TableCell>
                         <Badge className={statusColors[property.status]} variant="secondary">
@@ -292,7 +342,11 @@ export default function PropertiesList() {
                           {property.risk_rating}
                         </Badge>
                       </TableCell>
-                      <TableCell>{property.profiles?.full_name || "-"}</TableCell>
+                      <TableCell>
+                        {property.assigned_consultant?.full_name || (
+                          <span className="text-muted-foreground italic">Unassigned</span>
+                        )}
+                      </TableCell>
                       <TableCell className="text-muted-foreground text-sm">
                         {new Date(property.updated_at).toLocaleDateString()}
                       </TableCell>
@@ -303,8 +357,7 @@ export default function PropertiesList() {
                               <Eye size={16} />
                             </Link>
                           </Button>
-                          {(isAdmin ||
-                            property.assigned_consultant_id === profile?.id) && (
+                          {(isAdmin || property.assigned_consultant_id === profile?.id) && (
                             <Button variant="ghost" size="icon" asChild>
                               <Link to={`/dashboard/properties/${property.id}/edit`}>
                                 <Edit size={16} />
@@ -348,7 +401,7 @@ export default function PropertiesList() {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete property?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete “{deleteTarget?.title}”. If it has linked leads/deals/viewings we’ll block the deletion.
+              This will permanently delete "{deleteTarget?.title}". If it has linked leads/deals/viewings we'll block the deletion.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

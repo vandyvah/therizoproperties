@@ -42,6 +42,7 @@ type PropertyMedia = {
 type PublicProperty = {
   id: string;
   title: string;
+  slug: string | null;
   city: string;
   area: string | null;
   status: string;
@@ -65,7 +66,7 @@ const Properties = () => {
       const { data, error } = await supabase
         .from("properties")
         .select(
-          "id, title, city, area, status, asking_price_ngn, risk_rating, property_type, description, property_media(file_url, file_type, sort_order)",
+          "id, title, slug, city, area, status, asking_price_ngn, risk_rating, property_type, description, property_media(file_url, file_type, sort_order)",
         )
         .eq("status", "listed")
         .order("updated_at", { ascending: false });
@@ -182,7 +183,7 @@ const Properties = () => {
                       {formatPrice(property.asking_price_ngn)}
                     </span>
                     <Button variant="outline" size="sm" asChild>
-                      <Link to={`/properties/${property.id}`}>
+                      <Link to={`/properties/${property.slug || property.id}`}>
                         View
                         <ArrowRight size={14} className="ml-1" />
                       </Link>
