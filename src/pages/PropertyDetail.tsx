@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
 import { useCurrency } from "@/components/currency/CurrencySwitcher";
+import { PropertyMediaCarousel } from "@/components/property/PropertyMediaCarousel";
 import { 
   MapPin, 
   Home, 
@@ -19,23 +20,85 @@ import {
   Phone,
   Mail
 } from "lucide-react";
+import property1 from "@/assets/property-1.jpg";
+
+interface PropertyMedia {
+  file_url: string;
+  file_type: string;
+  file_name: string;
+  sort_order: number | null;
+}
+
+interface Property {
+  id: string;
+  title: string;
+  slug: string | null;
+  description: string | null;
+  city: string;
+  area: string | null;
+  property_type: string;
+  asking_price_ngn: number;
+  min_price_ngn: number | null;
+  rental_potential_monthly_ngn: number | null;
+  airbnb_potential_nightly_ngn: number | null;
+  risk_rating: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  property_media: PropertyMedia[];
+}
 
 const PropertyDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { formatPrice } = useCurrency();
 
+  // Fetch property by ID or slug
   const { data: property, isLoading, error } = useQuery({
     queryKey: ["public-property", id],
     queryFn: async () => {
-      const { data, error } = await supabase
+      // Try to find by slug first, then by id
+      let query = supabase
         .from("properties")
-        .select("*")
-        .eq("id", id)
-        .eq("status", "listed")
-        .single();
+        .select(`
+          id, title, slug, description, city, area, property_type,
+          asking_price_ngn, min_price_ngn, rental_potential_monthly_ngn,
+          airbnb_potential_nightly_ngn, risk_rating, status, created_at, updated_at,
+          property_media(file_url, file_type, file_name, sort_order)
+        `)
+        .eq("status", "listed");
+
+      // Check if id looks like a UUID
+      const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id || "");
+      
+      if (isUUID) {
+        query = query.eq("id", id);
+      } else {
+        // Try slug first
+        query = query.eq("slug", id);
+      }
+
+      const { data, error } = await query.maybeSingle();
+      
+      // If not found by slug, try by ID as fallback
+      if (!data && !isUUID && id) {
+        const { data: byId, error: byIdError } = await supabase
+          .from("properties")
+          .select(`
+            id, title, slug, description, city, area, property_type,
+            asking_price_ngn, min_price_ngn, rental_potential_monthly_ngn,
+            airbnb_potential_nightly_ngn, risk_rating, status, created_at, updated_at,
+            property_media(file_url, file_type, file_name, sort_order)
+          `)
+          .eq("status", "listed")
+          .eq("id", id)
+          .maybeSingle();
+        
+        if (byIdError) throw byIdError;
+        return byId as Property | null;
+      }
       
       if (error) throw error;
-      return data;
+      return data as Property | null;
     },
     enabled: !!id,
   });
@@ -103,15 +166,31 @@ const PropertyDetail = () => {
     high: "bg-red-500/10 text-red-700 border-red-500/20",
   };
 
+  // Generate SEO-optimized title
+  const location = property.area ? `${property.area}, ${property.city}` : property.city;
+  const seoTitle = `${property.title} in ${location} — ${formatPrice(property.asking_price_ngn)}`;
+  
+  // Generate meta description
+  const seoDescription = property.description 
+    ? property.description.substring(0, 155) + (property.description.length > 155 ? "..." : "")
+    : `${property.property_type} property available in ${location}. Verified by Therizo. Starting at ${formatPrice(property.asking_price_ngn)}. Contact us for viewings.`;
+
+  // Get the hero image for OG
+  const heroImage = property.property_media?.[0]?.file_url || "https://therizoproperties.com/og/og-properties.jpg";
+  
+  // Canonical URL using slug if available
+  const canonicalPath = property.slug ? `/properties/${property.slug}` : `/properties/${property.id}`;
+
   // Create structured data for SEO
   const propertySchema = {
     "@context": "https://schema.org",
     "@type": "RealEstateListing",
     name: property.title,
-    description: property.description || `${property.property_type} property in ${property.area || property.city}`,
-    url: `https://therizoproperties.com/properties/${property.id}`,
+    description: property.description || `${property.property_type} property in ${location}`,
+    url: `https://therizoproperties.com${canonicalPath}`,
     datePosted: property.created_at,
     dateModified: property.updated_at,
+    image: heroImage,
     address: {
       "@type": "PostalAddress",
       addressLocality: property.area || property.city,
@@ -131,13 +210,16 @@ const PropertyDetail = () => {
     },
   };
 
+  const hasMedia = property.property_media && property.property_media.length > 0;
+
   return (
     <Layout>
       <SEOHead
-        title={`${property.title} | ${property.city} Property for Sale`}
-        description={property.description || `${property.property_type} property available in ${property.area || property.city}, ${property.city}. Verified by Therizo. Contact us for viewings.`}
-        canonicalUrl={`/properties/${property.id}`}
+        title={seoTitle}
+        description={seoDescription}
+        canonicalUrl={canonicalPath}
         ogType="product"
+        ogImage={heroImage}
         keywords={[
           property.city,
           property.area || "",
@@ -145,6 +227,8 @@ const PropertyDetail = () => {
           "Nigerian property",
           "property for sale",
           "verified property",
+          location,
+          "real estate investment",
         ].filter(Boolean)}
       />
       <JsonLd data={propertySchema} />
@@ -155,7 +239,7 @@ const PropertyDetail = () => {
           <Breadcrumbs
             items={[
               { label: "Properties", href: "/properties" },
-              { label: property.title, href: `/properties/${property.id}` },
+              { label: property.title, href: canonicalPath },
             ]}
           />
           <div className="mt-6">
@@ -172,7 +256,7 @@ const PropertyDetail = () => {
             </h1>
             <div className="flex items-center gap-2 text-ivory/70">
               <MapPin size={18} />
-              <span>{property.area ? `${property.area}, ` : ""}{property.city}</span>
+              <span>{location}</span>
             </div>
           </div>
         </div>
@@ -184,6 +268,25 @@ const PropertyDetail = () => {
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Property Details */}
             <div className="lg:col-span-2 space-y-8">
+              {/* Media Carousel */}
+              {hasMedia ? (
+                <div className="bg-warm-white border border-sand rounded-sm p-4">
+                  <PropertyMediaCarousel 
+                    media={property.property_media} 
+                    propertyTitle={property.title}
+                  />
+                </div>
+              ) : (
+                <div className="relative aspect-[4/3] rounded-sm overflow-hidden">
+                  <img
+                    src={property1}
+                    alt={property.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                </div>
+              )}
+
               {/* Price Card */}
               <div className="bg-warm-white border border-sand rounded-sm p-6">
                 <p className="text-sm text-slate mb-2">Asking Price</p>
@@ -254,7 +357,7 @@ const PropertyDetail = () => {
                     <MapPin className="text-gold" size={18} />
                     <div>
                       <p className="text-sm text-slate">Location</p>
-                      <p className="font-medium text-ink">{property.city}</p>
+                      <p className="font-medium text-ink">{location}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">

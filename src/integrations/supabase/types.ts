@@ -831,6 +831,7 @@ export type Database = {
           property_type: string
           rental_potential_monthly_ngn: number | null
           risk_rating: Database["public"]["Enums"]["risk_rating"]
+          slug: string | null
           status: Database["public"]["Enums"]["property_status"]
           title: string
           updated_at: string
@@ -851,6 +852,7 @@ export type Database = {
           property_type: string
           rental_potential_monthly_ngn?: number | null
           risk_rating?: Database["public"]["Enums"]["risk_rating"]
+          slug?: string | null
           status?: Database["public"]["Enums"]["property_status"]
           title: string
           updated_at?: string
@@ -871,6 +873,7 @@ export type Database = {
           property_type?: string
           rental_potential_monthly_ngn?: number | null
           risk_rating?: Database["public"]["Enums"]["risk_rating"]
+          slug?: string | null
           status?: Database["public"]["Enums"]["property_status"]
           title?: string
           updated_at?: string
