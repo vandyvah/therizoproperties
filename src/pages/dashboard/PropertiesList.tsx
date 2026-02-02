@@ -80,6 +80,8 @@ export default function PropertiesList() {
   const [showForm, setShowForm] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<Pick<Property, "id" | "title"> | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [showForceDeleteConfirm, setShowForceDeleteConfirm] = useState(false);
+  const [relatedCounts, setRelatedCounts] = useState<{ label: string; count: number }[]>([]);
 
   useEffect(() => {
     fetchProperties();
@@ -146,32 +148,55 @@ export default function PropertiesList() {
     return parts.length > 1 ? parts[1] : null;
   };
 
-  const deleteProperty = async (propertyId: string) => {
+  const checkRelatedRecords = async (propertyId: string) => {
+    const [leadsRes, dealsRes, viewingsRes, checksRes, roiRes] = await Promise.all([
+      supabase.from("leads").select("id", { head: true, count: "exact" }).eq("property_id", propertyId),
+      supabase.from("deals").select("id", { head: true, count: "exact" }).eq("property_id", propertyId),
+      supabase.from("viewings").select("id", { head: true, count: "exact" }).eq("property_id", propertyId),
+      supabase.from("due_diligence_checks").select("id", { head: true, count: "exact" }).eq("property_id", propertyId),
+      supabase.from("roi_calculations").select("id", { head: true, count: "exact" }).eq("property_id", propertyId),
+    ]);
+
+    return [
+      { label: "leads", count: leadsRes.count ?? 0 },
+      { label: "deals", count: dealsRes.count ?? 0 },
+      { label: "viewings", count: viewingsRes.count ?? 0 },
+      { label: "due diligence checks", count: checksRes.count ?? 0 },
+      { label: "ROI calculations", count: roiRes.count ?? 0 },
+    ].filter((x) => x.count > 0);
+  };
+
+  const deleteProperty = async (propertyId: string, force = false) => {
     setIsDeleting(true);
     try {
-      // Block deletes if there are relational dependencies
-      const [leadsRes, dealsRes, viewingsRes, checksRes, roiRes] = await Promise.all([
-        supabase.from("leads").select("id", { head: true, count: "exact" }).eq("property_id", propertyId),
-        supabase.from("deals").select("id", { head: true, count: "exact" }).eq("property_id", propertyId),
-        supabase.from("viewings").select("id", { head: true, count: "exact" }).eq("property_id", propertyId),
-        supabase.from("due_diligence_checks").select("id", { head: true, count: "exact" }).eq("property_id", propertyId),
-        supabase.from("roi_calculations").select("id", { head: true, count: "exact" }).eq("property_id", propertyId),
-      ]);
+      // Check for relational dependencies
+      const blockingCounts = await checkRelatedRecords(propertyId);
 
-      const blockingCounts = [
-        { label: "leads", count: leadsRes.count ?? 0 },
-        { label: "deals", count: dealsRes.count ?? 0 },
-        { label: "viewings", count: viewingsRes.count ?? 0 },
-        { label: "due diligence checks", count: checksRes.count ?? 0 },
-        { label: "ROI calculations", count: roiRes.count ?? 0 },
-      ].filter((x) => x.count > 0);
-
-      if (blockingCounts.length > 0) {
-        toast.error(
-          `Can't delete: this property has ${blockingCounts.map((x) => `${x.count} ${x.label}`).join(", ")}. Set status to Sold/On Hold instead.`,
-        );
-        setDeleteTarget(null);
+      if (blockingCounts.length > 0 && !force) {
+        // Show force delete confirmation
+        setRelatedCounts(blockingCounts);
+        setShowForceDeleteConfirm(true);
+        setIsDeleting(false);
         return;
+      }
+
+      // If force delete, remove all related records first
+      if (force && blockingCounts.length > 0) {
+        // Delete in order to respect foreign key constraints
+        // First: viewings (references leads)
+        await supabase.from("viewings").delete().eq("property_id", propertyId);
+        
+        // Then: deals (references leads, properties)
+        await supabase.from("deals").delete().eq("property_id", propertyId);
+        
+        // Then: leads (references properties)
+        await supabase.from("leads").delete().eq("property_id", propertyId);
+        
+        // Then: due diligence checks
+        await supabase.from("due_diligence_checks").delete().eq("property_id", propertyId);
+        
+        // Then: ROI calculations
+        await supabase.from("roi_calculations").delete().eq("property_id", propertyId);
       }
 
       // Remove media files + rows
@@ -194,10 +219,13 @@ export default function PropertiesList() {
       const { error: deleteError } = await supabase.from("properties").delete().eq("id", propertyId);
       if (deleteError) throw deleteError;
 
-      toast.success("Property deleted");
+      toast.success("Property deleted successfully");
       setDeleteTarget(null);
+      setShowForceDeleteConfirm(false);
+      setRelatedCounts([]);
       await fetchProperties();
     } catch (e: any) {
+      console.error("Delete error:", e);
       toast.error(e?.message || "Failed to delete property");
     } finally {
       setIsDeleting(false);
@@ -392,16 +420,19 @@ export default function PropertiesList() {
       />
 
       <AlertDialog
-        open={!!deleteTarget}
+        open={!!deleteTarget && !showForceDeleteConfirm}
         onOpenChange={(open) => {
-          if (!open) setDeleteTarget(null);
+          if (!open) {
+            setDeleteTarget(null);
+            setRelatedCounts([]);
+          }
         }}
       >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete property?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete "{deleteTarget?.title}". If it has linked leads/deals/viewings we'll block the deletion.
+              This will permanently delete "{deleteTarget?.title}" and all associated media.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -412,8 +443,55 @@ export default function PropertiesList() {
                 if (deleteTarget) void deleteProperty(deleteTarget.id);
               }}
               disabled={isDeleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              {isDeleting ? "Deleting…" : "Delete"}
+              {isDeleting ? "Checking…" : "Delete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Force Delete Confirmation Dialog */}
+      <AlertDialog
+        open={showForceDeleteConfirm}
+        onOpenChange={(open) => {
+          if (!open) {
+            setShowForceDeleteConfirm(false);
+            setDeleteTarget(null);
+            setRelatedCounts([]);
+          }
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-destructive">⚠️ Force Delete Property?</AlertDialogTitle>
+            <AlertDialogDescription className="space-y-3">
+              <p>
+                This property has linked records that will also be <strong className="text-destructive">permanently deleted</strong>:
+              </p>
+              <ul className="list-disc pl-5 space-y-1">
+                {relatedCounts.map((item) => (
+                  <li key={item.label} className="text-foreground">
+                    <strong>{item.count}</strong> {item.label}
+                  </li>
+                ))}
+              </ul>
+              <p className="text-destructive font-medium">
+                This action cannot be undone. All data will be permanently lost.
+              </p>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                if (deleteTarget) void deleteProperty(deleteTarget.id, true);
+              }}
+              disabled={isDeleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {isDeleting ? "Deleting…" : "Force Delete All"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
