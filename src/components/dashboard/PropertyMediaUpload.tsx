@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -7,9 +7,26 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { 
   Upload, X, Image, Video, Loader2, RefreshCw, AlertCircle, 
-  CheckCircle, WifiOff, ShieldAlert, FolderX, Database 
+  CheckCircle, WifiOff, ShieldAlert, FolderX, Database, GripVertical
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  rectSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 // File validation config
 const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -39,12 +56,12 @@ interface MediaFile {
   file_type: "image" | "video";
   file_name: string;
   file_size?: number;
+  sort_order?: number;
 }
 
 interface PropertyMediaUploadProps {
   propertyId?: string;
   onMediaChange?: (media: MediaFile[]) => void;
-  initialMedia?: MediaFile[];
 }
 
 const getErrorIcon = (errorType?: ErrorType) => {
@@ -63,17 +80,187 @@ const formatFileSize = (bytes: number) => {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 };
 
+// Sortable media item component
+function SortableMediaItem({ 
+  item, 
+  index, 
+  onRemove 
+}: { 
+  item: MediaFile; 
+  index: number; 
+  onRemove: (index: number) => void;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: item.id || `item-${index}` });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  const [imageError, setImageError] = useState(false);
+  const [videoError, setVideoError] = useState(false);
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={cn(
+        "relative group rounded-lg overflow-hidden border border-border bg-muted",
+        isDragging && "z-50 shadow-lg"
+      )}
+    >
+      {/* Drag handle */}
+      <div 
+        {...attributes} 
+        {...listeners}
+        className="absolute top-1 left-1 z-10 bg-black/50 rounded p-1 cursor-grab opacity-0 group-hover:opacity-100 transition-opacity"
+      >
+        <GripVertical className="h-4 w-4 text-white" />
+      </div>
+
+      {/* Sort order badge */}
+      <div className="absolute top-1 right-8 z-10 bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium">
+        {index + 1}
+      </div>
+
+      {item.file_type === "image" ? (
+        imageError ? (
+          <div className="w-full h-28 flex items-center justify-center bg-muted">
+            <div className="text-center text-muted-foreground">
+              <Image className="h-8 w-8 mx-auto mb-1 opacity-50" />
+              <span className="text-xs">Failed to load</span>
+            </div>
+          </div>
+        ) : (
+          <img
+            src={item.file_url}
+            alt={item.file_name}
+            className="w-full h-28 object-cover"
+            onError={() => setImageError(true)}
+            loading="lazy"
+          />
+        )
+      ) : (
+        videoError ? (
+          <div className="w-full h-28 flex items-center justify-center bg-muted">
+            <div className="text-center text-muted-foreground">
+              <Video className="h-8 w-8 mx-auto mb-1 opacity-50" />
+              <span className="text-xs">Failed to load</span>
+            </div>
+          </div>
+        ) : (
+          <video
+            src={item.file_url}
+            className="w-full h-28 object-cover"
+            muted
+            playsInline
+            onError={() => setVideoError(true)}
+          />
+        )
+      )}
+      
+      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+        <Button
+          type="button"
+          variant="destructive"
+          size="icon"
+          className="h-8 w-8 pointer-events-auto"
+          onClick={() => onRemove(index)}
+        >
+          <X className="h-4 w-4" />
+        </Button>
+      </div>
+      
+      <div className="absolute bottom-0 left-0 right-0 bg-black/70 px-2 py-1">
+        <div className="flex items-center gap-1">
+          {item.file_type === "image" ? (
+            <Image className="h-3 w-3 text-white" />
+          ) : (
+            <Video className="h-3 w-3 text-white" />
+          )}
+          <span className="text-xs text-white truncate">{item.file_name}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function PropertyMediaUpload({ 
   propertyId, 
   onMediaChange,
-  initialMedia = [] 
 }: PropertyMediaUploadProps) {
   const { profile } = useAuth();
-  const [media, setMedia] = useState<MediaFile[]>(initialMedia);
+  const [media, setMedia] = useState<MediaFile[]>([]);
   const [uploadQueue, setUploadQueue] = useState<UploadFile[]>([]);
   const [isDragging, setIsDragging] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const abortControllers = useRef<Map<string, AbortController>>(new Map());
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  // Fetch existing media when propertyId is provided
+  useEffect(() => {
+    if (propertyId) {
+      fetchExistingMedia();
+    }
+  }, [propertyId]);
+
+  const fetchExistingMedia = async () => {
+    if (!propertyId) return;
+    
+    setIsLoading(true);
+    setLoadError(null);
+    
+    try {
+      const { data, error } = await supabase
+        .from("property_media")
+        .select("id, file_url, file_type, file_name, file_size, sort_order")
+        .eq("property_id", propertyId)
+        .order("sort_order", { ascending: true });
+
+      if (error) {
+        console.error("Error fetching media:", error);
+        setLoadError("Failed to load existing media");
+        return;
+      }
+
+      const mediaItems: MediaFile[] = (data || []).map(item => ({
+        id: item.id,
+        file_url: item.file_url,
+        file_type: item.file_type as "image" | "video",
+        file_name: item.file_name,
+        file_size: item.file_size || undefined,
+        sort_order: item.sort_order || 0,
+      }));
+
+      setMedia(mediaItems);
+      onMediaChange?.(mediaItems);
+    } catch (err) {
+      console.error("Error fetching media:", err);
+      setLoadError("Failed to load existing media");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const validateFile = (file: File): { valid: boolean; error?: string; errorType?: ErrorType } => {
     const isImage = file.type.startsWith("image/");
@@ -141,16 +328,13 @@ export function PropertyMediaUpload({
   const uploadSingleFile = async (uploadFile: UploadFile): Promise<void> => {
     const { id, file } = uploadFile;
     const isImage = file.type.startsWith("image/");
-    const isVideo = file.type.startsWith("video/");
     const mediaType = isImage ? "image" : "video";
 
-    // Update status to uploading
     setUploadQueue(prev => prev.map(f => 
       f.id === id ? { ...f, status: "uploading" as UploadStatus, progress: 0 } : f
     ));
 
     try {
-      // Generate unique filename
       const fileExt = file.name.split(".").pop()?.toLowerCase() || "bin";
       const timestamp = Date.now();
       const safeFileName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_").substring(0, 50);
@@ -158,12 +342,9 @@ export function PropertyMediaUpload({
       const basePath = propertyId || "temp";
       const storagePath = `${basePath}/${mediaType}/${fileName}`;
 
-      // Create abort controller for this upload
       const abortController = new AbortController();
       abortControllers.current.set(id, abortController);
 
-      // Upload to Supabase Storage with progress tracking
-      // Note: Supabase JS client doesn't support native progress, so we simulate it
       const progressInterval = setInterval(() => {
         setUploadQueue(prev => prev.map(f => {
           if (f.id === id && f.status === "uploading" && f.progress < 90) {
@@ -191,7 +372,6 @@ export function PropertyMediaUpload({
         return;
       }
 
-      // Get public URL
       const { data: { publicUrl } } = supabase.storage
         .from("property-media")
         .getPublicUrl(storagePath);
@@ -200,7 +380,6 @@ export function PropertyMediaUpload({
         f.id === id ? { ...f, progress: 95, storagePath, publicUrl } : f
       ));
 
-      // If we have a propertyId, save to database
       if (propertyId) {
         setUploadQueue(prev => prev.map(f => 
           f.id === id ? { ...f, status: "linking" as UploadStatus } : f
@@ -235,13 +414,13 @@ export function PropertyMediaUpload({
           return;
         }
 
-        // Success with database link
         const newMediaItem: MediaFile = {
           id: mediaData.id,
           file_url: publicUrl,
           file_type: mediaType,
           file_name: file.name,
           file_size: file.size,
+          sort_order: media.length,
         };
 
         setMedia(prev => {
@@ -254,7 +433,6 @@ export function PropertyMediaUpload({
           f.id === id ? { ...f, status: "success" as UploadStatus, progress: 100, mediaId: mediaData.id } : f
         ));
       } else {
-        // No propertyId - just track for pending media
         const newMediaItem: MediaFile = {
           file_url: publicUrl,
           file_type: mediaType,
@@ -290,7 +468,6 @@ export function PropertyMediaUpload({
     const uploadFile = uploadQueue.find(f => f.id === uploadId);
     if (!uploadFile) return;
 
-    // If it's a database error and we have the URL, just retry the database insert
     if (uploadFile.errorType === "database" && uploadFile.publicUrl && propertyId) {
       setUploadQueue(prev => prev.map(f => 
         f.id === uploadId ? { ...f, status: "linking" as UploadStatus, error: undefined, errorType: undefined } : f
@@ -338,7 +515,6 @@ export function PropertyMediaUpload({
         f.id === uploadId ? { ...f, status: "success" as UploadStatus, progress: 100, mediaId: mediaData.id } : f
       ));
     } else {
-      // Full retry
       setUploadQueue(prev => prev.map(f => 
         f.id === uploadId ? { ...f, status: "pending" as UploadStatus, error: undefined, errorType: undefined, progress: 0 } : f
       ));
@@ -361,7 +537,6 @@ export function PropertyMediaUpload({
   const handleFileSelect = useCallback(async (files: FileList | File[]) => {
     const fileArray = Array.from(files);
     
-    // Check max files limit
     const totalFiles = media.length + uploadQueue.filter(f => f.status !== "error").length + fileArray.length;
     if (totalFiles > MAX_FILES_PER_PROPERTY) {
       toast.error(`Maximum ${MAX_FILES_PER_PROPERTY} files per property`);
@@ -394,7 +569,6 @@ export function PropertyMediaUpload({
 
     setUploadQueue(prev => [...prev, ...newUploads]);
 
-    // Start uploads
     for (const upload of newUploads) {
       await uploadSingleFile(upload);
     }
@@ -433,14 +607,12 @@ export function PropertyMediaUpload({
     const item = media[index];
     
     try {
-      // Extract file path from URL
       const urlParts = item.file_url.split("/property-media/");
       if (urlParts.length > 1) {
         const filePath = urlParts[1];
         await supabase.storage.from("property-media").remove([filePath]);
       }
 
-      // Remove from database if it has an id
       if (item.id) {
         await supabase.from("property_media").delete().eq("id", item.id);
       }
@@ -455,6 +627,36 @@ export function PropertyMediaUpload({
     }
   };
 
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+    
+    if (over && active.id !== over.id) {
+      const oldIndex = media.findIndex(item => (item.id || `item-${media.indexOf(item)}`) === active.id);
+      const newIndex = media.findIndex(item => (item.id || `item-${media.indexOf(item)}`) === over.id);
+      
+      if (oldIndex !== -1 && newIndex !== -1) {
+        const newMedia = arrayMove(media, oldIndex, newIndex);
+        setMedia(newMedia);
+        onMediaChange?.(newMedia);
+        
+        // Update sort_order in database if we have propertyId
+        if (propertyId) {
+          const updates = newMedia.map((item, idx) => ({
+            id: item.id,
+            sort_order: idx,
+          })).filter(item => item.id);
+          
+          for (const update of updates) {
+            await supabase
+              .from("property_media")
+              .update({ sort_order: update.sort_order })
+              .eq("id", update.id);
+          }
+        }
+      }
+    }
+  };
+
   const activeUploads = uploadQueue.filter(f => f.status === "uploading" || f.status === "linking");
   const errorUploads = uploadQueue.filter(f => f.status === "error");
   const overallProgress = activeUploads.length > 0 
@@ -463,46 +665,87 @@ export function PropertyMediaUpload({
 
   return (
     <div className="space-y-4">
-      <Label>Property Media (Images & Videos)</Label>
+      <div className="flex items-center justify-between">
+        <Label>Property Media (Images & Videos)</Label>
+        {propertyId && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={fetchExistingMedia}
+            disabled={isLoading}
+          >
+            <RefreshCw className={cn("h-4 w-4 mr-1", isLoading && "animate-spin")} />
+            Refresh
+          </Button>
+        )}
+      </div>
+
+      {/* Loading state */}
+      {isLoading && (
+        <div className="flex items-center justify-center py-8 border-2 border-dashed border-border rounded-lg">
+          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+          <span className="ml-2 text-muted-foreground">Loading existing media...</span>
+        </div>
+      )}
+
+      {/* Error loading media */}
+      {loadError && (
+        <div className="flex items-center gap-2 p-3 bg-destructive/10 border border-destructive/20 rounded-lg text-sm text-destructive">
+          <AlertCircle className="h-4 w-4" />
+          {loadError}
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={fetchExistingMedia}
+            className="ml-auto"
+          >
+            Retry
+          </Button>
+        </div>
+      )}
       
       {/* Upload Zone */}
-      <div 
-        className={cn(
-          "border-2 border-dashed rounded-lg p-4 transition-colors",
-          isDragging ? "border-primary bg-primary/5" : "border-border",
-          activeUploads.length > 0 && "pointer-events-none opacity-70"
-        )}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-      >
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept={[...ALLOWED_IMAGE_TYPES, ...ALLOWED_VIDEO_TYPES].join(",")}
-          multiple
-          onChange={handleInputChange}
-          className="hidden"
-          id="media-upload"
-          disabled={activeUploads.length > 0}
-        />
-        
-        <label
-          htmlFor="media-upload"
-          className="flex flex-col items-center justify-center cursor-pointer py-4"
+      {!isLoading && (
+        <div 
+          className={cn(
+            "border-2 border-dashed rounded-lg p-4 transition-colors",
+            isDragging ? "border-primary bg-primary/5" : "border-border",
+            activeUploads.length > 0 && "pointer-events-none opacity-70"
+          )}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
         >
-          <Upload className="h-8 w-8 text-muted-foreground mb-2" />
-          <span className="text-sm text-muted-foreground text-center">
-            {isDragging ? "Drop files here" : "Click or drag to upload images/videos"}
-          </span>
-          <span className="text-xs text-muted-foreground mt-1 text-center">
-            Images: JPG, PNG, WebP (max 50MB) | Videos: MP4, MOV, WebM (max 250MB)
-          </span>
-          <span className="text-xs text-muted-foreground">
-            Max {MAX_FILES_PER_PROPERTY} files per property
-          </span>
-        </label>
-      </div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept={[...ALLOWED_IMAGE_TYPES, ...ALLOWED_VIDEO_TYPES].join(",")}
+            multiple
+            onChange={handleInputChange}
+            className="hidden"
+            id="media-upload"
+            disabled={activeUploads.length > 0}
+          />
+          
+          <label
+            htmlFor="media-upload"
+            className="flex flex-col items-center justify-center cursor-pointer py-4"
+          >
+            <Upload className="h-8 w-8 text-muted-foreground mb-2" />
+            <span className="text-sm text-muted-foreground text-center">
+              {isDragging ? "Drop files here" : "Click or drag to upload images/videos"}
+            </span>
+            <span className="text-xs text-muted-foreground mt-1 text-center">
+              Images: JPG, PNG, WebP (max 50MB) | Videos: MP4, MOV, WebM (max 250MB)
+            </span>
+            <span className="text-xs text-muted-foreground">
+              Max {MAX_FILES_PER_PROPERTY} files per property
+            </span>
+          </label>
+        </div>
+      )}
 
       {/* Overall Progress */}
       {activeUploads.length > 0 && (
@@ -531,7 +774,6 @@ export function PropertyMediaUpload({
                 (upload.status === "uploading" || upload.status === "linking" || upload.status === "pending") && "border-border bg-muted/30"
               )}
             >
-              {/* File icon */}
               <div className="flex-shrink-0">
                 {upload.file.type.startsWith("image/") ? (
                   <Image className="h-5 w-5 text-muted-foreground" />
@@ -540,7 +782,6 @@ export function PropertyMediaUpload({
                 )}
               </div>
               
-              {/* File info */}
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">{upload.file.name}</p>
                 <p className="text-xs text-muted-foreground">
@@ -557,19 +798,16 @@ export function PropertyMediaUpload({
                 )}
               </div>
 
-              {/* Progress/Status indicator */}
               {(upload.status === "uploading" || upload.status === "linking") && (
                 <div className="w-20">
                   <Progress value={upload.progress} className="h-1.5" />
                 </div>
               )}
 
-              {/* Status icon */}
               {upload.status === "success" && (
                 <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
               )}
 
-              {/* Actions */}
               <div className="flex items-center gap-1 flex-shrink-0">
                 {upload.status === "error" && (
                   <>
@@ -622,53 +860,33 @@ export function PropertyMediaUpload({
         </div>
       )}
 
-      {/* Uploaded Media Grid */}
-      {media.length > 0 && (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          {media.map((item, index) => (
-            <div
-              key={item.id || index}
-              className="relative group rounded-lg overflow-hidden border border-border bg-muted"
+      {/* Uploaded Media Grid with Drag & Drop Reordering */}
+      {media.length > 0 && !isLoading && (
+        <div className="space-y-2">
+          <p className="text-xs text-muted-foreground">
+            Drag items to reorder. First image will be the main/featured image.
+          </p>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={media.map((item, index) => item.id || `item-${index}`)}
+              strategy={rectSortingStrategy}
             >
-              {item.file_type === "image" ? (
-                <img
-                  src={item.file_url}
-                  alt={item.file_name}
-                  className="w-full h-24 object-cover"
-                />
-              ) : (
-                <video
-                  src={item.file_url}
-                  className="w-full h-24 object-cover"
-                  muted
-                  playsInline
-                />
-              )}
-              
-              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <Button
-                  type="button"
-                  variant="destructive"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={() => removeMedia(index)}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {media.map((item, index) => (
+                  <SortableMediaItem
+                    key={item.id || `item-${index}`}
+                    item={item}
+                    index={index}
+                    onRemove={removeMedia}
+                  />
+                ))}
               </div>
-              
-              <div className="absolute bottom-0 left-0 right-0 bg-black/70 px-2 py-1">
-                <div className="flex items-center gap-1">
-                  {item.file_type === "image" ? (
-                    <Image className="h-3 w-3 text-white" />
-                  ) : (
-                    <Video className="h-3 w-3 text-white" />
-                  )}
-                  <span className="text-xs text-white truncate">{item.file_name}</span>
-                </div>
-              </div>
-            </div>
-          ))}
+            </SortableContext>
+          </DndContext>
         </div>
       )}
 
