@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
@@ -77,13 +77,21 @@ const checkStatusIcons: Record<string, React.ReactNode> = {
 export default function PropertyDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { isAdmin, profile } = useAuth();
   const [property, setProperty] = useState<Property | null>(null);
   const [dueDiligence, setDueDiligence] = useState<DueDiligenceCheck[]>([]);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showEditForm, setShowEditForm] = useState(false);
-
+  
+  // Auto-open edit form if URL ends with /edit
+  const isEditMode = location.pathname.endsWith('/edit');
+  const [showEditForm, setShowEditForm] = useState(isEditMode);
+  
+  // Update showEditForm when route changes
+  useEffect(() => {
+    setShowEditForm(isEditMode);
+  }, [isEditMode]);
   useEffect(() => {
     if (id) {
       fetchProperty();
@@ -382,7 +390,13 @@ export default function PropertyDetail() {
         {showEditForm && (
           <PropertyForm
             open={showEditForm}
-            onClose={() => setShowEditForm(false)}
+            onClose={() => {
+              setShowEditForm(false);
+              // Navigate back to detail page (without /edit) if we were on /edit route
+              if (isEditMode) {
+                navigate(`/dashboard/properties/${id}`, { replace: true });
+              }
+            }}
             onSuccess={fetchProperty}
             initialData={property}
           />
