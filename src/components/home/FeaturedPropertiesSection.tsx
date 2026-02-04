@@ -3,6 +3,8 @@ import { ArrowRight, MapPin, Shield, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCurrency } from "@/components/currency/CurrencySwitcher";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Tooltip,
   TooltipContent,
@@ -12,44 +14,96 @@ import property1 from "@/assets/property-1.jpg";
 import property2 from "@/assets/property-2.jpg";
 import property3 from "@/assets/property-3.jpg";
 
-const properties = [
-  {
-    id: 1,
-    title: "4-Bedroom Terrace in Lekki Phase 1",
-    location: "Lekki, Lagos",
-    description: "Secure estate, strong rental demand, serviced",
-    tag: "Exclusive Listing",
-    image: property1,
-    priceNGN: 180000000,
-    verified: true,
-    verifiedDate: "Oct 12, 2024",
-  },
-  {
-    id: 2,
-    title: "Luxury Apartment in Ikoyi",
-    location: "Ikoyi, Lagos",
-    description: "High-floor unit, city and water views",
-    tag: "New",
-    image: property2,
-    priceNGN: 320000000,
-    verified: true,
-    verifiedDate: "Nov 5, 2024",
-  },
-  {
-    id: 3,
-    title: "Serviced Apartments in Abuja",
-    location: "Maitama, Abuja",
-    description: "Ideal for corporate lets and Airbnb",
-    tag: "Developer Direct",
-    image: property3,
-    priceNGN: 95000000,
-    verified: true,
-    verifiedDate: "Dec 1, 2024",
-  },
-];
+type PropertyMedia = {
+  file_url: string;
+  file_type: string;
+  sort_order: number | null;
+};
+
+type PublicProperty = {
+  id: string;
+  title: string;
+  slug: string | null;
+  city: string;
+  area: string | null;
+  asking_price_ngn: number;
+  risk_rating: string;
+  property_type: string;
+  description: string | null;
+  property_media?: PropertyMedia[] | null;
+};
 
 export function FeaturedPropertiesSection() {
   const { formatPrice } = useCurrency();
+
+  const { data: listings } = useQuery({
+    queryKey: ["public-properties", "home-featured"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("properties")
+        .select(
+          "id, title, slug, city, area, status, asking_price_ngn, risk_rating, property_type, description, property_media(file_url, file_type, sort_order)",
+        )
+        .eq("status", "listed")
+        .order("updated_at", { ascending: false })
+        .limit(3);
+      if (error) throw error;
+      return (data || []) as PublicProperty[];
+    },
+  });
+
+  const fallback = [
+    {
+      id: "fallback-1",
+      title: "4-Bedroom Terrace in Lekki Phase 1",
+      slug: null,
+      city: "Lagos",
+      area: "Lekki",
+      asking_price_ngn: 180000000,
+      risk_rating: "medium",
+      property_type: "Terrace",
+      description: "Secure estate, strong rental demand, serviced",
+      property_media: [{ file_url: property1, file_type: "image", sort_order: 0 }],
+    },
+    {
+      id: "fallback-2",
+      title: "Luxury Apartment in Ikoyi",
+      slug: null,
+      city: "Lagos",
+      area: "Ikoyi",
+      asking_price_ngn: 320000000,
+      risk_rating: "low",
+      property_type: "Apartment",
+      description: "High-floor unit, city and water views",
+      property_media: [{ file_url: property2, file_type: "image", sort_order: 0 }],
+    },
+    {
+      id: "fallback-3",
+      title: "Serviced Apartments in Abuja",
+      slug: null,
+      city: "Abuja",
+      area: "Maitama",
+      asking_price_ngn: 95000000,
+      risk_rating: "medium",
+      property_type: "Apartment",
+      description: "Ideal for corporate lets and Airbnb",
+      property_media: [{ file_url: property3, file_type: "image", sort_order: 0 }],
+    },
+  ] satisfies PublicProperty[];
+
+  const properties = (listings && listings.length > 0 ? listings : fallback).map((p) => {
+    const media = (p.property_media || [])
+      .slice()
+      .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
+    const coverImage = media.find((m) => m.file_type === "image")?.file_url || property1;
+    const location = p.area ? `${p.area}, ${p.city}` : p.city;
+    return {
+      ...p,
+      location,
+      coverImage,
+      tag: p.property_type || "Listed",
+    };
+  });
 
   return (
     <section className="section-padding bg-background">
@@ -73,7 +127,7 @@ export function FeaturedPropertiesSection() {
             >
               <div className="relative aspect-[4/3] overflow-hidden">
                 <img
-                  src={property.image}
+                  src={property.coverImage}
                   alt={property.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   loading="lazy"
@@ -84,7 +138,7 @@ export function FeaturedPropertiesSection() {
                   </Badge>
                 </div>
                 {/* Title Verification Badge */}
-                {property.verified && (
+                (
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <div className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-green-500/90 text-white px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md flex items-center gap-1 text-[10px] sm:text-xs font-medium cursor-help">
@@ -99,12 +153,12 @@ export function FeaturedPropertiesSection() {
                           Title Verified
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          C of O verified by our legal team on {property.verifiedDate}
+                          Documentation reviewed by our team before listing.
                         </p>
                       </div>
                     </TooltipContent>
                   </Tooltip>
-                )}
+                )
               </div>
               <div className="p-4 sm:p-6">
                 <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground mb-1 sm:mb-2">
@@ -115,14 +169,14 @@ export function FeaturedPropertiesSection() {
                   {property.title}
                 </h3>
                 <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4 line-clamp-2">
-                  {property.description}
+                  {property.description || `${property.property_type} in ${property.location}.`}
                 </p>
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-display text-base sm:text-xl font-semibold text-primary">
-                    {formatPrice(property.priceNGN)}
+                    {formatPrice(property.asking_price_ngn)}
                   </span>
                   <Button variant="outline" size="sm" className="text-xs px-2 sm:px-3" asChild>
-                    <Link to={`/calculator`}>
+                    <Link to={`/properties/${property.slug || property.id}`}>
                       <span className="hidden sm:inline">View & ROI</span>
                       <span className="sm:hidden">View</span>
                       <ArrowRight size={12} className="ml-1" />

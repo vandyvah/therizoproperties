@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -62,6 +63,7 @@ interface MediaFile {
 
 export function PropertyForm({ open, onClose, onSuccess, initialData }: PropertyFormProps) {
   const { profile } = useAuth();
+  const queryClient = useQueryClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [pendingMedia, setPendingMedia] = useState<MediaFile[]>([]);
 
@@ -150,6 +152,10 @@ export function PropertyForm({ open, onClose, onSuccess, initialData }: Property
         
         toast.success("Property created successfully");
       }
+
+      // Ensure public pages (home, listings, detail) refetch updated data
+      queryClient.invalidateQueries({ queryKey: ["public-properties"] });
+      queryClient.invalidateQueries({ queryKey: ["public-property"] });
 
       onSuccess();
       onClose();
