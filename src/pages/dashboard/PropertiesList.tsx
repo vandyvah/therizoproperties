@@ -153,9 +153,24 @@ export default function PropertiesList() {
       supabase.from("leads").select("id", { head: true, count: "exact" }).eq("property_id", propertyId),
       supabase.from("deals").select("id", { head: true, count: "exact" }).eq("property_id", propertyId),
       supabase.from("viewings").select("id", { head: true, count: "exact" }).eq("property_id", propertyId),
-      supabase.from("due_diligence_checks").select("id", { head: true, count: "exact" }).eq("property_id", propertyId),
-      supabase.from("roi_calculations").select("id", { head: true, count: "exact" }).eq("property_id", propertyId),
+      supabase
+        .from("due_diligence_checks")
+        .select("id", { head: true, count: "exact" })
+        .eq("property_id", propertyId),
+      supabase
+        .from("roi_calculations")
+        .select("id", { head: true, count: "exact" })
+        .eq("property_id", propertyId),
     ]);
+
+    const firstError = [
+      leadsRes.error,
+      dealsRes.error,
+      viewingsRes.error,
+      checksRes.error,
+      roiRes.error,
+    ].find(Boolean);
+    if (firstError) throw firstError;
 
     return [
       { label: "leads", count: leadsRes.count ?? 0 },
@@ -180,23 +195,67 @@ export default function PropertiesList() {
         return;
       }
 
-      // If force delete, remove all related records first
-      if (force && blockingCounts.length > 0) {
-        // Delete in order to respect foreign key constraints
-        // First: viewings (references leads)
-        await supabase.from("viewings").delete().eq("property_id", propertyId);
-        
-        // Then: deals (references leads, properties)
-        await supabase.from("deals").delete().eq("property_id", propertyId);
-        
-        // Then: leads (references properties)
-        await supabase.from("leads").delete().eq("property_id", propertyId);
-        
-        // Then: due diligence checks
-        await supabase.from("due_diligence_checks").delete().eq("property_id", propertyId);
-        
-        // Then: ROI calculations
-        await supabase.from("roi_calculations").delete().eq("property_id", propertyId);
+      // If force delete, remove all related records first (and fail fast on any error)
+      if (force) {
+        // 1) Viewings (references leads)
+        const { error: viewingsDeleteError } = await supabase
+          .from("viewings")
+          .delete()
+          .eq("property_id", propertyId);
+        if (viewingsDeleteError) throw viewingsDeleteError;
+
+        // 2) Deals + deal consultant shares
+        const { data: dealsForProperty, error: dealsFetchError } = await supabase
+          .from("deals")
+          .select("id")
+          .eq("property_id", propertyId);
+        if (dealsFetchError) throw dealsFetchError;
+
+        const dealIds = (dealsForProperty || []).map((d) => d.id);
+        if (dealIds.length > 0) {
+          const { error: sharesDeleteError } = await supabase
+            .from("deal_consultant_shares")
+            .delete()
+            .in("deal_id", dealIds);
+          if (sharesDeleteError) throw sharesDeleteError;
+        }
+
+        const { error: dealsDeleteError } = await supabase
+          .from("deals")
+          .delete()
+          .eq("property_id", propertyId);
+        if (dealsDeleteError) throw dealsDeleteError;
+
+        // 3) Leads (references properties)
+        const { error: leadsDeleteError } = await supabase
+          .from("leads")
+          .delete()
+          .eq("property_id", propertyId);
+        if (leadsDeleteError) throw leadsDeleteError;
+
+        // 4) Due diligence checks
+        const { error: checksDeleteError } = await supabase
+          .from("due_diligence_checks")
+          .delete()
+          .eq("property_id", propertyId);
+        if (checksDeleteError) throw checksDeleteError;
+
+        // 5) ROI calculations
+        const { error: roiDeleteError } = await supabase
+          .from("roi_calculations")
+          .delete()
+          .eq("property_id", propertyId);
+        if (roiDeleteError) throw roiDeleteError;
+
+        // Final sanity check: if anything remains, stop before deleting property
+        const remaining = await checkRelatedRecords(propertyId);
+        if (remaining.length > 0) {
+          throw new Error(
+            `Force delete couldn't remove all linked records (${remaining
+              .map((r) => `${r.count} ${r.label}`)
+              .join(", ")}).`,
+          );
+        }
       }
 
       // Remove media files + rows
@@ -210,11 +269,26 @@ export default function PropertiesList() {
         .filter(Boolean) as string[];
 
       if (mediaPaths.length > 0) {
-        await supabase.storage.from("property-media").remove(mediaPaths);
+        const { error: storageRemoveError } = await supabase.storage
+          .from("property-media")
+          .remove(mediaPaths);
+        if (storageRemoveError) {
+          // Don't block deletion if storage cleanup fails, but log it for follow-up.
+          console.warn("Storage cleanup failed:", storageRemoveError);
+        }
       }
 
-      await supabase.from("property_media").delete().eq("property_id", propertyId);
-      await supabase.from("property_documents").delete().eq("property_id", propertyId);
+      const { error: mediaDeleteError } = await supabase
+        .from("property_media")
+        .delete()
+        .eq("property_id", propertyId);
+      if (mediaDeleteError) throw mediaDeleteError;
+
+      const { error: docsDeleteError } = await supabase
+        .from("property_documents")
+        .delete()
+        .eq("property_id", propertyId);
+      if (docsDeleteError) throw docsDeleteError;
 
       const { error: deleteError } = await supabase.from("properties").delete().eq("id", propertyId);
       if (deleteError) throw deleteError;

@@ -2,71 +2,142 @@ import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight, MapPin, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useCurrency } from "@/components/currency/CurrencySwitcher";
 import property1 from "@/assets/property-1.jpg";
 import property2 from "@/assets/property-2.jpg";
 import property3 from "@/assets/property-3.jpg";
 
-const properties = [
+type PropertyMedia = {
+  file_url: string;
+  file_type: string;
+  sort_order: number | null;
+};
+
+type PublicProperty = {
+  id: string;
+  title: string;
+  slug: string | null;
+  city: string;
+  area: string | null;
+  asking_price_ngn: number;
+  risk_rating: "low" | "medium" | "high";
+  property_type: string;
+  property_media?: PropertyMedia[] | null;
+};
+
+const fallbackProperties = [
   {
-    id: 1,
+    id: "fallback-1",
     image: property1,
     tag: "EXCLUSIVE",
     title: "The Meridian Penthouse",
     location: "Banana Island, Lagos",
     price: "₦1.2B",
-    beds: 5,
-    baths: 6,
-    sqm: 850,
-    roi: "18%",
+    meta1: "Penthouse",
+    meta2: "Low risk",
+    meta3: "Lagos",
+    meta4: "Listed",
+    href: "/properties",
   },
   {
-    id: 2,
+    id: "fallback-2",
     image: property2,
     tag: "NEW LISTING",
     title: "Azure Waterfront Villa",
     location: "Eko Atlantic, Lagos",
     price: "₦680M",
-    beds: 4,
-    baths: 5,
-    sqm: 620,
-    roi: "15%",
+    meta1: "Detached",
+    meta2: "Medium risk",
+    meta3: "Lagos",
+    meta4: "Listed",
+    href: "/properties",
   },
   {
-    id: 3,
+    id: "fallback-3",
     image: property3,
     tag: "PRIME LOCATION",
     title: "The Crown Residences",
     location: "Maitama, Abuja",
     price: "₦450M",
-    beds: 4,
-    baths: 4,
-    sqm: 480,
-    roi: "22%",
+    meta1: "Apartment",
+    meta2: "Medium risk",
+    meta3: "Abuja",
+    meta4: "Listed",
+    href: "/properties",
   },
 ];
 
 export function ElitePropertyCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const { formatPrice } = useCurrency();
 
-  const nextSlide = useCallback(() => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setCurrentIndex((prev) => (prev + 1) % properties.length);
-    setTimeout(() => setIsAnimating(false), 600);
-  }, [isAnimating]);
+  const { data: listings } = useQuery({
+    queryKey: ["public-properties", "home-carousel"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("properties")
+        .select(
+          "id, title, slug, city, area, asking_price_ngn, risk_rating, property_type, property_media(file_url, file_type, sort_order)",
+        )
+        .eq("status", "listed")
+        .order("updated_at", { ascending: false })
+        .limit(6);
+      if (error) throw error;
+      return (data || []) as PublicProperty[];
+    },
+  });
 
-  const prevSlide = useCallback(() => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setCurrentIndex((prev) => (prev - 1 + properties.length) % properties.length);
-    setTimeout(() => setIsAnimating(false), 600);
-  }, [isAnimating]);
+  const dynamicProperties = (listings || []).map((p) => {
+    const media = (p.property_media || [])
+      .slice()
+      .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
+    const coverImage = media.find((m) => m.file_type === "image")?.file_url || property1;
+    const location = p.area ? `${p.area}, ${p.city}` : p.city;
+    const href = `/properties/${p.slug || p.id}`;
+    return {
+      id: p.id,
+      image: coverImage,
+      tag: p.property_type?.toUpperCase() || "LISTED",
+      title: p.title,
+      location,
+      price: formatPrice(p.asking_price_ngn),
+      meta1: p.property_type,
+      meta2: `${p.risk_rating} risk`,
+      meta3: p.city,
+      meta4: "Listed",
+      href,
+    };
+  });
+
+  const properties = dynamicProperties.length > 0 ? dynamicProperties : fallbackProperties;
+  const totalSlides = properties.length;
 
   useEffect(() => {
+    if (currentIndex >= totalSlides) setCurrentIndex(0);
+  }, [currentIndex, totalSlides]);
+
+  const nextSlide = useCallback(() => {
+    if (isAnimating || totalSlides <= 1) return;
+    setIsAnimating(true);
+    setCurrentIndex((prev) => (prev + 1) % totalSlides);
+    setTimeout(() => setIsAnimating(false), 600);
+  }, [isAnimating, totalSlides]);
+
+  const prevSlide = useCallback(() => {
+    if (isAnimating || totalSlides <= 1) return;
+    setIsAnimating(true);
+    setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
+    setTimeout(() => setIsAnimating(false), 600);
+  }, [isAnimating, totalSlides]);
+
+  useEffect(() => {
+    if (totalSlides <= 1) return;
     const timer = setInterval(nextSlide, 8000);
     return () => clearInterval(timer);
-  }, [nextSlide]);
+  }, [nextSlide, totalSlides]);
 
   const currentProperty = properties[currentIndex];
 
@@ -149,22 +220,30 @@ export function ElitePropertyCarousel() {
                 </div>
 
                 {/* Property Stats */}
-                <div className="grid grid-cols-4 gap-4 py-6 border-y border-border">
+                 <div className="grid grid-cols-4 gap-4 py-6 border-y border-border">
                   <div className="text-center">
-                    <p className="text-2xl font-display font-bold text-primary">{currentProperty.beds}</p>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wider">Beds</p>
+                     <p className="text-sm font-display font-bold text-primary line-clamp-1">
+                       {currentProperty.meta1}
+                     </p>
+                     <p className="text-xs text-muted-foreground uppercase tracking-wider">Type</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-2xl font-display font-bold text-primary">{currentProperty.baths}</p>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wider">Baths</p>
+                     <p className="text-sm font-display font-bold text-primary line-clamp-1">
+                       {currentProperty.meta2}
+                     </p>
+                     <p className="text-xs text-muted-foreground uppercase tracking-wider">Risk</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-2xl font-display font-bold text-primary">{currentProperty.sqm}</p>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wider">SQM</p>
+                     <p className="text-sm font-display font-bold text-primary line-clamp-1">
+                       {currentProperty.meta3}
+                     </p>
+                     <p className="text-xs text-muted-foreground uppercase tracking-wider">City</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-2xl font-display font-bold text-gold">{currentProperty.roi}</p>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wider">Est. ROI</p>
+                     <p className="text-sm font-display font-bold text-gold line-clamp-1">
+                       {currentProperty.meta4}
+                     </p>
+                     <p className="text-xs text-muted-foreground uppercase tracking-wider">Status</p>
                   </div>
                 </div>
 
@@ -175,7 +254,7 @@ export function ElitePropertyCarousel() {
                     className="bg-navy hover:bg-navy/90 text-white px-8 py-6"
                     asChild
                   >
-                    <Link to="/properties">
+                    <Link to={currentProperty.href}>
                       View Property Details
                       <ArrowRight className="ml-2 w-4 h-4" />
                     </Link>
@@ -186,7 +265,7 @@ export function ElitePropertyCarousel() {
               {/* Navigation */}
               <div className="flex items-center justify-between pt-4">
                 <div className="flex items-center gap-3">
-                  {properties.map((_, index) => (
+                   {properties.map((_, index) => (
                     <button
                       key={index}
                       onClick={() => setCurrentIndex(index)}
