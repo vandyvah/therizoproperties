@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 
 const team = [
   {
-    name: "Victor",
+    name: "Richard",
     role: "Founder & CEO",
     description:
       "Leads strategy, capital allocation, and key partnerships. Personally oversees high-value and complex transactions.",
