@@ -10,10 +10,10 @@ import aishaImage from "@/assets/team-aisha.jpg";
 import kellyImage from "@/assets/team-kelly.png";
 
 const founder = {
-  name: "Victor",
+  name: "Richard",
   role: "Founder & Chief Executive Officer",
-  bio: "Victor leads Therizo's strategy, capital deployment, and key relationships. He focuses on finding properties and projects where the paperwork, numbers, and execution can support long-term value for both the firm and its clients. Victor personally oversees high-value transactions and all joint-venture and development discussions.",
-  initial: "V",
+  bio: "Richard leads Therizo's strategy, capital deployment, and key relationships. He focuses on finding properties and projects where the paperwork, numbers, and execution can support long-term value for both the firm and its clients. Richard personally oversees high-value transactions and all joint-venture and development discussions.",
+  initial: "R",
 };
 
 const consultants = [
