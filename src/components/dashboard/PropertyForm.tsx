@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
@@ -24,6 +25,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { PropertyMediaUpload } from "./PropertyMediaUpload";
+import { Globe, Star } from "lucide-react";
 
 const propertySchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -47,7 +49,7 @@ interface PropertyFormProps {
   open: boolean;
   onClose: () => void;
   onSuccess: () => void;
-  initialData?: Partial<PropertyFormData> & { id?: string };
+  initialData?: Partial<PropertyFormData> & { id?: string; is_featured?: boolean };
 }
 
 const CITIES = ["Lagos", "Abuja", "Port Harcourt", "Ogun State", "Kano", "Ibadan", "Enugu", "Other"];
@@ -66,6 +68,11 @@ export function PropertyForm({ open, onClose, onSuccess, initialData }: Property
   const queryClient = useQueryClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [pendingMedia, setPendingMedia] = useState<MediaFile[]>([]);
+  const [isFeatured, setIsFeatured] = useState(initialData?.is_featured ?? false);
+
+  useEffect(() => {
+    setIsFeatured(initialData?.is_featured ?? false);
+  }, [initialData?.is_featured]);
 
   const form = useForm<PropertyFormData>({
     resolver: zodResolver(propertySchema),
@@ -111,6 +118,7 @@ export function PropertyForm({ open, onClose, onSuccess, initialData }: Property
             description: data.description || null,
             risk_rating: data.risk_rating,
             status: data.status,
+            is_featured: isFeatured,
           })
           .eq("id", initialData.id);
         if (error) throw error;
@@ -130,6 +138,7 @@ export function PropertyForm({ open, onClose, onSuccess, initialData }: Property
           description: data.description || null,
           risk_rating: data.risk_rating,
           status: data.status,
+          is_featured: isFeatured,
           created_by_id: profile.id,
           assigned_consultant_id: profile.id,
         }).select().single();
@@ -307,6 +316,45 @@ export function PropertyForm({ open, onClose, onSuccess, initialData }: Property
             <div className="col-span-2">
               <Label htmlFor="description">Description</Label>
               <Textarea id="description" {...form.register("description")} rows={3} />
+            </div>
+
+            {/* Publish & Featured Toggles */}
+            <div className="col-span-2 space-y-4 rounded-lg border border-border bg-muted/30 p-4">
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <Globe className="h-5 w-5 text-muted-foreground" />
+                  <div>
+                    <Label htmlFor="publish-toggle" className="text-sm font-medium">Publish to Website</Label>
+                    <p className="text-xs text-muted-foreground">
+                      Only "Listed" properties appear on the public site. Drafts are internal only.
+                    </p>
+                  </div>
+                </div>
+                <Switch
+                  id="publish-toggle"
+                  checked={form.watch("status") === "listed"}
+                  onCheckedChange={(checked) => {
+                    form.setValue("status", checked ? "listed" : "draft");
+                  }}
+                />
+              </div>
+
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <Star className="h-5 w-5 text-muted-foreground" />
+                  <div>
+                    <Label htmlFor="featured-toggle" className="text-sm font-medium">Featured on Home Page</Label>
+                    <p className="text-xs text-muted-foreground">
+                      Featured properties are highlighted on the home page (max 3 shown).
+                    </p>
+                  </div>
+                </div>
+                <Switch
+                  id="featured-toggle"
+                  checked={isFeatured}
+                  onCheckedChange={setIsFeatured}
+                />
+              </div>
             </div>
 
             <div className="col-span-2">

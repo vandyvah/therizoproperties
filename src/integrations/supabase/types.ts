@@ -825,6 +825,7 @@ export type Database = {
           created_by_id: string | null
           description: string | null
           id: string
+          is_featured: boolean
           min_price_ngn: number | null
           owner_contact: string | null
           owner_name: string | null
@@ -846,6 +847,7 @@ export type Database = {
           created_by_id?: string | null
           description?: string | null
           id?: string
+          is_featured?: boolean
           min_price_ngn?: number | null
           owner_contact?: string | null
           owner_name?: string | null
@@ -867,6 +869,7 @@ export type Database = {
           created_by_id?: string | null
           description?: string | null
           id?: string
+          is_featured?: boolean
           min_price_ngn?: number | null
           owner_contact?: string | null
           owner_name?: string | null
