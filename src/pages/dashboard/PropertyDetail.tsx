@@ -27,6 +27,7 @@ interface Property {
   description: string | null;
   risk_rating: "low" | "medium" | "high";
   status: "draft" | "under_review" | "listed" | "on_hold" | "sold";
+  is_featured: boolean;
   created_at: string;
 }
 

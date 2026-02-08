@@ -77,12 +77,14 @@ export function ElitePropertyCarousel() {
   const { data: listings } = useQuery({
     queryKey: ["public-properties", "home-carousel"],
     queryFn: async () => {
+      // Featured first, then latest listed
       const { data, error } = await supabase
         .from("properties")
         .select(
-          "id, title, slug, city, area, asking_price_ngn, risk_rating, property_type, property_media(file_url, file_type, sort_order)",
+          "id, title, slug, city, area, asking_price_ngn, risk_rating, property_type, is_featured, property_media(file_url, file_type, sort_order)",
         )
         .eq("status", "listed")
+        .order("is_featured", { ascending: false })
         .order("updated_at", { ascending: false })
         .limit(6);
       if (error) throw error;

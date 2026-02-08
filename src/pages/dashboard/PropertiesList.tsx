@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Plus, Search, Eye, Edit, Loader2, Trash2, User, Users } from "lucide-react";
+import { Plus, Search, Eye, Edit, Loader2, Trash2, User, Users, Star } from "lucide-react";
 import { PropertyForm } from "@/components/dashboard/PropertyForm";
 import {
   AlertDialog,
@@ -49,6 +49,7 @@ interface Property {
   status: PropertyStatus;
   asking_price_ngn: number;
   risk_rating: RiskRating;
+  is_featured: boolean;
   assigned_consultant_id: string | null;
   created_by_id: string | null;
   updated_at: string;
@@ -92,7 +93,7 @@ export default function PropertiesList() {
       const { data, error } = await supabase
         .from("properties")
         .select(`
-          id, title, city, area, status, asking_price_ngn, risk_rating, 
+          id, title, city, area, status, asking_price_ngn, risk_rating, is_featured,
           assigned_consultant_id, created_by_id, updated_at,
           assigned_consultant:profiles!properties_assigned_consultant_id_fkey(full_name)
         `)
@@ -400,6 +401,7 @@ export default function PropertiesList() {
                   <TableHead>Title</TableHead>
                   <TableHead>Location</TableHead>
                   <TableHead>Status</TableHead>
+                  <TableHead className="text-center">Featured</TableHead>
                   <TableHead>Price</TableHead>
                   <TableHead>Risk</TableHead>
                   <TableHead>Consultant</TableHead>
@@ -410,7 +412,7 @@ export default function PropertiesList() {
               <TableBody>
                 {filteredProperties.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={8} className="text-center text-muted-foreground py-8">
+                    <TableCell colSpan={9} className="text-center text-muted-foreground py-8">
                       {ownershipFilter === "my" 
                         ? "You don't have any properties yet. Click 'Add Property' to create one."
                         : "No properties found"
@@ -437,6 +439,13 @@ export default function PropertiesList() {
                         <Badge className={statusColors[property.status]} variant="secondary">
                           {property.status.replace("_", " ")}
                         </Badge>
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {property.is_featured ? (
+                          <Star className="h-4 w-4 text-yellow-500 fill-yellow-500 mx-auto" />
+                        ) : (
+                          <span className="text-muted-foreground">—</span>
+                        )}
                       </TableCell>
                       <TableCell>{formatCurrency(property.asking_price_ngn)}</TableCell>
                       <TableCell>

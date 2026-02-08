@@ -39,16 +39,43 @@ export function FeaturedPropertiesSection() {
   const { data: listings } = useQuery({
     queryKey: ["public-properties", "home-featured"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      // First try to get featured properties
+      const { data: featured, error: fErr } = await supabase
         .from("properties")
         .select(
-          "id, title, slug, city, area, status, asking_price_ngn, risk_rating, property_type, description, property_media(file_url, file_type, sort_order)",
+          "id, title, slug, city, area, status, asking_price_ngn, risk_rating, property_type, description, is_featured, property_media(file_url, file_type, sort_order)",
+        )
+        .eq("status", "listed")
+        .eq("is_featured", true)
+        .order("updated_at", { ascending: false })
+        .limit(3);
+      if (fErr) throw fErr;
+
+      // If we have 3+ featured, use those; otherwise backfill with latest listed
+      if (featured && featured.length >= 3) {
+        return featured.slice(0, 3) as PublicProperty[];
+      }
+
+      const remaining = 3 - (featured?.length || 0);
+      const featuredIds = (featured || []).map((p) => p.id);
+      
+      let query = supabase
+        .from("properties")
+        .select(
+          "id, title, slug, city, area, status, asking_price_ngn, risk_rating, property_type, description, is_featured, property_media(file_url, file_type, sort_order)",
         )
         .eq("status", "listed")
         .order("updated_at", { ascending: false })
-        .limit(3);
-      if (error) throw error;
-      return (data || []) as PublicProperty[];
+        .limit(remaining);
+      
+      if (featuredIds.length > 0) {
+        query = query.not("id", "in", `(${featuredIds.join(",")})`);
+      }
+
+      const { data: backfill, error: bErr } = await query;
+      if (bErr) throw bErr;
+
+      return [...(featured || []), ...(backfill || [])].slice(0, 3) as PublicProperty[];
     },
   });
 
