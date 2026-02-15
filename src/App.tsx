@@ -44,6 +44,11 @@ import BlogPost from "./pages/BlogPost";
 import BlogCluster from "./pages/BlogCluster";
 import SEOHealth from "./pages/SEOHealth";
 import MaterialsSupply from "./pages/MaterialsSupply";
+import OwnerBrief from "./pages/owner/OwnerBrief";
+import SubmitProperty from "./pages/owner/SubmitProperty";
+import OwnerAdmin from "./pages/owner/OwnerAdmin";
+import OwnerPrivacy from "./pages/owner/OwnerPrivacy";
+import OwnerTerms from "./pages/owner/OwnerTerms";
 
 const queryClient = new QueryClient();
 
@@ -86,6 +91,13 @@ const App = () => (
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/blog/cluster/:slug" element={<BlogCluster />} />
               <Route path="/locations/port-harcourt" element={<PortHarcourt />} />
+              
+              {/* Owner Briefing Routes */}
+              <Route path="/owner-brief" element={<OwnerBrief />} />
+              <Route path="/submit-property" element={<SubmitProperty />} />
+              <Route path="/admin" element={<OwnerAdmin />} />
+              <Route path="/privacy" element={<OwnerPrivacy />} />
+              <Route path="/terms" element={<OwnerTerms />} />
               
               {/* Dashboard Routes */}
               <Route path="/dashboard/auth" element={<DashboardAuth />} />
