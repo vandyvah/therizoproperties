@@ -1,4 +1,4 @@
-export const WHATSAPP_NUMBER = "+2348000000000"; // Replace with actual number
+export const WHATSAPP_NUMBER = "+2348034830087";
 export const OWNER_NAME = "Mr. Solomon Adebayo";
 
 export const getWhatsAppUrl = (message: string) =>
