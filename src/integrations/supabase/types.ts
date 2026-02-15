@@ -994,6 +994,72 @@ export type Database = {
           },
         ]
       }
+      property_submissions: {
+        Row: {
+          admin_notes: string | null
+          area: string | null
+          asking_price: string
+          bedrooms: string | null
+          can_inspect_this_week: boolean | null
+          city: string
+          created_at: string
+          currency: string | null
+          email: string | null
+          id: string
+          is_tenanted: boolean | null
+          notes: string | null
+          owner_name: string
+          phone: string
+          plot_size: string | null
+          property_type: string
+          status: string
+          title_status: string | null
+          updated_at: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          area?: string | null
+          asking_price: string
+          bedrooms?: string | null
+          can_inspect_this_week?: boolean | null
+          city: string
+          created_at?: string
+          currency?: string | null
+          email?: string | null
+          id?: string
+          is_tenanted?: boolean | null
+          notes?: string | null
+          owner_name: string
+          phone: string
+          plot_size?: string | null
+          property_type: string
+          status?: string
+          title_status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          area?: string | null
+          asking_price?: string
+          bedrooms?: string | null
+          can_inspect_this_week?: boolean | null
+          city?: string
+          created_at?: string
+          currency?: string | null
+          email?: string | null
+          id?: string
+          is_tenanted?: boolean | null
+          notes?: string | null
+          owner_name?: string
+          phone?: string
+          plot_size?: string | null
+          property_type?: string
+          status?: string
+          title_status?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       roi_calculations: {
         Row: {
           airbnb_nightly_rate_ngn: number | null
