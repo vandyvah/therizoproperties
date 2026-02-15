@@ -8,3 +8,9 @@ verify_jwt = false
 
 [functions.indexnow]
 verify_jwt = false
+
+[functions.owner-auth]
+verify_jwt = false
+
+[functions.owner-admin-api]
+verify_jwt = false
