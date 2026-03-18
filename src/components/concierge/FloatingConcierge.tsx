@@ -18,7 +18,7 @@ export function FloatingConcierge() {
       icon: Phone,
       label: "Speak to Consultant",
       description: "Direct line to our experts",
-      href: "https://wa.me/2348000000000?text=Hello%2C%20I%27d%20like%20to%20speak%20with%20a%20consultant",
+      href: "https://wa.me/2348034830087?text=Hello%2C%20I%27d%20like%20to%20speak%20with%20a%20consultant",
       external: true,
       color: "text-green-500",
     },
