@@ -100,7 +100,7 @@ export default function BlogPost() {
       name: "Therizo Property and Development Corporation",
       logo: {
         "@type": "ImageObject",
-        url: "https://therizoproperties.com/logo.png",
+        url: "https://therizoproperties.com/favicon.png",
       },
     },
     datePublished: post.published_at,

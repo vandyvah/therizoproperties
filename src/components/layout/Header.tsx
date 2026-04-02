@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import logo from "@/assets/logo.png";
 import { CurrencySwitcher } from "@/components/currency/CurrencySwitcher";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { cn } from "@/lib/utils";
@@ -46,11 +47,7 @@ export function Header() {
     >
       <div className="container-wide flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <span
-            className="font-display text-2xl font-semibold tracking-tight text-ivory transition-colors"
-          >
-            Therizo
-          </span>
+          <img src={logo} alt="Therizo Properties" className="h-10 md:h-12 w-auto" />
         </Link>
 
         {/* Desktop Navigation */}
