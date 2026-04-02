@@ -47,11 +47,7 @@ export function Header() {
     >
       <div className="container-wide flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <span
-            className="font-display text-2xl font-semibold tracking-tight text-ivory transition-colors"
-          >
-            Therizo
-          </span>
+          <img src={logo} alt="Therizo Properties" className="h-10 md:h-12 w-auto" />
         </Link>
 
         {/* Desktop Navigation */}

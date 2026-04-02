@@ -35,9 +35,7 @@ export function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <Link to="/" className="inline-block">
-              <span className="font-display text-2xl font-semibold text-ivory">
-                Therizo
-              </span>
+              <img src={logo} alt="Therizo Properties" className="h-12 w-auto brightness-0 invert" />
             </Link>
             <p className="mt-4 text-ivory/70 text-sm leading-relaxed">
               Curated Nigerian properties, clean titles, and disciplined returns
