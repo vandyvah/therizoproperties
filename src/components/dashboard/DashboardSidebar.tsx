@@ -67,7 +67,8 @@ export function DashboardSidebar() {
       <div className="p-4 flex items-center justify-between border-b border-primary-foreground/10">
         {!collapsed && (
           <Link to="/dashboard" className="flex items-center gap-2">
-            <img src="/favicon.png" alt="Therizo" className="h-8 w-auto" />
+            <Building2 className="h-6 w-6 text-gold" />
+            <span className="font-display text-xl font-semibold">Therizo</span>
           </Link>
         )}
         <Button

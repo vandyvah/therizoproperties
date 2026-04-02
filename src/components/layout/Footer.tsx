@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import logo from "@/assets/logo.png";
 import { Mail, Phone, MapPin } from "lucide-react";
 
 const footerLinks = {
@@ -35,7 +34,9 @@ export function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <Link to="/" className="inline-block">
-              <img src={logo} alt="Therizo Properties" className="h-12 w-auto brightness-0 invert" />
+              <span className="font-display text-2xl font-semibold text-ivory">
+                Therizo
+              </span>
             </Link>
             <p className="mt-4 text-ivory/70 text-sm leading-relaxed">
               Curated Nigerian properties, clean titles, and disciplined returns
