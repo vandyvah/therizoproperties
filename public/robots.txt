@@ -1,6 +1,6 @@
 # Therizo Property and Development Corporation
 # Canonical domain: https://therizoproperties.com
-# Last updated: 2025-12-17
+# Last updated: 2026-04-03
 
 # Default rules for all crawlers
 User-agent: *
