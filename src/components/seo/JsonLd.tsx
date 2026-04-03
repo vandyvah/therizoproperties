@@ -71,7 +71,12 @@ export function createOrganizationSchema() {
       addressCountry: "NG",
     },
     areaServed: ["Lagos", "Abuja", "Port Harcourt", "Ogun State"],
-    sameAs: [],
+    sameAs: [
+      "https://x.com/TherizoProperty",
+      "https://www.facebook.com/therizoproperties",
+      "https://www.linkedin.com/company/therizoproperties",
+      "https://www.youtube.com/@therizoproperty",
+    ],
   };
 }
 
