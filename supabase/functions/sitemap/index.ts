@@ -12,11 +12,13 @@ const SITE_URL = "https://therizoproperties.com";
 const staticPages = [
   { path: "/", priority: "1.0", changefreq: "weekly" },
   { path: "/properties", priority: "0.9", changefreq: "weekly" },
+  { path: "/blog", priority: "0.8", changefreq: "weekly" },
   { path: "/calculator", priority: "0.8", changefreq: "monthly" },
   { path: "/our-standard", priority: "0.8", changefreq: "monthly" },
   { path: "/team", priority: "0.7", changefreq: "monthly" },
   { path: "/contact", priority: "0.8", changefreq: "monthly" },
   { path: "/vault", priority: "0.7", changefreq: "weekly" },
+  { path: "/materials-supply", priority: "0.8", changefreq: "monthly" },
   { path: "/guides/title-verification", priority: "0.8", changefreq: "monthly" },
   { path: "/guides/buyer-guide", priority: "0.8", changefreq: "monthly" },
   { path: "/guides/roi-methodology", priority: "0.7", changefreq: "monthly" },
@@ -24,6 +26,7 @@ const staticPages = [
   { path: "/locations/lagos", priority: "0.9", changefreq: "monthly" },
   { path: "/locations/abuja", priority: "0.9", changefreq: "monthly" },
   { path: "/locations/port-harcourt", priority: "0.9", changefreq: "monthly" },
+  { path: "/submit-property", priority: "0.7", changefreq: "monthly" },
 ];
 
 Deno.serve(async (req) => {
@@ -73,6 +76,31 @@ Deno.serve(async (req) => {
         .join("\n");
 
       urlsXml += "\n" + propertyUrls;
+    }
+
+    // Fetch published blog posts
+    const { data: blogPosts, error: blogError } = await supabase
+      .from("blog_posts")
+      .select("slug, updated_at")
+      .eq("status", "published")
+      .order("updated_at", { ascending: false });
+
+    if (!blogError && blogPosts && blogPosts.length > 0) {
+      const blogUrls = blogPosts
+        .map((post) => {
+          const lastmod = post.updated_at
+            ? new Date(post.updated_at).toISOString().split("T")[0]
+            : today;
+          return `  <url>
+    <loc>${SITE_URL}/blog/${post.slug}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>`;
+        })
+        .join("\n");
+
+      urlsXml += "\n" + blogUrls;
     }
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
