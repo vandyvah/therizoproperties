@@ -12,11 +12,13 @@ const SITE_URL = "https://therizoproperties.com";
 const staticPages = [
   { path: "/", priority: "1.0", changefreq: "weekly" },
   { path: "/properties", priority: "0.9", changefreq: "weekly" },
+  { path: "/blog", priority: "0.8", changefreq: "weekly" },
   { path: "/calculator", priority: "0.8", changefreq: "monthly" },
   { path: "/our-standard", priority: "0.8", changefreq: "monthly" },
   { path: "/team", priority: "0.7", changefreq: "monthly" },
   { path: "/contact", priority: "0.8", changefreq: "monthly" },
   { path: "/vault", priority: "0.7", changefreq: "weekly" },
+  { path: "/materials-supply", priority: "0.8", changefreq: "monthly" },
   { path: "/guides/title-verification", priority: "0.8", changefreq: "monthly" },
   { path: "/guides/buyer-guide", priority: "0.8", changefreq: "monthly" },
   { path: "/guides/roi-methodology", priority: "0.7", changefreq: "monthly" },
@@ -24,6 +26,7 @@ const staticPages = [
   { path: "/locations/lagos", priority: "0.9", changefreq: "monthly" },
   { path: "/locations/abuja", priority: "0.9", changefreq: "monthly" },
   { path: "/locations/port-harcourt", priority: "0.9", changefreq: "monthly" },
+  { path: "/submit-property", priority: "0.7", changefreq: "monthly" },
 ];
 
 Deno.serve(async (req) => {
