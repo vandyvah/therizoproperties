@@ -19,6 +19,8 @@ Disallow: /dashboard/*
 Disallow: /style-guide
 Disallow: /vault
 Disallow: /seo-health
+Disallow: /owner-brief
+Disallow: /admin
 
 # Google-specific rules (Googlebot ignores Crawl-delay)
 User-agent: Googlebot
