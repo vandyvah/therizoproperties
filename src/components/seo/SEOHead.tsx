@@ -147,7 +147,7 @@ export function SEOHead({
     updateMeta("twitter:title", fullTitle);
     updateMeta("twitter:description", truncatedDescription);
     updateMeta("twitter:image", ogImage);
-    updateMeta("twitter:site", "@TherizoNG");
+    updateMeta("twitter:site", "@TherizoProperty");
 
     // Pinterest Rich Pins domain verification
     if (pinterestDomainVerify) {

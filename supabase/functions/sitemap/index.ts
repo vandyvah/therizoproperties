@@ -78,6 +78,31 @@ Deno.serve(async (req) => {
       urlsXml += "\n" + propertyUrls;
     }
 
+    // Fetch published blog posts
+    const { data: blogPosts, error: blogError } = await supabase
+      .from("blog_posts")
+      .select("slug, updated_at")
+      .eq("status", "published")
+      .order("updated_at", { ascending: false });
+
+    if (!blogError && blogPosts && blogPosts.length > 0) {
+      const blogUrls = blogPosts
+        .map((post) => {
+          const lastmod = post.updated_at
+            ? new Date(post.updated_at).toISOString().split("T")[0]
+            : today;
+          return `  <url>
+    <loc>${SITE_URL}/blog/${post.slug}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>`;
+        })
+        .join("\n");
+
+      urlsXml += "\n" + blogUrls;
+    }
+
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

@@ -9,7 +9,7 @@ import { OurStandardSection } from "@/components/home/OurStandardSection";
 import { TeamPreviewSection } from "@/components/home/TeamPreviewSection";
 import { CTASection } from "@/components/home/CTASection";
 import { SEOHead } from "@/components/seo/SEOHead";
-import { JsonLd, createOrganizationSchema, createRealEstateAgentSchema, createFAQSchema } from "@/components/seo/JsonLd";
+import { JsonLd, createOrganizationSchema, createRealEstateAgentSchema, createFAQSchema, createWebSiteSchema, createSpeakableSchema } from "@/components/seo/JsonLd";
 import { FAQSection } from "@/components/seo/FAQSection";
 
 const homeFAQs = [
@@ -47,6 +47,8 @@ const Index = () => {
       />
       <JsonLd data={createOrganizationSchema()} />
       <JsonLd data={createRealEstateAgentSchema()} />
+      <JsonLd data={createWebSiteSchema()} />
+      <JsonLd data={createSpeakableSchema(["h1", ".hero-description", ".faq-section"])} />
       <JsonLd data={createFAQSchema(homeFAQs)} />
       
       <HeroSection />

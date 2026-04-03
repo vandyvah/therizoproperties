@@ -173,6 +173,73 @@ export function createRealEstateAgentSchema() {
       { "@type": "City", name: "Abuja" },
       { "@type": "City", name: "Port Harcourt" },
     ],
+    sameAs: [
+      "https://x.com/TherizoProperty",
+      "https://www.facebook.com/therizoproperties",
+      "https://www.linkedin.com/company/therizoproperties",
+      "https://www.youtube.com/@therizoproperty",
+    ],
+  };
+}
+
+// Helper function to create HowTo schema (AEO: answer boxes)
+export function createHowToSchema(data: {
+  name: string;
+  description: string;
+  steps: { name: string; text: string }[];
+  totalTime?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: data.name,
+    description: data.description,
+    ...(data.totalTime && { totalTime: data.totalTime }),
+    step: data.steps.map((step, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: step.name,
+      text: step.text,
+    })),
+  };
+}
+
+// Helper function to create Speakable schema (GEO: AI citation)
+export function createSpeakableSchema(cssSelectors: string[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: cssSelectors,
+    },
+  };
+}
+
+// Helper function to create WebSite schema with SearchAction (AEO)
+export function createWebSiteSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Therizo Properties",
+    alternateName: "Therizo Property and Development Corporation",
+    url: "https://therizoproperties.com",
+    description: "Premium Nigerian real estate for diaspora investors — verified properties, clean titles, and disciplined due diligence.",
+    publisher: {
+      "@type": "Organization",
+      name: "Therizo Property and Development Corporation",
+      sameAs: [
+        "https://x.com/TherizoProperty",
+        "https://www.facebook.com/therizoproperties",
+        "https://www.linkedin.com/company/therizoproperties",
+        "https://www.youtube.com/@therizoproperty",
+      ],
+    },
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://therizoproperties.com/properties?q={search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
   };
 }
 
