@@ -15,6 +15,7 @@ const footerLinks = {
     { href: "/contact", label: "Book Consultation" },
   ],
   guides: [
+    { href: "/abuja-starter-kit", label: "Abuja Diaspora Starter Kit" },
     { href: "/guides/title-verification", label: "Title Verification Guide" },
     { href: "/guides/buyer-guide", label: "Property Buyer's Guide" },
     { href: "/guides/roi-methodology", label: "ROI Methodology" },

@@ -27,6 +27,7 @@ const staticPages = [
   { path: "/locations/abuja", priority: "0.9", changefreq: "monthly" },
   { path: "/locations/port-harcourt", priority: "0.9", changefreq: "monthly" },
   { path: "/submit-property", priority: "0.7", changefreq: "monthly" },
+  { path: "/abuja-starter-kit", priority: "0.9", changefreq: "monthly" },
 ];
 
 Deno.serve(async (req) => {
