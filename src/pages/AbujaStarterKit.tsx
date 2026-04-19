@@ -78,11 +78,11 @@ export default function AbujaStarterKit() {
         canonicalUrl="https://therizoproperties.com/abuja-starter-kit"
         keywords="Abuja diaspora property, Abuja land for sale, AGIS title verification, remote property buying Nigeria, Karsana Lugbe Kurudu Kuje Gwagwalada"
       />
-      <JsonLd
-        data={createBreadcrumbSchema([
+      <BreadcrumbJsonLd
+        items={[
           { name: "Home", url: "https://therizoproperties.com/" },
           { name: "Abuja Diaspora Starter Kit", url: "https://therizoproperties.com/abuja-starter-kit" },
-        ])}
+        ]}
       />
 
       <div className="bg-background">
