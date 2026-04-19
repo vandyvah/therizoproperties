@@ -44,6 +44,7 @@ import BlogPost from "./pages/BlogPost";
 import BlogCluster from "./pages/BlogCluster";
 import SEOHealth from "./pages/SEOHealth";
 import MaterialsSupply from "./pages/MaterialsSupply";
+import AbujaStarterKit from "./pages/AbujaStarterKit";
 import OwnerBrief from "./pages/owner/OwnerBrief";
 import SubmitProperty from "./pages/owner/SubmitProperty";
 import OwnerAdmin from "./pages/owner/OwnerAdmin";
@@ -73,6 +74,7 @@ const App = () => (
               <Route path="/vault" element={<Vault />} />
               <Route path="/press" element={<Press />} />
               <Route path="/materials-supply" element={<MaterialsSupply />} />
+              <Route path="/abuja-starter-kit" element={<AbujaStarterKit />} />
               <Route path="/style-guide" element={<StyleGuide />} />
               <Route path="/seo-health" element={<SEOHealth />} />
               
