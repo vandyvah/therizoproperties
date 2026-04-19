@@ -115,6 +115,14 @@
     <priority>0.9</priority>
   </url>
 
+  <!-- Abuja Diaspora Starter Kit -->
+  <url>
+    <loc>https://therizoproperties.com/abuja-starter-kit</loc>
+    <lastmod>2026-04-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
   <!-- Submit Property (Owner Funnel) -->
   <url>
     <loc>https://therizoproperties.com/submit-property</loc>
