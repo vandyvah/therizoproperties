@@ -1,6 +1,6 @@
 import { Layout } from "@/components/layout/Layout";
 import { SEOHead } from "@/components/seo/SEOHead";
-import { JsonLd, createBreadcrumbSchema } from "@/components/seo/JsonLd";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
