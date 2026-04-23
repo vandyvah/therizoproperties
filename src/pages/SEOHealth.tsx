@@ -88,6 +88,9 @@ export default function SEOHealth() {
 
       <section className="section-padding bg-ivory">
         <div className="container-wide space-y-8">
+          {/* NEW: Live Site Indexing Status */}
+          <SiteIndexingStatus />
+
           {/* Canonical Domain & Config */}
           <Card>
             <CardHeader>
