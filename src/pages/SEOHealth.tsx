@@ -1,5 +1,6 @@
 import { Layout } from "@/components/layout/Layout";
 import { SEOHead } from "@/components/seo/SEOHead";
+import { SiteIndexingStatus } from "@/components/seo/SiteIndexingStatus";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, XCircle, AlertCircle, Globe, FileText, Link as LinkIcon, Shield } from "lucide-react";
