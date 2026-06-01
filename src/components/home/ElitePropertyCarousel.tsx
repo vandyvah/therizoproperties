@@ -71,7 +71,7 @@ export function ElitePropertyCarousel() {
   });
 
   const properties = dynamicProperties;
-  if (properties.length === 0) return null;
+  
   const totalSlides = properties.length;
 
   useEffect(() => {
@@ -98,6 +98,7 @@ export function ElitePropertyCarousel() {
     return () => clearInterval(timer);
   }, [nextSlide, totalSlides]);
 
+  if (properties.length === 0) return null;
   const currentProperty = properties[currentIndex];
 
   return (
