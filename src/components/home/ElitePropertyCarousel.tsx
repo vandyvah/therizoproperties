@@ -5,9 +5,6 @@ import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useCurrency } from "@/components/currency/CurrencySwitcher";
-import property1 from "@/assets/property-1.jpg";
-import property2 from "@/assets/property-2.jpg";
-import property3 from "@/assets/property-3.jpg";
 
 type PropertyMedia = {
   file_url: string;
@@ -27,47 +24,6 @@ type PublicProperty = {
   property_media?: PropertyMedia[] | null;
 };
 
-const fallbackProperties = [
-  {
-    id: "fallback-1",
-    image: property1,
-    tag: "EXCLUSIVE",
-    title: "The Meridian Penthouse",
-    location: "Banana Island, Lagos",
-    price: "₦1.2B",
-    meta1: "Penthouse",
-    meta2: "Low risk",
-    meta3: "Lagos",
-    meta4: "Listed",
-    href: "/properties",
-  },
-  {
-    id: "fallback-2",
-    image: property2,
-    tag: "NEW LISTING",
-    title: "Azure Waterfront Villa",
-    location: "Eko Atlantic, Lagos",
-    price: "₦680M",
-    meta1: "Detached",
-    meta2: "Medium risk",
-    meta3: "Lagos",
-    meta4: "Listed",
-    href: "/properties",
-  },
-  {
-    id: "fallback-3",
-    image: property3,
-    tag: "PRIME LOCATION",
-    title: "The Crown Residences",
-    location: "Maitama, Abuja",
-    price: "₦450M",
-    meta1: "Apartment",
-    meta2: "Medium risk",
-    meta3: "Abuja",
-    meta4: "Listed",
-    href: "/properties",
-  },
-];
 
 export function ElitePropertyCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -96,7 +52,7 @@ export function ElitePropertyCarousel() {
     const media = (p.property_media || [])
       .slice()
       .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
-    const coverImage = media.find((m) => m.file_type === "image")?.file_url || property1;
+    const coverImage = media.find((m) => m.file_type === "image")?.file_url || "/placeholder.svg";
     const location = p.area ? `${p.area}, ${p.city}` : p.city;
     const href = `/properties/${p.slug || p.id}`;
     return {
@@ -114,7 +70,8 @@ export function ElitePropertyCarousel() {
     };
   });
 
-  const properties = dynamicProperties.length > 0 ? dynamicProperties : fallbackProperties;
+  const properties = dynamicProperties;
+  if (properties.length === 0) return null;
   const totalSlides = properties.length;
 
   useEffect(() => {

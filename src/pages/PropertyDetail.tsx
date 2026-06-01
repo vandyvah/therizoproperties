@@ -20,7 +20,7 @@ import {
   Phone,
   Mail
 } from "lucide-react";
-import property1 from "@/assets/property-1.jpg";
+
 
 interface PropertyMedia {
   file_url: string;
@@ -277,13 +277,8 @@ const PropertyDetail = () => {
                   />
                 </div>
               ) : (
-                <div className="relative aspect-[4/3] rounded-sm overflow-hidden">
-                  <img
-                    src={property1}
-                    alt={property.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                <div className="relative aspect-[4/3] rounded-sm overflow-hidden bg-gradient-to-br from-navy/10 via-sand to-navy/5 flex items-center justify-center">
+                  <span className="text-sm uppercase tracking-widest text-slate/60">Media coming soon</span>
                 </div>
               )}
 

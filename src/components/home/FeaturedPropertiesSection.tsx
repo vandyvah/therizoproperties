@@ -10,9 +10,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import property1 from "@/assets/property-1.jpg";
-import property2 from "@/assets/property-2.jpg";
-import property3 from "@/assets/property-3.jpg";
 
 type PropertyMedia = {
   file_url: string;
@@ -79,50 +76,11 @@ export function FeaturedPropertiesSection() {
     },
   });
 
-  const fallback = [
-    {
-      id: "fallback-1",
-      title: "4-Bedroom Terrace in Lekki Phase 1",
-      slug: null,
-      city: "Lagos",
-      area: "Lekki",
-      asking_price_ngn: 180000000,
-      risk_rating: "medium",
-      property_type: "Terrace",
-      description: "Secure estate, strong rental demand, serviced",
-      property_media: [{ file_url: property1, file_type: "image", sort_order: 0 }],
-    },
-    {
-      id: "fallback-2",
-      title: "Luxury Apartment in Ikoyi",
-      slug: null,
-      city: "Lagos",
-      area: "Ikoyi",
-      asking_price_ngn: 320000000,
-      risk_rating: "low",
-      property_type: "Apartment",
-      description: "High-floor unit, city and water views",
-      property_media: [{ file_url: property2, file_type: "image", sort_order: 0 }],
-    },
-    {
-      id: "fallback-3",
-      title: "Serviced Apartments in Abuja",
-      slug: null,
-      city: "Abuja",
-      area: "Maitama",
-      asking_price_ngn: 95000000,
-      risk_rating: "medium",
-      property_type: "Apartment",
-      description: "Ideal for corporate lets and Airbnb",
-      property_media: [{ file_url: property3, file_type: "image", sort_order: 0 }],
-    },
-  ] satisfies PublicProperty[];
-
-  const properties = (listings && listings.length > 0 ? listings : fallback).map((p) => {
+  const properties = (listings || []).map((p) => {
     const media = (p.property_media || [])
       .slice()
       .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
-    const coverImage = media.find((m) => m.file_type === "image")?.file_url || property1;
+    const coverImage = media.find((m) => m.file_type === "image")?.file_url || "/placeholder.svg";
     const location = p.area ? `${p.area}, ${p.city}` : p.city;
     return {
       ...p,
@@ -131,6 +89,8 @@ export function FeaturedPropertiesSection() {
       tag: p.property_type || "Listed",
     };
   });
+
+  if (properties.length === 0) return null;
 
   return (
     <section className="section-padding bg-background">
