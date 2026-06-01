@@ -3,7 +3,7 @@ import { ArrowRight, Newspaper, X, Star, Crown, CheckCircle } from "lucide-react
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import heroImage from "@/assets/hero-lagos.jpg";
+
 import { MiniROICalculator } from "./MiniROICalculator";
 
 interface Announcement {
@@ -67,15 +67,8 @@ export function HeroSection() {
         transform: `translateY(${scrollY * 0.3}px)`,
         willChange: 'transform'
       }}>
-          {/* Hero Background Image */}
-          <img 
-            src={heroImage} 
-            alt="Lagos cityscape - Premium Nigerian real estate" 
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-          
-          {/* Image Fallback (shows while video loads or if video fails) */}
-          <img src={heroImage} alt="Luxury Nigerian Real Estate" className="absolute inset-0 w-full h-full object-cover -z-10" />
+          {/* Hero Background — brand gradient (no stock imagery) */}
+          <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-navy via-navy to-navy-light" />
         </div>
         
         {/* Elite dark overlay - Brand Navy */}

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { OwnerLayout } from "@/components/owner/OwnerLayout";
-import heroImage from "@/assets/hero-lagos.jpg";
+
 import {
   DollarSign, Eye, ShieldCheck, Camera, Users, MapPin, Phone,
   TrendingUp, FileText, Globe, Calendar, CheckCircle, ArrowRight,
@@ -191,8 +191,8 @@ export default function OwnerBrief() {
     <OwnerLayout>
       {/* Hero */}
       <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
-        <img src={heroImage} alt="Lagos skyline" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0E1626]/90 via-[#0E1626]/80 to-[#0E1626]/95" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0E1626] via-[#0E1626] to-[#1a2a4a]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0E1626]/40 via-transparent to-[#0E1626]/80" />
         <div className="relative z-10 max-w-3xl mx-auto px-4 py-20 text-center space-y-6">
           <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight">
             Why Your Property Hasn't Sold <span className="text-[#C8A24A]">(Yet)</span> — And The 90-Day Plan That Fixes It

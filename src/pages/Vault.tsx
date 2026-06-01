@@ -31,45 +31,19 @@ interface VaultProperty {
   description: string | null;
 }
 
-// Simulated exclusive properties for demo (in production, these would come from a separate table)
-const exclusiveProperties = [
-  {
-    id: "vault-1",
-    title: "Waterfront Penthouse",
-    location: "Banana Island, Lagos",
-    price: "₦2.8B",
-    beds: 5,
-    baths: 6,
-    sqm: 850,
-    tag: "Ultra-Exclusive",
-    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&auto=format&fit=crop&q=60",
-    verified: true,
-  },
-  {
-    id: "vault-2",
-    title: "Ambassador's Residence",
-    location: "Maitama, Abuja",
-    price: "₦1.5B",
-    beds: 7,
-    baths: 8,
-    sqm: 1200,
-    tag: "Off-Market",
-    image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&auto=format&fit=crop&q=60",
-    verified: true,
-  },
-  {
-    id: "vault-3",
-    title: "Ocean View Estate",
-    location: "Oniru, Victoria Island",
-    price: "₦950M",
-    beds: 4,
-    baths: 5,
-    sqm: 520,
-    tag: "Pre-Market",
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&auto=format&fit=crop&q=60",
-    verified: true,
-  },
-];
+// Off-market opportunities are surfaced privately by consultants — no demo/stock data here.
+const exclusiveProperties: Array<{
+  id: string;
+  title: string;
+  location: string;
+  price: string;
+  beds: number;
+  baths: number;
+  sqm: number;
+  tag: string;
+  image: string;
+  verified: boolean;
+}> = [];
 
 export default function Vault() {
   const { user, session } = useAuth();
@@ -85,7 +59,6 @@ export default function Vault() {
         <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
           {/* Background */}
           <div className="absolute inset-0 bg-gradient-to-br from-navy via-navy to-navy-light" />
-          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&auto=format&fit=crop&q=60')] bg-cover bg-center opacity-10" />
           
           {/* Content */}
           <div className="relative z-10 text-center px-4 max-w-2xl mx-auto">
@@ -190,7 +163,7 @@ export default function Vault() {
       {/* Hero - Unlocked State */}
       <section className="relative py-20 md:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-navy via-navy to-navy-light" />
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&auto=format&fit=crop&q=60')] bg-cover bg-center opacity-10" />
+        
         
         <div className="relative z-10 container-wide">
           <div className="flex items-center gap-3 mb-6">

@@ -5,9 +5,6 @@ import { Users, MapPin, ArrowRight } from "lucide-react";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { JsonLd, createOrganizationSchema } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
-import bayoImage from "@/assets/team-bayo.jpg";
-import aishaImage from "@/assets/team-aisha.jpg";
-import kellyImage from "@/assets/team-kelly.png";
 
 const founder = {
   name: "Richard",
@@ -23,7 +20,7 @@ const consultants = [
     location: "Lagos Island",
     bio: "A distinguished mathematician and accounting professional, Mr. Solomon Adebayo brings analytical rigour and financial discipline to Therizo's operations. He oversees the firm's financial management, administrative processes, and ensures every transaction meets the highest standards of fiscal accountability and transparency.",
     initial: "S",
-    image: bayoImage,
+    image: null,
   },
   {
     name: "Mr Kelly Amiwero",
@@ -31,7 +28,7 @@ const consultants = [
     location: "FCT Abuja / Northern Region",
     bio: "Mr Kelly Amiwero oversees Therizo's operations across FCT Abuja and the Northern Region. He coordinates deal execution, manages consultant performance, and ensures operational standards are maintained across markets. With deep knowledge of the Abuja property landscape and northern investment corridors, he serves high-net-worth individuals, institutional clients, and diaspora investors seeking well-documented assets in Nigeria's political capital and emerging northern markets.",
     initial: "K",
-    image: kellyImage,
+    image: null,
   },
   {
     name: "Mrs Aisha Collins A.",
@@ -39,7 +36,7 @@ const consultants = [
     location: "FCT, Middle Belt, Ibadan, Port Harcourt & Emerging Markets",
     bio: "Mrs Aisha Collins A. leads Therizo's expansion into Nigeria's high-growth corridors, covering Inlands and Chief Lands in FCT, the Middle Belt Region, and emerging markets including Ibadan and Port Harcourt. Fluent in the three major Nigerian languages, she brings unmatched versatility across residential, commercial, and agricultural properties. Investors trust her to identify the right opportunities across diverse markets and deal structures.",
     initial: "A",
-    image: aishaImage,
+    image: null,
   },
 ];
 

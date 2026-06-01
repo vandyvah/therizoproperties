@@ -10,7 +10,7 @@ import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useCurrency } from "@/components/currency/CurrencySwitcher";
-import property1 from "@/assets/property-1.jpg";
+
 
 const propertyFAQs = [
   {
@@ -148,12 +148,9 @@ const Properties = () => {
                       loading="lazy"
                     />
                   ) : (
-                    <img
-                      src={property1}
-                      alt={property.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      loading="lazy"
-                    />
+                    <div className="w-full h-full bg-gradient-to-br from-navy/10 via-sand to-navy/5 flex items-center justify-center">
+                      <span className="text-xs uppercase tracking-widest text-slate/60">Media coming soon</span>
+                    </div>
                   )}
 
                   <Badge className="absolute top-4 left-4 bg-gold text-navy hover:bg-gold-dark">
