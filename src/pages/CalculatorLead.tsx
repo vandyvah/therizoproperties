@@ -482,12 +482,23 @@ Please send me your matching verified properties.`;
                   </ul>
                 </div>
 
-                <a href={whatsappLink()} target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" className="w-full bg-[#25D366] hover:bg-[#1ebe57] text-white font-bold h-14 text-base">
-                    <MessageCircle className="mr-2 h-5 w-5" />
-                    Send My Report on WhatsApp & Get Matched Properties
+                <div className="space-y-3">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    onClick={downloadPDF}
+                    className="w-full border-navy text-navy hover:bg-navy hover:text-white font-semibold h-12"
+                  >
+                    <Download className="mr-2 h-5 w-5" />
+                    Download My ROI Report (PDF)
                   </Button>
-                </a>
+                  <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="block">
+                    <Button size="lg" className="w-full bg-[#25D366] hover:bg-[#1ebe57] text-white font-bold h-14 text-base">
+                      <MessageCircle className="mr-2 h-5 w-5" />
+                      Send My Report on WhatsApp & Get Matched Properties
+                    </Button>
+                  </a>
+                </div>
                 <p className="text-xs text-center text-charcoal/60 mt-3 flex items-center justify-center gap-1.5">
                   <Clock className="h-3 w-3" /> Average consultant response: under 12 minutes during business hours.
                 </p>
