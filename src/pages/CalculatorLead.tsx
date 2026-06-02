@@ -137,6 +137,111 @@ Please send me your matching verified properties.`;
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
   };
 
+  const downloadPDF = () => {
+    if (!results) return;
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    const W = doc.internal.pageSize.getWidth();
+    const M = 48;
+    const NAVY: [number, number, number] = [8, 26, 47];
+    const GOLD: [number, number, number] = [201, 168, 76];
+    const GREY: [number, number, number] = [90, 90, 90];
+
+    // Header band
+    doc.setFillColor(...NAVY);
+    doc.rect(0, 0, W, 110, "F");
+    doc.setTextColor(...GOLD);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    doc.text("THERIZO PROPERTIES", M, 42);
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(20);
+    doc.text("Personalised ROI Report", M, 72);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.text(`Prepared for ${lead.name} · ${new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" })}`, M, 92);
+
+    let y = 150;
+    doc.setTextColor(...NAVY);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(13);
+    doc.text("Your Scenario", M, y); y += 18;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(...GREY);
+    const scenario = [
+      ["Strategy", strategy.replace("-", " ").replace(/\b\w/g, c => c.toUpperCase())],
+      ["Preferred Location", lead.location],
+      ["Budget Range", lead.budget],
+      ["Purchase Price", fmt(parseNum(price))],
+      ["Renovation / Fit-Out", fmt(parseNum(reno))],
+      ["Total Investment", fmt(results.investment)],
+    ];
+    scenario.forEach(([k, v]) => {
+      doc.setTextColor(...GREY); doc.text(k, M, y);
+      doc.setTextColor(...NAVY); doc.setFont("helvetica", "bold");
+      doc.text(String(v), W - M, y, { align: "right" });
+      doc.setFont("helvetica", "normal");
+      y += 16;
+    });
+
+    y += 16;
+    doc.setDrawColor(...GOLD); doc.setLineWidth(1);
+    doc.line(M, y, W - M, y); y += 24;
+
+    doc.setTextColor(...NAVY); doc.setFont("helvetica", "bold"); doc.setFontSize(13);
+    doc.text("Projected Returns", M, y); y += 8;
+
+    // Big number cards
+    const cardW = (W - M * 2 - 16) / 2;
+    const cards: Array<[string, string]> = [
+      ["Net Annual Income", fmt(results.net)],
+      ["Annual ROI", `${results.roi.toFixed(1)}%`],
+      ["Payback Period", results.payback > 0 ? `${results.payback.toFixed(1)} years` : "—"],
+      ["10-Year Wealth Est.", fmt(results.tenYr)],
+    ];
+    cards.forEach(([label, val], i) => {
+      const col = i % 2; const row = Math.floor(i / 2);
+      const x = M + col * (cardW + 16);
+      const cy = y + 12 + row * 78;
+      doc.setFillColor(247, 244, 237);
+      doc.roundedRect(x, cy, cardW, 64, 6, 6, "F");
+      doc.setTextColor(...GREY); doc.setFont("helvetica", "normal"); doc.setFontSize(8);
+      doc.text(label.toUpperCase(), x + 14, cy + 20);
+      doc.setTextColor(...NAVY); doc.setFont("helvetica", "bold"); doc.setFontSize(18);
+      doc.text(val, x + 14, cy + 46);
+    });
+    y += 12 + Math.ceil(cards.length / 2) * 78 + 16;
+
+    // Methodology
+    doc.setTextColor(...NAVY); doc.setFont("helvetica", "bold"); doc.setFontSize(11);
+    doc.text("How we calculated this", M, y); y += 16;
+    doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(...GREY);
+    const notes = doc.splitTextToSize(
+      "Gross income is derived from your inputs (rent / nightly rate × occupancy / resale value). Net income applies an 18% blended deduction for management, maintenance, insurance and vacancy — typical for the Nigerian market. The 10-year wealth estimate compounds net cashflow and adds a conservative 60% capital appreciation over a decade. These projections are indicative, not guaranteed.",
+      W - M * 2,
+    );
+    doc.text(notes, M, y); y += notes.length * 12 + 18;
+
+    // Next steps box
+    doc.setFillColor(...NAVY);
+    doc.roundedRect(M, y, W - M * 2, 110, 8, 8, "F");
+    doc.setTextColor(...GOLD); doc.setFont("helvetica", "bold"); doc.setFontSize(10);
+    doc.text("YOUR NEXT STEP", M + 18, y + 24);
+    doc.setTextColor(255, 255, 255); doc.setFontSize(13);
+    doc.text("Get 3–5 hand-matched verified properties for your budget.", M + 18, y + 46);
+    doc.setFont("helvetica", "normal"); doc.setFontSize(10);
+    doc.text("WhatsApp a senior consultant: +234 803 483 0087", M + 18, y + 68);
+    doc.text("Email: hello@therizoproperties.com   ·   therizoproperties.com", M + 18, y + 86);
+
+    // Footer
+    const fy = doc.internal.pageSize.getHeight() - 28;
+    doc.setTextColor(...GREY); doc.setFontSize(7); doc.setFont("helvetica", "normal");
+    doc.text("Therizo Properties · Prime Property for The Right Amount · Confidential to recipient", M, fy);
+    doc.text(`Ref: ${Date.now().toString(36).toUpperCase()}`, W - M, fy, { align: "right" });
+
+    doc.save(`Therizo-ROI-Report-${lead.name.split(" ")[0] || "Investor"}.pdf`);
+  };
+
   return (
     <Layout>
       <SEOHead
