@@ -66,7 +66,8 @@ const App = () => (
             <ScrollManager />
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/calculator" element={<Calculator />} />
+              <Route path="/calculator" element={<CalculatorLead />} />
+              <Route path="/calculator/advanced" element={<Calculator />} />
               <Route path="/our-standard" element={<OurStandard />} />
               <Route path="/team" element={<Team />} />
               <Route path="/contact" element={<Contact />} />
