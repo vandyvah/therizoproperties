@@ -9,6 +9,7 @@ import { CurrencyProvider } from "@/components/currency/CurrencySwitcher";
 import { ScrollManager } from "@/components/ScrollManager";
 import Index from "./pages/Index";
 import Calculator from "./pages/Calculator";
+import CalculatorLead from "./pages/CalculatorLead";
 import OurStandard from "./pages/OurStandard";
 import Team from "./pages/Team";
 import Contact from "./pages/Contact";
