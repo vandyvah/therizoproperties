@@ -10,9 +10,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import {
   ArrowRight, Loader2, Lock, CheckCircle2, TrendingUp,
-  Zap, ShieldCheck, Clock, MessageCircle, Sparkles, Trophy,
+  Zap, ShieldCheck, Clock, MessageCircle, Sparkles, Trophy, Download,
 } from "lucide-react";
 import { SEOHead } from "@/components/seo/SEOHead";
+import { jsPDF } from "jspdf";
 
 const WHATSAPP_NUMBER = "2348034830087";
 
