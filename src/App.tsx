@@ -9,6 +9,7 @@ import { CurrencyProvider } from "@/components/currency/CurrencySwitcher";
 import { ScrollManager } from "@/components/ScrollManager";
 import Index from "./pages/Index";
 import Calculator from "./pages/Calculator";
+import CalculatorLead from "./pages/CalculatorLead";
 import OurStandard from "./pages/OurStandard";
 import Team from "./pages/Team";
 import Contact from "./pages/Contact";
@@ -65,7 +66,8 @@ const App = () => (
             <ScrollManager />
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/calculator" element={<Calculator />} />
+              <Route path="/calculator" element={<CalculatorLead />} />
+              <Route path="/calculator/advanced" element={<Calculator />} />
               <Route path="/our-standard" element={<OurStandard />} />
               <Route path="/team" element={<Team />} />
               <Route path="/contact" element={<Contact />} />
