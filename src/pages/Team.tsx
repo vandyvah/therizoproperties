@@ -6,7 +6,8 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { JsonLd, createOrganizationSchema } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 
-import founderImage from "@/assets/founder-ugo.png";
+import founderAsset from "@/assets/founder-ugo.jpg.asset.json";
+const founderImage = founderAsset.url;
 
 const founder = {
   name: "Ugo Uzoukwu",
