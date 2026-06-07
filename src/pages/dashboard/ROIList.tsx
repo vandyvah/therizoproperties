@@ -28,6 +28,11 @@ interface ROICalculation {
   cash_on_cash_return_pct: number;
   payback_period_years: number;
   created_at: string;
+  lead_name: string | null;
+  lead_email: string | null;
+  lead_phone: string | null;
+  source: string | null;
+  utm_source: string | null;
   properties?: { title: string } | null;
   clients?: { full_name: string } | null;
   profiles?: { full_name: string } | null;
