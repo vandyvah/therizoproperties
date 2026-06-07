@@ -134,13 +134,14 @@ export default function ROIList() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Property / Location</TableHead>
-                  <TableHead>Client</TableHead>
+                  <TableHead>Lead / Client</TableHead>
+                  <TableHead>Contact</TableHead>
+                  <TableHead>Source</TableHead>
                   <TableHead>Strategy</TableHead>
                   <TableHead>Purchase Price</TableHead>
                   <TableHead>Net Annual Income</TableHead>
                   <TableHead>Cash-on-Cash</TableHead>
                   <TableHead>Payback</TableHead>
-                  <TableHead>Created By</TableHead>
                   <TableHead>Date</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
@@ -148,7 +149,7 @@ export default function ROIList() {
               <TableBody>
                 {calculations.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={10} className="text-center text-muted-foreground py-8">
+                    <TableCell colSpan={11} className="text-center text-muted-foreground py-8">
                       No ROI calculations found
                     </TableCell>
                   </TableRow>
