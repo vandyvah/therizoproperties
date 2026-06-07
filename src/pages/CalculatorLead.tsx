@@ -252,7 +252,7 @@ Please send me your matching verified properties.`;
       <section className="bg-gradient-to-br from-navy via-navy to-navy-light text-white">
         <div className="container max-w-5xl py-16 md:py-24 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/15 text-gold text-xs font-semibold uppercase tracking-wider mb-6">
-            <Sparkles className="h-3.5 w-3.5" /> Free Tool · 60 Seconds · No Signup To Start
+            <Sparkles className="h-3.5 w-3.5" /> Free Tool · 60 Seconds · Personalised PDF Report
           </div>
           <h1 className="font-display text-4xl md:text-6xl font-bold leading-tight mb-5">
             See Exactly How Much Your Next Nigerian Property Will <span className="text-gold">Pay You</span> — Before You Buy a Brick.
