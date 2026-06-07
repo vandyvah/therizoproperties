@@ -89,7 +89,7 @@ const Team = () => {
         <div className="container-wide">
           <div className="grid lg:grid-cols-5 gap-10 lg:gap-16 items-center">
             <div className="lg:col-span-2">
-              <div className="relative max-w-md mx-auto lg:mx-0">
+              <div className="relative max-w-[220px] sm:max-w-[260px] mx-auto lg:mx-0">
                 <div className="absolute -inset-3 bg-gradient-to-br from-gold/30 to-navy/20 rounded-sm blur-2xl opacity-60" />
                 <div className="relative aspect-[4/5] overflow-hidden rounded-sm border-2 border-gold/30 shadow-therizo-lg bg-navy">
                   <img
