@@ -64,26 +64,31 @@ Deno.serve(async (req) => {
       });
     }
 
-    const apiKey = Deno.env.get("RESEND_API_KEY");
-    if (!apiKey) {
-      // No email provider configured yet — return 200 so the frontend flow is unaffected.
-      console.log("[roi-lead-email] RESEND_API_KEY not set; skipping send", { email: payload.email });
+    const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+    const resendKey = Deno.env.get("RESEND_API_KEY");
+    if (!lovableKey || !resendKey) {
+      console.log("[roi-lead-email] missing gateway keys; skipping send", {
+        hasLovable: !!lovableKey,
+        hasResend: !!resendKey,
+      });
       return new Response(JSON.stringify({ ok: true, skipped: "no_api_key" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
     const html = buildHtml(payload);
-    const res = await fetch("https://api.resend.com/emails", {
+    const res = await fetch("https://connector-gateway.lovable.dev/resend/emails", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${lovableKey}`,
+        "X-Connection-Api-Key": resendKey,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         from: FROM_EMAIL,
         to: [payload.email],
         bcc: BCC ? [BCC] : undefined,
+        reply_to: BCC || undefined,
         subject: `Your Therizo ROI report — ${payload.results.roi.toFixed(1)}% projected return`,
         html,
       }),
@@ -91,13 +96,14 @@ Deno.serve(async (req) => {
 
     const data = await res.json().catch(() => ({}));
     if (!res.ok) {
-      console.error("[roi-lead-email] resend error", res.status, data);
+      console.error("[roi-lead-email] gateway error", res.status, data);
       return new Response(JSON.stringify({ ok: false, error: data }), {
-        status: 200, // never break the frontend
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
+    console.log("[roi-lead-email] sent", { to: payload.email, id: data.id });
     return new Response(JSON.stringify({ ok: true, id: data.id }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
