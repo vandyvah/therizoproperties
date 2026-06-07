@@ -1,9 +1,10 @@
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -31,12 +32,21 @@ const LOCATIONS = [
 
 const BUDGETS = ["Under ₦20M", "₦20M – ₦50M", "₦50M – ₦150M", "₦150M – ₦500M", "₦500M+"];
 
+const phoneRegex = /^[+\d][\d\s().-]{6,29}$/;
+
 const leadSchema = z.object({
   name: z.string().trim().min(2, "Enter your full name").max(100),
   email: z.string().trim().email("Enter a valid email").max(255),
-  phone: z.string().trim().max(30).optional().or(z.literal("")),
+  phone: z
+    .string()
+    .trim()
+    .max(30)
+    .optional()
+    .or(z.literal(""))
+    .refine((v) => !v || phoneRegex.test(v), "Enter a valid phone number"),
   budget: z.string().optional().or(z.literal("")),
   location: z.string().optional().or(z.literal("")),
+  whatsappConsent: z.boolean().optional(),
 });
 
 const fmt = (n: number) =>
@@ -46,6 +56,12 @@ const shortFmt = (n: number) =>
   n >= 1e9 ? `₦${(n / 1e9).toFixed(2)}B` : n >= 1e6 ? `₦${(n / 1e6).toFixed(1)}M` : `₦${Math.round(n).toLocaleString()}`;
 
 const parseNum = (s: string) => parseFloat(s.replace(/[^\d.]/g, "")) || 0;
+
+const strategyToDb = (s: string): "long_term_rental" | "airbnb" | "compare" => {
+  if (s === "airbnb") return "airbnb";
+  if (s === "flip") return "compare";
+  return "long_term_rental";
+};
 
 export default function CalculatorLead() {
   const { toast } = useToast();
@@ -57,9 +73,37 @@ export default function CalculatorLead() {
   const [nightly, setNightly] = useState("");
   const [occupancy, setOccupancy] = useState("65");
   const [sellPrice, setSellPrice] = useState("");
-  const [lead, setLead] = useState({ name: "", email: "", phone: "", budget: "", location: "" });
+  const [lead, setLead] = useState({
+    name: "", email: "", phone: "", budget: "", location: "", whatsappConsent: true,
+  });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
+  const honeypotRef = useRef<HTMLInputElement>(null);
+  const mountedAtRef = useRef<number>(Date.now());
+  const [utm, setUtm] = useState({
+    utm_source: "", utm_medium: "", utm_campaign: "", utm_term: "", utm_content: "", referrer: "",
+  });
+  const submissionIdRef = useRef<string | null>(null);
+
+  // Capture UTM + referrer once on mount
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const captured = {
+        utm_source: params.get("utm_source") || sessionStorage.getItem("utm_source") || "",
+        utm_medium: params.get("utm_medium") || sessionStorage.getItem("utm_medium") || "",
+        utm_campaign: params.get("utm_campaign") || sessionStorage.getItem("utm_campaign") || "",
+        utm_term: params.get("utm_term") || sessionStorage.getItem("utm_term") || "",
+        utm_content: params.get("utm_content") || sessionStorage.getItem("utm_content") || "",
+        referrer: document.referrer || "",
+      };
+      // Persist for session so direct calculator visits after first landing still attribute
+      Object.entries(captured).forEach(([k, v]) => v && sessionStorage.setItem(k, v));
+      setUtm(captured);
+    } catch {
+      /* noop */
+    }
+  }, []);
 
   const results = useMemo(() => {
     const investment = parseNum(price) + parseNum(reno);
@@ -79,6 +123,16 @@ export default function CalculatorLead() {
   const canAdvance = !!results && results.investment > 0 && results.gross > 0;
 
   const handleCaptureLead = async () => {
+    // Spam prevention: honeypot must be empty + form must take >1.5s to fill
+    if (honeypotRef.current && honeypotRef.current.value) {
+      toast({ title: "Submission blocked", description: "Spam check failed.", variant: "destructive" });
+      return;
+    }
+    if (Date.now() - mountedAtRef.current < 1500) {
+      toast({ title: "Please take a moment", description: "Form submitted too fast.", variant: "destructive" });
+      return;
+    }
+
     const parsed = leadSchema.safeParse(lead);
     if (!parsed.success) {
       const e: Record<string, string> = {};
@@ -89,17 +143,29 @@ export default function CalculatorLead() {
     setErrors({});
     setSubmitting(true);
     try {
-      const { error } = await supabase.from("contact_submissions").insert({
-        name: lead.name,
-        email: lead.email,
-        phone: lead.phone || null,
-        budget: lead.budget || null,
-        preferred_location: lead.location || null,
-        client_type: "investor",
-        message: "Started ROI calculator — awaiting scenario inputs.",
-        page: "roi-calculator",
-      });
+      const { data, error } = await supabase
+        .from("contact_submissions")
+        .insert({
+          name: lead.name,
+          email: lead.email,
+          phone: lead.phone || null,
+          budget: lead.budget || null,
+          preferred_location: lead.location || null,
+          client_type: "investor",
+          message: "Started ROI calculator — awaiting scenario inputs.",
+          page: "roi-calculator",
+          utm_source: utm.utm_source || null,
+          utm_medium: utm.utm_medium || null,
+          utm_campaign: utm.utm_campaign || null,
+          utm_term: utm.utm_term || null,
+          utm_content: utm.utm_content || null,
+          referrer: utm.referrer || null,
+          whatsapp_consent: !!lead.whatsappConsent && !!lead.phone,
+        })
+        .select("id")
+        .single();
       if (error) throw error;
+      submissionIdRef.current = data?.id ?? null;
       setStep(2);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err: any) {
@@ -109,10 +175,61 @@ export default function CalculatorLead() {
     }
   };
 
-  const handleReveal = () => {
-    if (!canAdvance) return;
+  const handleReveal = async () => {
+    if (!canAdvance || !results) return;
     setStep(3);
     window.scrollTo({ top: 0, behavior: "smooth" });
+
+    // Mirror the completed scenario to the dashboard so consultants see it under /dashboard/roi
+    try {
+      await supabase.from("roi_calculations").insert({
+        strategy: strategyToDb(strategy),
+        property_location: lead.location || null,
+        purchase_price_ngn: parseNum(price),
+        renovation_cost_ngn: parseNum(reno),
+        monthly_rent_ngn: strategy === "long-term" ? parseNum(monthly) : null,
+        airbnb_nightly_rate_ngn: strategy === "airbnb" ? parseNum(nightly) : null,
+        airbnb_occupancy_rate_pct: strategy === "airbnb" ? parseNum(occupancy) : null,
+        gross_annual_income_ngn: results.gross,
+        net_annual_income_ngn: results.net,
+        cash_on_cash_return_pct: results.roi,
+        payback_period_years: results.payback,
+        lead_name: lead.name,
+        lead_email: lead.email,
+        lead_phone: lead.phone || null,
+        source: "website-calculator",
+        utm_source: utm.utm_source || null,
+        utm_medium: utm.utm_medium || null,
+        utm_campaign: utm.utm_campaign || null,
+      });
+    } catch (err) {
+      console.warn("[roi-lead] dashboard sync failed", err);
+    }
+
+    // Fire-and-forget: send confirmation email + summary (graceful if function not deployed)
+    try {
+      await supabase.functions.invoke("roi-lead-email", {
+        body: {
+          name: lead.name,
+          email: lead.email,
+          phone: lead.phone || null,
+          whatsappConsent: !!lead.whatsappConsent && !!lead.phone,
+          strategy,
+          location: lead.location,
+          budget: lead.budget,
+          results: {
+            investment: results.investment,
+            net: results.net,
+            roi: results.roi,
+            payback: results.payback,
+            tenYr: results.tenYr,
+          },
+          submissionId: submissionIdRef.current,
+        },
+      });
+    } catch (err) {
+      console.warn("[roi-lead] email function call failed", err);
+    }
   };
 
   const whatsappLink = () => {
@@ -319,8 +436,42 @@ Please send me your matching verified properties.`;
                   <Label htmlFor="phone" className="text-sm font-semibold text-navy">
                     WhatsApp / Phone <span className="text-charcoal/50 font-normal">(optional — fastest way to get matched listings)</span>
                   </Label>
-                  <Input id="phone" value={lead.phone} onChange={(e) => setLead({ ...lead, phone: e.target.value })} placeholder="+44 7XXX XXXXXX" />
+                  <Input
+                    id="phone"
+                    type="tel"
+                    inputMode="tel"
+                    autoComplete="tel"
+                    value={lead.phone}
+                    onChange={(e) => setLead({ ...lead, phone: e.target.value })}
+                    placeholder="+44 7XXX XXXXXX"
+                  />
                   {errors.phone && <p className="text-xs text-destructive mt-1">{errors.phone}</p>}
+                </div>
+
+                {lead.phone && (
+                  <label className="flex items-start gap-3 cursor-pointer select-none rounded-lg border border-navy/10 bg-sand/40 p-3">
+                    <Checkbox
+                      checked={!!lead.whatsappConsent}
+                      onCheckedChange={(v) => setLead({ ...lead, whatsappConsent: v === true })}
+                      className="mt-0.5"
+                    />
+                    <span className="text-xs text-charcoal/80 leading-relaxed">
+                      <strong className="text-navy">Send me WhatsApp updates</strong> — new verified listings, market notes, and a direct line to a senior consultant. No spam, opt out any time.
+                    </span>
+                  </label>
+                )}
+
+                {/* Honeypot — hidden from real users, filled by bots */}
+                <div aria-hidden="true" className="absolute -left-[9999px] top-auto h-0 w-0 overflow-hidden">
+                  <label htmlFor="website">Website</label>
+                  <input
+                    ref={honeypotRef}
+                    id="website"
+                    name="website"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
                 </div>
 
                 <Button

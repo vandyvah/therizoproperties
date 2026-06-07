@@ -28,6 +28,11 @@ interface ROICalculation {
   cash_on_cash_return_pct: number;
   payback_period_years: number;
   created_at: string;
+  lead_name: string | null;
+  lead_email: string | null;
+  lead_phone: string | null;
+  source: string | null;
+  utm_source: string | null;
   properties?: { title: string } | null;
   clients?: { full_name: string } | null;
   profiles?: { full_name: string } | null;
@@ -129,13 +134,14 @@ export default function ROIList() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Property / Location</TableHead>
-                  <TableHead>Client</TableHead>
+                  <TableHead>Lead / Client</TableHead>
+                  <TableHead>Contact</TableHead>
+                  <TableHead>Source</TableHead>
                   <TableHead>Strategy</TableHead>
                   <TableHead>Purchase Price</TableHead>
                   <TableHead>Net Annual Income</TableHead>
                   <TableHead>Cash-on-Cash</TableHead>
                   <TableHead>Payback</TableHead>
-                  <TableHead>Created By</TableHead>
                   <TableHead>Date</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
@@ -143,7 +149,7 @@ export default function ROIList() {
               <TableBody>
                 {calculations.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={10} className="text-center text-muted-foreground py-8">
+                    <TableCell colSpan={11} className="text-center text-muted-foreground py-8">
                       No ROI calculations found
                     </TableCell>
                   </TableRow>
@@ -153,7 +159,35 @@ export default function ROIList() {
                       <TableCell className="font-medium max-w-[200px] truncate">
                         {calc.properties?.title || calc.property_location || "-"}
                       </TableCell>
-                      <TableCell>{calc.clients?.full_name || "-"}</TableCell>
+                      <TableCell>
+                        {calc.lead_name || calc.clients?.full_name || "-"}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        {calc.lead_email && (
+                          <div>
+                            <a href={`mailto:${calc.lead_email}`} className="text-primary hover:underline">
+                              {calc.lead_email}
+                            </a>
+                          </div>
+                        )}
+                        {calc.lead_phone && (
+                          <div className="text-muted-foreground">
+                            <a href={`tel:${calc.lead_phone}`} className="hover:underline">
+                              {calc.lead_phone}
+                            </a>
+                          </div>
+                        )}
+                        {!calc.lead_email && !calc.lead_phone && "-"}
+                      </TableCell>
+                      <TableCell>
+                        {calc.source === "website-calculator" ? (
+                          <Badge className="bg-gold/15 text-gold border-gold/30" variant="outline">
+                            Website Lead
+                          </Badge>
+                        ) : (
+                          <Badge variant="outline">{calc.profiles?.full_name || "Internal"}</Badge>
+                        )}
+                      </TableCell>
                       <TableCell>
                         <Badge variant="secondary">{strategyLabels[calc.strategy]}</Badge>
                       </TableCell>
@@ -163,7 +197,6 @@ export default function ROIList() {
                       </TableCell>
                       <TableCell>{calc.cash_on_cash_return_pct.toFixed(2)}%</TableCell>
                       <TableCell>{calc.payback_period_years.toFixed(1)} yrs</TableCell>
-                      <TableCell>{calc.profiles?.full_name || "-"}</TableCell>
                       <TableCell className="text-muted-foreground text-sm">
                         {new Date(calc.created_at).toLocaleDateString()}
                       </TableCell>
