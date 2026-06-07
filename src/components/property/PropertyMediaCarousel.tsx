@@ -96,9 +96,11 @@ export function PropertyMediaCarousel({ media, propertyTitle, className }: Prope
             fullscreen ? "max-w-full max-h-full" : "w-full h-full object-cover"
           )}
           playsInline
+          controls
+          preload="metadata"
           onEnded={handleVideoEnded}
-          onClick={togglePlay}
-          poster=""
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
         />
       ) : (
         <img
