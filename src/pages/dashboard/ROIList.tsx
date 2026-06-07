@@ -159,7 +159,35 @@ export default function ROIList() {
                       <TableCell className="font-medium max-w-[200px] truncate">
                         {calc.properties?.title || calc.property_location || "-"}
                       </TableCell>
-                      <TableCell>{calc.clients?.full_name || "-"}</TableCell>
+                      <TableCell>
+                        {calc.lead_name || calc.clients?.full_name || "-"}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        {calc.lead_email && (
+                          <div>
+                            <a href={`mailto:${calc.lead_email}`} className="text-primary hover:underline">
+                              {calc.lead_email}
+                            </a>
+                          </div>
+                        )}
+                        {calc.lead_phone && (
+                          <div className="text-muted-foreground">
+                            <a href={`tel:${calc.lead_phone}`} className="hover:underline">
+                              {calc.lead_phone}
+                            </a>
+                          </div>
+                        )}
+                        {!calc.lead_email && !calc.lead_phone && "-"}
+                      </TableCell>
+                      <TableCell>
+                        {calc.source === "website-calculator" ? (
+                          <Badge className="bg-gold/15 text-gold border-gold/30" variant="outline">
+                            Website Lead
+                          </Badge>
+                        ) : (
+                          <Badge variant="outline">{calc.profiles?.full_name || "Internal"}</Badge>
+                        )}
+                      </TableCell>
                       <TableCell>
                         <Badge variant="secondary">{strategyLabels[calc.strategy]}</Badge>
                       </TableCell>
@@ -169,7 +197,6 @@ export default function ROIList() {
                       </TableCell>
                       <TableCell>{calc.cash_on_cash_return_pct.toFixed(2)}%</TableCell>
                       <TableCell>{calc.payback_period_years.toFixed(1)} yrs</TableCell>
-                      <TableCell>{calc.profiles?.full_name || "-"}</TableCell>
                       <TableCell className="text-muted-foreground text-sm">
                         {new Date(calc.created_at).toLocaleDateString()}
                       </TableCell>
