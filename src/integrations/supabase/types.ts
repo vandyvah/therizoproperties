@@ -1112,6 +1112,7 @@ export type Database = {
           utm_campaign: string | null
           utm_medium: string | null
           utm_source: string | null
+          whatsapp_consent: boolean
         }
         Insert: {
           airbnb_nightly_rate_ngn?: number | null
@@ -1143,6 +1144,7 @@ export type Database = {
           utm_campaign?: string | null
           utm_medium?: string | null
           utm_source?: string | null
+          whatsapp_consent?: boolean
         }
         Update: {
           airbnb_nightly_rate_ngn?: number | null
@@ -1174,6 +1176,7 @@ export type Database = {
           utm_campaign?: string | null
           utm_medium?: string | null
           utm_source?: string | null
+          whatsapp_consent?: boolean
         }
         Relationships: [
           {
