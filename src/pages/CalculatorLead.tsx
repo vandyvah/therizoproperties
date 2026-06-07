@@ -78,7 +78,7 @@ export default function CalculatorLead() {
 
   const canAdvance = !!results && results.investment > 0 && results.gross > 0;
 
-  const handleUnlock = async () => {
+  const handleCaptureLead = async () => {
     const parsed = leadSchema.safeParse(lead);
     if (!parsed.success) {
       const e: Record<string, string> = {};
@@ -89,32 +89,30 @@ export default function CalculatorLead() {
     setErrors({});
     setSubmitting(true);
     try {
-      const summary = `ROI Calculator Lead
-Strategy: ${strategy}
-Investment: ${fmt(results!.investment)}
-Projected Annual Net: ${fmt(results!.net)}
-Projected ROI: ${results!.roi.toFixed(1)}%
-Payback: ${results!.payback.toFixed(1)} yrs
-10-Year Wealth Est.: ${fmt(results!.tenYr)}`;
-
       const { error } = await supabase.from("contact_submissions").insert({
         name: lead.name,
         email: lead.email,
-        phone: lead.phone,
-        budget: lead.budget,
-        preferred_location: lead.location,
+        phone: lead.phone || null,
+        budget: lead.budget || null,
+        preferred_location: lead.location || null,
         client_type: "investor",
-        message: summary,
+        message: "Started ROI calculator — awaiting scenario inputs.",
         page: "roi-calculator",
       });
       if (error) throw error;
-      setStep(3);
+      setStep(2);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err: any) {
       toast({ title: "Could not save", description: err.message ?? "Try again", variant: "destructive" });
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleReveal = () => {
+    if (!canAdvance) return;
+    setStep(3);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const whatsappLink = () => {
