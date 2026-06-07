@@ -6,7 +6,7 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { JsonLd, createOrganizationSchema } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 
-import founderAsset from "@/assets/founder-ugo.jpg.asset.json";
+import founderAsset from "@/assets/founder-ugo-v2.png.asset.json";
 const founderImage = founderAsset.url;
 
 const founder = {
@@ -89,14 +89,15 @@ const Team = () => {
         <div className="container-wide">
           <div className="grid lg:grid-cols-5 gap-10 lg:gap-16 items-center">
             <div className="lg:col-span-2">
-              <div className="relative w-[140px] sm:w-[160px] md:w-[180px] mx-auto lg:mx-0">
+              <div className="relative w-[160px] sm:w-[180px] md:w-[200px] mx-auto lg:mx-0">
                 <div className="absolute -inset-2 bg-gradient-to-br from-gold/30 to-navy/20 rounded-sm blur-xl opacity-60" />
-                <div className="relative aspect-[3/4] overflow-hidden rounded-sm border-2 border-gold/30 shadow-therizo-lg bg-navy">
+                <div className="relative aspect-square overflow-hidden rounded-sm border-2 border-gold/30 shadow-therizo-lg bg-navy">
                   <img
                     src={founder.image}
                     alt={`${founder.name}, Founder & CEO of Therizo Properties`}
-                    className="w-full h-full object-cover object-top"
+                    className="w-full h-full object-cover object-center"
                     loading="eager"
+                    decoding="async"
                   />
                 </div>
               </div>
