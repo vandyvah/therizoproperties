@@ -436,8 +436,42 @@ Please send me your matching verified properties.`;
                   <Label htmlFor="phone" className="text-sm font-semibold text-navy">
                     WhatsApp / Phone <span className="text-charcoal/50 font-normal">(optional — fastest way to get matched listings)</span>
                   </Label>
-                  <Input id="phone" value={lead.phone} onChange={(e) => setLead({ ...lead, phone: e.target.value })} placeholder="+44 7XXX XXXXXX" />
+                  <Input
+                    id="phone"
+                    type="tel"
+                    inputMode="tel"
+                    autoComplete="tel"
+                    value={lead.phone}
+                    onChange={(e) => setLead({ ...lead, phone: e.target.value })}
+                    placeholder="+44 7XXX XXXXXX"
+                  />
                   {errors.phone && <p className="text-xs text-destructive mt-1">{errors.phone}</p>}
+                </div>
+
+                {lead.phone && (
+                  <label className="flex items-start gap-3 cursor-pointer select-none rounded-lg border border-navy/10 bg-sand/40 p-3">
+                    <Checkbox
+                      checked={!!lead.whatsappConsent}
+                      onCheckedChange={(v) => setLead({ ...lead, whatsappConsent: v === true })}
+                      className="mt-0.5"
+                    />
+                    <span className="text-xs text-charcoal/80 leading-relaxed">
+                      <strong className="text-navy">Send me WhatsApp updates</strong> — new verified listings, market notes, and a direct line to a senior consultant. No spam, opt out any time.
+                    </span>
+                  </label>
+                )}
+
+                {/* Honeypot — hidden from real users, filled by bots */}
+                <div aria-hidden="true" className="absolute -left-[9999px] top-auto h-0 w-0 overflow-hidden">
+                  <label htmlFor="website">Website</label>
+                  <input
+                    ref={honeypotRef}
+                    id="website"
+                    name="website"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
                 </div>
 
                 <Button
