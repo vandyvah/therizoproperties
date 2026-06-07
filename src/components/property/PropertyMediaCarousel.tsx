@@ -55,13 +55,21 @@ export function PropertyMediaCarousel({ media, propertyTitle, className }: Prope
   };
 
   const togglePlay = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
+    const v = videoRef.current;
+    if (!v) return;
+    if (isPlaying) {
+      v.pause();
+      setIsPlaying(false);
+    } else {
+      const p = v.play();
+      if (p && typeof p.then === "function") {
+        p.then(() => setIsPlaying(true)).catch((err) => {
+          console.error("Video play failed:", err);
+          setIsPlaying(false);
+        });
       } else {
-        videoRef.current.play();
+        setIsPlaying(true);
       }
-      setIsPlaying(!isPlaying);
     }
   };
 
