@@ -198,6 +198,7 @@ export default function CalculatorLead() {
         lead_email: lead.email,
         lead_phone: lead.phone || null,
         source: "website-calculator",
+        whatsapp_consent: !!lead.whatsappConsent && !!lead.phone,
         utm_source: utm.utm_source || null,
         utm_medium: utm.utm_medium || null,
         utm_campaign: utm.utm_campaign || null,
@@ -648,12 +649,21 @@ Please send me your matching verified properties.`;
                     <Download className="mr-2 h-5 w-5" />
                     Download My ROI Report (PDF)
                   </Button>
-                  <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="block">
-                    <Button size="lg" className="w-full bg-[#25D366] hover:bg-[#1ebe57] text-white font-bold h-14 text-base">
-                      <MessageCircle className="mr-2 h-5 w-5" />
-                      Send My Report on WhatsApp & Get Matched Properties
-                    </Button>
-                  </a>
+                  {lead.whatsappConsent && lead.phone ? (
+                    <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="block">
+                      <Button size="lg" className="w-full bg-[#25D366] hover:bg-[#1ebe57] text-white font-bold h-14 text-base">
+                        <MessageCircle className="mr-2 h-5 w-5" />
+                        Send My Report on WhatsApp & Get Matched Properties
+                      </Button>
+                    </a>
+                  ) : (
+                    <a href={`mailto:hello@therizoproperties.com?subject=${encodeURIComponent("My ROI scenario — please send matched properties")}&body=${encodeURIComponent(`Hi Therizo,\n\nI just ran the ROI calculator (${results?.roi.toFixed(1)}% projected return). Please send your matched verified listings to ${lead.email}.\n\nThanks,\n${lead.name}`)}`} className="block">
+                      <Button size="lg" className="w-full bg-navy hover:bg-navy/90 text-white font-bold h-14 text-base">
+                        <MessageCircle className="mr-2 h-5 w-5" />
+                        Email Me Matched Properties
+                      </Button>
+                    </a>
+                  )}
                 </div>
                 <p className="text-xs text-center text-charcoal/60 mt-3 flex items-center justify-center gap-1.5">
                   <Clock className="h-3 w-3" /> Average consultant response: under 12 minutes during business hours.

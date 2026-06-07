@@ -32,6 +32,7 @@ interface ROICalculation {
   lead_email: string | null;
   lead_phone: string | null;
   source: string | null;
+  whatsapp_consent?: boolean | null;
   utm_source: string | null;
   properties?: { title: string } | null;
   clients?: { full_name: string } | null;
@@ -171,10 +172,19 @@ export default function ROIList() {
                           </div>
                         )}
                         {calc.lead_phone && (
-                          <div className="text-muted-foreground">
+                          <div className="text-muted-foreground flex items-center gap-1.5">
                             <a href={`tel:${calc.lead_phone}`} className="hover:underline">
                               {calc.lead_phone}
                             </a>
+                            {calc.whatsapp_consent ? (
+                              <Badge className="bg-[#25D366]/15 text-[#1ebe57] border-[#25D366]/30 text-[10px] px-1.5 py-0" variant="outline">
+                                WA opt-in
+                              </Badge>
+                            ) : (
+                              <Badge variant="outline" className="text-[10px] px-1.5 py-0 text-muted-foreground">
+                                No WA
+                              </Badge>
+                            )}
                           </div>
                         )}
                         {!calc.lead_email && !calc.lead_phone && "-"}
