@@ -32,6 +32,7 @@ interface ROICalculation {
   lead_email: string | null;
   lead_phone: string | null;
   source: string | null;
+  whatsapp_consent?: boolean | null;
   utm_source: string | null;
   properties?: { title: string } | null;
   clients?: { full_name: string } | null;
