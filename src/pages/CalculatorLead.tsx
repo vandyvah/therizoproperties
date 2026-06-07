@@ -198,6 +198,7 @@ export default function CalculatorLead() {
         lead_email: lead.email,
         lead_phone: lead.phone || null,
         source: "website-calculator",
+        whatsapp_consent: !!lead.whatsappConsent && !!lead.phone,
         utm_source: utm.utm_source || null,
         utm_medium: utm.utm_medium || null,
         utm_campaign: utm.utm_campaign || null,
