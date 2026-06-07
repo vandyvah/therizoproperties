@@ -409,7 +409,14 @@ export type Database = {
           page: string | null
           phone: string | null
           preferred_location: string | null
+          referrer: string | null
           status: string
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+          whatsapp_consent: boolean | null
         }
         Insert: {
           budget?: string | null
@@ -422,7 +429,14 @@ export type Database = {
           page?: string | null
           phone?: string | null
           preferred_location?: string | null
+          referrer?: string | null
           status?: string
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          whatsapp_consent?: boolean | null
         }
         Update: {
           budget?: string | null
@@ -435,7 +449,14 @@ export type Database = {
           page?: string | null
           phone?: string | null
           preferred_location?: string | null
+          referrer?: string | null
           status?: string
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          whatsapp_consent?: boolean | null
         }
         Relationships: []
       }
@@ -1074,6 +1095,9 @@ export type Database = {
           created_by_id: string | null
           gross_annual_income_ngn: number
           id: string
+          lead_email: string | null
+          lead_name: string | null
+          lead_phone: string | null
           management_fee_pct: number
           monthly_rent_ngn: number | null
           net_annual_income_ngn: number
@@ -1083,7 +1107,11 @@ export type Database = {
           property_location: string | null
           purchase_price_ngn: number
           renovation_cost_ngn: number
+          source: string | null
           strategy: Database["public"]["Enums"]["roi_strategy"]
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
         }
         Insert: {
           airbnb_nightly_rate_ngn?: number | null
@@ -1098,6 +1126,9 @@ export type Database = {
           created_by_id?: string | null
           gross_annual_income_ngn?: number
           id?: string
+          lead_email?: string | null
+          lead_name?: string | null
+          lead_phone?: string | null
           management_fee_pct?: number
           monthly_rent_ngn?: number | null
           net_annual_income_ngn?: number
@@ -1107,7 +1138,11 @@ export type Database = {
           property_location?: string | null
           purchase_price_ngn?: number
           renovation_cost_ngn?: number
+          source?: string | null
           strategy: Database["public"]["Enums"]["roi_strategy"]
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
         }
         Update: {
           airbnb_nightly_rate_ngn?: number | null
@@ -1122,6 +1157,9 @@ export type Database = {
           created_by_id?: string | null
           gross_annual_income_ngn?: number
           id?: string
+          lead_email?: string | null
+          lead_name?: string | null
+          lead_phone?: string | null
           management_fee_pct?: number
           monthly_rent_ngn?: number | null
           net_annual_income_ngn?: number
@@ -1131,7 +1169,11 @@ export type Database = {
           property_location?: string | null
           purchase_price_ngn?: number
           renovation_cost_ngn?: number
+          source?: string | null
           strategy?: Database["public"]["Enums"]["roi_strategy"]
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
         }
         Relationships: [
           {
