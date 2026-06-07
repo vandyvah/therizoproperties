@@ -143,7 +143,7 @@ export default function CalculatorLead() {
     setErrors({});
     setSubmitting(true);
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("contact_submissions")
         .insert({
           name: lead.name,
@@ -161,11 +161,9 @@ export default function CalculatorLead() {
           utm_content: utm.utm_content || null,
           referrer: utm.referrer || null,
           whatsapp_consent: !!lead.whatsappConsent && !!lead.phone,
-        })
-        .select("id")
-        .single();
+        });
       if (error) throw error;
-      submissionIdRef.current = data?.id ?? null;
+      submissionIdRef.current = null;
       setStep(2);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err: any) {
