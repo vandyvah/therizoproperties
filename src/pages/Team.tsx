@@ -6,11 +6,13 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { JsonLd, createOrganizationSchema } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 
+import founderImage from "@/assets/founder-ugo.png";
+
 const founder = {
-  name: "Richard",
+  name: "Ugo Uzoukwu",
   role: "Founder & Chief Executive Officer",
-  bio: "Richard leads Therizo's strategy, capital deployment, and key relationships. He focuses on finding properties and projects where the paperwork, numbers, and execution can support long-term value for both the firm and its clients. Richard personally oversees high-value transactions and all joint-venture and development discussions.",
-  initial: "R",
+  bio: "Ugo Uzoukwu leads Therizo's strategy, capital deployment, and key relationships. His background spans cybersecurity, real estate, law, and oil and gas. Ugo personally oversees high-value transactions, joint-venture discussions, and development opportunities.",
+  image: founderImage,
 };
 
 const consultants = [
@@ -84,21 +86,28 @@ const Team = () => {
       {/* Founder */}
       <section className="section-padding bg-ivory">
         <div className="container-wide">
-          <div className="grid lg:grid-cols-3 gap-12 items-start">
-            <div className="lg:col-span-1">
-              <div className="text-center lg:text-left">
-                <div className="w-32 h-32 mx-auto lg:mx-0 rounded-full bg-gradient-to-br from-navy to-navy-light flex items-center justify-center mb-6">
-                  <span className="text-5xl font-display font-semibold text-ivory">
-                    {founder.initial}
-                  </span>
+          <div className="grid lg:grid-cols-5 gap-10 lg:gap-16 items-center">
+            <div className="lg:col-span-2">
+              <div className="relative max-w-md mx-auto lg:mx-0">
+                <div className="absolute -inset-3 bg-gradient-to-br from-gold/30 to-navy/20 rounded-sm blur-2xl opacity-60" />
+                <div className="relative aspect-[4/5] overflow-hidden rounded-sm border-2 border-gold/30 shadow-therizo-lg bg-navy">
+                  <img
+                    src={founder.image}
+                    alt={`${founder.name}, Founder & CEO of Therizo Properties`}
+                    className="w-full h-full object-cover object-center"
+                    loading="eager"
+                  />
                 </div>
-                <h2 className="font-display text-2xl font-semibold text-ink mb-2">
-                  {founder.name}
-                </h2>
-                <p className="text-gold font-medium">{founder.role}</p>
               </div>
             </div>
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-3 text-center lg:text-left">
+              <p className="text-xs uppercase tracking-[0.2em] text-gold font-semibold mb-3">
+                Founder & CEO
+              </p>
+              <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-semibold text-ink mb-3">
+                {founder.name}
+              </h2>
+              <p className="text-gold font-medium mb-6">{founder.role}</p>
               <p className="text-lg text-slate leading-relaxed">
                 {founder.bio}
               </p>

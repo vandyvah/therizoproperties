@@ -4,10 +4,10 @@ import { ArrowRight } from "lucide-react";
 
 const team = [
   {
-    name: "Richard",
+    name: "Ugo Uzoukwu",
     role: "Founder & CEO",
     description:
-      "Leads strategy, capital allocation, and key partnerships. Personally oversees high-value and complex transactions.",
+      "Leads strategy, capital deployment, and key relationships. Background spans cybersecurity, real estate, law, and oil and gas.",
   },
   {
     name: "Mr. Solomon Adebayo",
