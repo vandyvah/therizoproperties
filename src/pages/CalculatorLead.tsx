@@ -34,9 +34,9 @@ const BUDGETS = ["Under ₦20M", "₦20M – ₦50M", "₦50M – ₦150M", "₦
 const leadSchema = z.object({
   name: z.string().trim().min(2, "Enter your full name").max(100),
   email: z.string().trim().email("Enter a valid email").max(255),
-  phone: z.string().trim().min(7, "Enter a valid phone number").max(30),
-  budget: z.string().min(1, "Select your budget"),
-  location: z.string().min(1, "Select preferred location"),
+  phone: z.string().trim().max(30).optional().or(z.literal("")),
+  budget: z.string().optional().or(z.literal("")),
+  location: z.string().optional().or(z.literal("")),
 });
 
 const fmt = (n: number) =>
