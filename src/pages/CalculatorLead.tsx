@@ -279,10 +279,72 @@ Please send me your matching verified properties.`;
           </div>
 
           {step === 1 && (
+            <Card className="p-6 md:p-10 border-navy/10 relative overflow-hidden">
+              <div className="text-xs font-semibold uppercase tracking-wider text-gold mb-2">Step 1 of 3 · Free Access</div>
+              <h2 className="font-display text-2xl md:text-3xl font-bold text-navy mb-2">
+                Get Your Free Nigerian Property ROI Report — Built For You In 60 Seconds.
+              </h2>
+              <p className="text-charcoal/70 mb-6">
+                Tell us where to send it. We'll unlock the calculator, generate your personalised projection (PDF included), and hand-match you with <strong>verified, titled properties</strong> that hit your numbers.
+              </p>
+
+              <ul className="space-y-2 text-sm text-charcoal/80 mb-6 bg-sand/60 rounded-lg p-4 border border-navy/5">
+                {[
+                  "Your custom ROI, payback period & 10-year wealth projection",
+                  "Downloadable PDF report you can keep or share",
+                  "3–5 hand-matched verified listings for your budget",
+                  "Direct WhatsApp line to a senior consultant",
+                ].map((b) => (
+                  <li key={b} className="flex items-start gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-gold flex-shrink-0 mt-0.5" />
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="space-y-4">
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="name" className="text-sm font-semibold text-navy">Full Name *</Label>
+                    <Input id="name" value={lead.name} onChange={(e) => setLead({ ...lead, name: e.target.value })} placeholder="Jane Adeyemi" />
+                    {errors.name && <p className="text-xs text-destructive mt-1">{errors.name}</p>}
+                  </div>
+                  <div>
+                    <Label htmlFor="email" className="text-sm font-semibold text-navy">Email * <span className="text-charcoal/50 font-normal">(report sent here)</span></Label>
+                    <Input id="email" type="email" value={lead.email} onChange={(e) => setLead({ ...lead, email: e.target.value })} placeholder="you@email.com" />
+                    {errors.email && <p className="text-xs text-destructive mt-1">{errors.email}</p>}
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="phone" className="text-sm font-semibold text-navy">
+                    WhatsApp / Phone <span className="text-charcoal/50 font-normal">(optional — fastest way to get matched listings)</span>
+                  </Label>
+                  <Input id="phone" value={lead.phone} onChange={(e) => setLead({ ...lead, phone: e.target.value })} placeholder="+44 7XXX XXXXXX" />
+                  {errors.phone && <p className="text-xs text-destructive mt-1">{errors.phone}</p>}
+                </div>
+
+                <Button
+                  size="lg"
+                  className="w-full bg-gold hover:bg-gold/90 text-navy font-bold h-14 text-base"
+                  onClick={handleCaptureLead}
+                  disabled={submitting}
+                >
+                  {submitting ? <Loader2 className="h-5 w-5 animate-spin" /> : <>Unlock The Calculator Free <ArrowRight className="ml-2 h-5 w-5" /></>}
+                </Button>
+                <p className="text-xs text-center text-charcoal/60 flex items-center justify-center gap-1.5">
+                  <Lock className="h-3 w-3" /> 100% private. Zero spam. Used only to send your report & matched listings.
+                </p>
+              </div>
+            </Card>
+          )}
+
+          {step === 2 && (
             <Card className="p-6 md:p-10 border-navy/10">
-              <div className="text-xs font-semibold uppercase tracking-wider text-gold mb-2">Step 1 of 3</div>
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-navy mb-1">Your Investment Scenario</h2>
-              <p className="text-charcoal/70 mb-8">Takes 45 seconds. No email required yet.</p>
+              <div className="text-xs font-semibold uppercase tracking-wider text-gold mb-2">Step 2 of 3 · Your Scenario</div>
+              <h2 className="font-display text-2xl md:text-3xl font-bold text-navy mb-1">
+                {lead.name.split(" ")[0]}, plug in your numbers.
+              </h2>
+              <p className="text-charcoal/70 mb-8">Takes 45 seconds. We'll show your full projection on the next screen.</p>
 
               <div className="space-y-6">
                 <div>
@@ -350,91 +412,36 @@ Please send me your matching verified properties.`;
                   </div>
                 )}
 
-                <Button
-                  size="lg"
-                  className="w-full bg-gold hover:bg-gold/90 text-navy font-bold h-14 text-base"
-                  disabled={!canAdvance}
-                  onClick={() => setStep(2)}
-                >
-                  Calculate My ROI <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-                {!canAdvance && (
-                  <p className="text-xs text-charcoal/60 text-center">Fill in price and income to continue.</p>
-                )}
-              </div>
-            </Card>
-          )}
-
-          {step === 2 && results && (
-            <Card className="p-6 md:p-10 border-navy/10 relative overflow-hidden">
-              <div className="text-xs font-semibold uppercase tracking-wider text-gold mb-2">Step 2 of 3</div>
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-navy mb-1">
-                Your Report Is Ready — Unlock It Free.
-              </h2>
-              <p className="text-charcoal/70 mb-6">
-                Enter your details and we'll instantly reveal your projection <strong>plus</strong> a curated list of verified properties that match your budget.
-              </p>
-
-              {/* Blurred preview */}
-              <div className="relative mb-8">
-                <div className="grid grid-cols-3 gap-3 blur-md select-none pointer-events-none">
-                  <div className="bg-navy/5 rounded-lg p-4"><div className="text-2xl font-bold text-navy">{shortFmt(results.net)}</div><div className="text-xs">Net / yr</div></div>
-                  <div className="bg-navy/5 rounded-lg p-4"><div className="text-2xl font-bold text-navy">{results.roi.toFixed(1)}%</div><div className="text-xs">ROI</div></div>
-                  <div className="bg-navy/5 rounded-lg p-4"><div className="text-2xl font-bold text-navy">{results.payback.toFixed(1)}y</div><div className="text-xs">Payback</div></div>
-                </div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="bg-navy text-white rounded-full p-3 shadow-lg"><Lock className="h-5 w-5" /></div>
-                </div>
-              </div>
-
-              <div className="space-y-4">
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="name" className="text-sm font-semibold text-navy">Full Name *</Label>
-                    <Input id="name" value={lead.name} onChange={(e) => setLead({ ...lead, name: e.target.value })} placeholder="Jane Adeyemi" />
-                    {errors.name && <p className="text-xs text-destructive mt-1">{errors.name}</p>}
-                  </div>
-                  <div>
-                    <Label htmlFor="email" className="text-sm font-semibold text-navy">Email *</Label>
-                    <Input id="email" type="email" value={lead.email} onChange={(e) => setLead({ ...lead, email: e.target.value })} placeholder="you@email.com" />
-                    {errors.email && <p className="text-xs text-destructive mt-1">{errors.email}</p>}
-                  </div>
-                </div>
-                <div>
-                  <Label htmlFor="phone" className="text-sm font-semibold text-navy">WhatsApp / Phone (with country code) *</Label>
-                  <Input id="phone" value={lead.phone} onChange={(e) => setLead({ ...lead, phone: e.target.value })} placeholder="+44 7XXX XXXXXX" />
-                  {errors.phone && <p className="text-xs text-destructive mt-1">{errors.phone}</p>}
-                </div>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="budget" className="text-sm font-semibold text-navy">Investment Budget *</Label>
+                    <Label htmlFor="budget" className="text-sm font-semibold text-navy">Investment Budget <span className="text-charcoal/50 font-normal">(optional)</span></Label>
                     <select id="budget" value={lead.budget} onChange={(e) => setLead({ ...lead, budget: e.target.value })}
                       className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
                       <option value="">Select…</option>
                       {BUDGETS.map((b) => <option key={b} value={b}>{b}</option>)}
                     </select>
-                    {errors.budget && <p className="text-xs text-destructive mt-1">{errors.budget}</p>}
                   </div>
                   <div>
-                    <Label htmlFor="loc" className="text-sm font-semibold text-navy">Preferred Location *</Label>
+                    <Label htmlFor="loc" className="text-sm font-semibold text-navy">Preferred Location <span className="text-charcoal/50 font-normal">(optional)</span></Label>
                     <select id="loc" value={lead.location} onChange={(e) => setLead({ ...lead, location: e.target.value })}
                       className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
                       <option value="">Select…</option>
                       {LOCATIONS.map((l) => <option key={l} value={l}>{l}</option>)}
                     </select>
-                    {errors.location && <p className="text-xs text-destructive mt-1">{errors.location}</p>}
                   </div>
                 </div>
 
-                <Button size="lg" className="w-full bg-gold hover:bg-gold/90 text-navy font-bold h-14 text-base" onClick={handleUnlock} disabled={submitting}>
-                  {submitting ? <Loader2 className="h-5 w-5 animate-spin" /> : <>Unlock My Full ROI Report <ArrowRight className="ml-2 h-5 w-5" /></>}
+                <Button
+                  size="lg"
+                  className="w-full bg-gold hover:bg-gold/90 text-navy font-bold h-14 text-base"
+                  disabled={!canAdvance}
+                  onClick={handleReveal}
+                >
+                  Reveal My ROI Projection <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <p className="text-xs text-center text-charcoal/60 flex items-center justify-center gap-1.5">
-                  <Lock className="h-3 w-3" /> Your data is private. We never spam. Used only to send your report + matched listings.
-                </p>
-                <button type="button" onClick={() => setStep(1)} className="block mx-auto text-xs text-charcoal/60 underline">
-                  ← Edit my numbers
-                </button>
+                {!canAdvance && (
+                  <p className="text-xs text-charcoal/60 text-center">Fill in price and income to continue.</p>
+                )}
               </div>
             </Card>
           )}
