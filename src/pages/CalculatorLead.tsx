@@ -396,12 +396,12 @@ Please send me your matching verified properties.`;
           </div>
 
           {step === 1 && (
-            <Card className="p-6 md:p-10 border-navy/10 relative overflow-hidden">
+            <Card className="p-4 sm:p-6 md:p-10 border-navy/10 relative overflow-hidden">
               <div className="text-xs font-semibold uppercase tracking-wider text-gold mb-2">Step 1 of 3 · Free Access</div>
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-navy mb-2">
+              <h2 className="font-display text-xl sm:text-2xl md:text-3xl font-bold text-navy mb-2 leading-tight">
                 Get Your Free Nigerian Property ROI Report — Built For You In 60 Seconds.
               </h2>
-              <p className="text-charcoal/70 mb-6">
+              <p className="text-sm sm:text-base text-charcoal/70 mb-6">
                 Tell us where to send it. We'll unlock the calculator, generate your personalised projection (PDF included), and hand-match you with <strong>verified, titled properties</strong> that hit your numbers.
               </p>
 
