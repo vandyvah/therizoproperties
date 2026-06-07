@@ -366,20 +366,21 @@ Please send me your matching verified properties.`;
 
       {/* HERO */}
       <section className="bg-gradient-to-br from-navy via-navy to-navy-light text-white">
-        <div className="container max-w-5xl py-16 md:py-24 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/15 text-gold text-xs font-semibold uppercase tracking-wider mb-6">
-            <Sparkles className="h-3.5 w-3.5" /> Free Tool · 60 Seconds · Personalised PDF Report
+        <div className="container max-w-5xl py-10 sm:py-16 md:py-24 text-center">
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 rounded-full bg-gold/15 text-gold text-[10px] sm:text-xs font-semibold uppercase tracking-wider mb-5 sm:mb-6 max-w-full">
+            <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 flex-shrink-0" />
+            <span className="truncate">Free Tool · 60 Seconds · Personalised PDF</span>
           </div>
-          <h1 className="font-display text-4xl md:text-6xl font-bold leading-tight mb-5">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-6xl font-bold leading-tight mb-4 sm:mb-5 break-words">
             See Exactly How Much Your Next Nigerian Property Will <span className="text-gold">Pay You</span> — Before You Buy a Brick.
           </h1>
-          <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto mb-8">
+          <p className="text-base sm:text-lg md:text-xl text-white/80 max-w-3xl mx-auto mb-6 sm:mb-8">
             Plug in the numbers. We'll show you the ROI, payback period, 10-year wealth projection — and hand-match you with verified, titled properties that hit your target.
           </p>
-          <div className="flex flex-wrap justify-center gap-6 text-sm text-white/70">
-            <span className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-gold" /> Verified titles only</span>
-            <span className="flex items-center gap-2"><Zap className="h-4 w-4 text-gold" /> Instant projections</span>
-            <span className="flex items-center gap-2"><Trophy className="h-4 w-4 text-gold" /> Diaspora-trusted</span>
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 sm:gap-6 text-xs sm:text-sm text-white/70">
+            <span className="flex items-center gap-1.5 sm:gap-2"><ShieldCheck className="h-4 w-4 text-gold" /> Verified titles only</span>
+            <span className="flex items-center gap-1.5 sm:gap-2"><Zap className="h-4 w-4 text-gold" /> Instant projections</span>
+            <span className="flex items-center gap-1.5 sm:gap-2"><Trophy className="h-4 w-4 text-gold" /> Diaspora-trusted</span>
           </div>
         </div>
       </section>
