@@ -294,13 +294,7 @@ export default function DashboardAuth() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="signin">Sign In</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
-            </TabsList>
-            <TabsContent value="signin">
-              <form onSubmit={handleSignIn} className="space-y-4">
+          <form onSubmit={handleSignIn} className="space-y-4">
                 <div>
                   <Label htmlFor="signin-email">Email</Label>
                   <div className="relative">
@@ -366,71 +360,10 @@ export default function DashboardAuth() {
                 >
                   Forgot your password?
                 </Button>
+                <p className="text-xs text-center text-muted-foreground pt-2 border-t">
+                  Staff accounts are provisioned by an administrator. Contact your admin if you need access.
+                </p>
               </form>
-            </TabsContent>
-            <TabsContent value="signup">
-              <form onSubmit={handleSignUp} className="space-y-4">
-                <div>
-                  <Label htmlFor="signup-name">Full Name</Label>
-                  <Input
-                    id="signup-name"
-                    name="fullName"
-                    type="text"
-                    placeholder="Your full name"
-                    required
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="signup-email">Email</Label>
-                  <div className="relative">
-                    <Input
-                      id="signup-email"
-                      name="email"
-                      type="email"
-                      placeholder="you@therizoproperties.com"
-                      value={signUpEmail}
-                      onChange={(e) => setSignUpEmail(e.target.value)}
-                      className={signUpEmail.length > 0 ? (signUpEmailValid ? "pr-10 border-green-500 focus-visible:ring-green-500" : "pr-10 border-destructive focus-visible:ring-destructive") : ""}
-                      required
-                    />
-                    {signUpEmail.length > 0 && (
-                      <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                        {signUpEmailValid ? (
-                          <CheckCircle2 className="h-4 w-4 text-green-500" />
-                        ) : (
-                          <XCircle className="h-4 w-4 text-destructive" />
-                        )}
-                      </div>
-                    )}
-                  </div>
-                  {signUpEmail.length > 0 && !signUpEmailValid && (
-                    <p className="text-xs text-destructive mt-1">Please enter a valid email address</p>
-                  )}
-                </div>
-                <div>
-                  <Label htmlFor="signup-password">Password</Label>
-                  <Input
-                    id="signup-password"
-                    name="password"
-                    type="password"
-                    placeholder="••••••••"
-                    minLength={6}
-                    required
-                  />
-                </div>
-                <Button type="submit" className="w-full" disabled={isSubmitting || (signUpEmail.length > 0 && !signUpEmailValid)}>
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Creating account...
-                    </>
-                  ) : (
-                    "Create Account"
-                  )}
-                </Button>
-              </form>
-            </TabsContent>
-          </Tabs>
         </CardContent>
       </Card>
     </div>
