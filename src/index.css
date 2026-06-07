@@ -172,11 +172,21 @@
 
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 
   body {
     @apply bg-background text-foreground font-body antialiased;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
   }
+
+  /* Prevent long words/URLs from forcing horizontal overflow on small screens */
+  h1, h2, h3 {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-display;
