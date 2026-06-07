@@ -490,7 +490,7 @@ Please send me your matching verified properties.`;
           )}
 
           {step === 2 && (
-            <Card className="p-6 md:p-10 border-navy/10">
+            <Card className="p-4 sm:p-6 md:p-10 border-navy/10">
               <div className="text-xs font-semibold uppercase tracking-wider text-gold mb-2">Step 2 of 3 · Your Scenario</div>
               <h2 className="font-display text-2xl md:text-3xl font-bold text-navy mb-1">
                 {lead.name.split(" ")[0]}, plug in your numbers.
@@ -599,7 +599,7 @@ Please send me your matching verified properties.`;
 
           {step === 3 && results && (
             <div className="space-y-6">
-              <Card className="p-6 md:p-10 border-gold/30 bg-gradient-to-br from-background to-gold/5">
+              <Card className="p-4 sm:p-6 md:p-10 border-gold/30 bg-gradient-to-br from-background to-gold/5">
                 <div className="flex items-center gap-2 text-gold mb-3">
                   <CheckCircle2 className="h-5 w-5" />
                   <span className="text-xs font-semibold uppercase tracking-wider">Your Personalised Report</span>
