@@ -6,11 +6,13 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { JsonLd, createOrganizationSchema } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 
+import founderImage from "@/assets/founder-ugo.png";
+
 const founder = {
-  name: "Richard",
+  name: "Ugo Uzoukwu",
   role: "Founder & Chief Executive Officer",
-  bio: "Richard leads Therizo's strategy, capital deployment, and key relationships. He focuses on finding properties and projects where the paperwork, numbers, and execution can support long-term value for both the firm and its clients. Richard personally oversees high-value transactions and all joint-venture and development discussions.",
-  initial: "R",
+  bio: "Ugo Uzoukwu leads Therizo's strategy, capital deployment, and key relationships. His background spans cybersecurity, real estate, law, and oil and gas. Ugo personally oversees high-value transactions, joint-venture discussions, and development opportunities.",
+  image: founderImage,
 };
 
 const consultants = [
