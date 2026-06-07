@@ -89,7 +89,7 @@ Deno.serve(async (req) => {
         from: FROM_EMAIL,
         to: [payload.email],
         bcc: BCC ? [BCC] : undefined,
-        reply_to: BCC || undefined,
+        reply_to: REPLY_TO,
         subject: `Your Therizo ROI report — ${payload.results.roi.toFixed(1)}% projected return`,
         html,
       }),
