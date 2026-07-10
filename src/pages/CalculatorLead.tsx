@@ -534,8 +534,8 @@ Please send me your matching verified properties.`;
 
                 {strategy === "long-term" && (
                   <div>
-                    <Label htmlFor="annualRent" className="text-sm font-semibold text-navy">Expected Monthly Rent (₦)</Label>
-                    <Input id="annualRent" inputMode="numeric" placeholder="e.g. 600,000" value={annualRent}
+                    <Label htmlFor="annualRent" className="text-sm font-semibold text-navy">Expected Annual Rent (₦/year)</Label>
+                    <Input id="annualRent" inputMode="numeric" placeholder="e.g. 7,200,000" value={annualRent}
                       onChange={(e) => setAnnualRent(e.target.value.replace(/[^\d]/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ","))} />
                   </div>
                 )}
