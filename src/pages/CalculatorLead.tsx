@@ -19,7 +19,7 @@ import { jsPDF } from "jspdf";
 const WHATSAPP_NUMBER = "2348034830087";
 
 const STRATEGIES = [
-  { id: "long-term", label: "Long-Term Rental", sub: "Steady monthly cashflow" },
+  { id: "long-term", label: "Long-Term Rental", sub: "Steady yearly cashflow" },
   { id: "airbnb", label: "Short-Stay / Airbnb", sub: "Premium nightly rates" },
   { id: "flip", label: "Buy → Renovate → Sell", sub: "Capital appreciation" },
 ] as const;
@@ -69,7 +69,7 @@ export default function CalculatorLead() {
   const [strategy, setStrategy] = useState<typeof STRATEGIES[number]["id"]>("long-term");
   const [price, setPrice] = useState("");
   const [reno, setReno] = useState("");
-  const [monthly, setMonthly] = useState("");
+  const [annualRent, setAnnualRent] = useState("");
   const [nightly, setNightly] = useState("");
   const [occupancy, setOccupancy] = useState("65");
   const [sellPrice, setSellPrice] = useState("");
@@ -109,7 +109,7 @@ export default function CalculatorLead() {
     const investment = parseNum(price) + parseNum(reno);
     if (investment <= 0) return null;
     let gross = 0;
-    if (strategy === "long-term") gross = parseNum(monthly) * 12;
+    if (strategy === "long-term") gross = parseNum(annualRent);
     else if (strategy === "airbnb") gross = parseNum(nightly) * 365 * (parseNum(occupancy) / 100);
     else gross = parseNum(sellPrice) - investment;
 
@@ -118,7 +118,7 @@ export default function CalculatorLead() {
     const payback = net > 0 ? investment / net : 0;
     const tenYr = strategy === "flip" ? gross : net * 10 + investment * 0.6; // appreciation est.
     return { investment, gross, net, roi, payback, tenYr };
-  }, [strategy, price, reno, monthly, nightly, occupancy, sellPrice]);
+  }, [strategy, price, reno, annualRent, nightly, occupancy, sellPrice]);
 
   const canAdvance = !!results && results.investment > 0 && results.gross > 0;
 
@@ -185,7 +185,7 @@ export default function CalculatorLead() {
         property_location: lead.location || null,
         purchase_price_ngn: parseNum(price),
         renovation_cost_ngn: parseNum(reno),
-        monthly_rent_ngn: strategy === "long-term" ? parseNum(monthly) : null,
+        monthly_rent_ngn: strategy === "long-term" ? Math.round(parseNum(annualRent) / 12) : null,
         airbnb_nightly_rate_ngn: strategy === "airbnb" ? parseNum(nightly) : null,
         airbnb_occupancy_rate_pct: strategy === "airbnb" ? parseNum(occupancy) : null,
         gross_annual_income_ngn: results.gross,
@@ -534,9 +534,9 @@ Please send me your matching verified properties.`;
 
                 {strategy === "long-term" && (
                   <div>
-                    <Label htmlFor="monthly" className="text-sm font-semibold text-navy">Expected Monthly Rent (₦)</Label>
-                    <Input id="monthly" inputMode="numeric" placeholder="e.g. 600,000" value={monthly}
-                      onChange={(e) => setMonthly(e.target.value.replace(/[^\d]/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ","))} />
+                    <Label htmlFor="annualRent" className="text-sm font-semibold text-navy">Expected Annual Rent (₦/year)</Label>
+                    <Input id="annualRent" inputMode="numeric" placeholder="e.g. 7,200,000" value={annualRent}
+                      onChange={(e) => setAnnualRent(e.target.value.replace(/[^\d]/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ","))} />
                   </div>
                 )}
 

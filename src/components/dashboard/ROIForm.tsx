@@ -39,7 +39,7 @@ const roiSchema = z.object({
   purchase_price_ngn: z.coerce.number().min(1, "Purchase price is required"),
   renovation_cost_ngn: z.coerce.number().min(0).default(0),
   other_acquisition_costs_ngn: z.coerce.number().min(0).default(0),
-  monthly_rent_ngn: z.coerce.number().min(0).optional(),
+  annual_rent_ngn: z.coerce.number().min(0).optional(),
   airbnb_nightly_rate_ngn: z.coerce.number().min(0).optional(),
   airbnb_occupancy_rate_pct: z.coerce.number().min(0).max(100).optional(),
   annual_property_tax_ngn: z.coerce.number().min(0).default(0),
@@ -83,7 +83,7 @@ export function ROIForm({ open, onClose, onSuccess }: ROIFormProps) {
       purchase_price_ngn: 0,
       renovation_cost_ngn: 0,
       other_acquisition_costs_ngn: 0,
-      monthly_rent_ngn: 0,
+      annual_rent_ngn: 0,
       airbnb_nightly_rate_ngn: 0,
       airbnb_occupancy_rate_pct: 70,
       annual_property_tax_ngn: 0,
@@ -124,7 +124,7 @@ export function ROIForm({ open, onClose, onSuccess }: ROIFormProps) {
 
       let grossAnnualIncome = 0;
       if (data.strategy === "long_term_rental" || data.strategy === "compare") {
-        grossAnnualIncome = (data.monthly_rent_ngn || 0) * 12;
+        grossAnnualIncome = data.annual_rent_ngn || 0;
       }
       if (data.strategy === "airbnb") {
         grossAnnualIncome =
@@ -152,7 +152,7 @@ export function ROIForm({ open, onClose, onSuccess }: ROIFormProps) {
         purchase_price_ngn: data.purchase_price_ngn,
         renovation_cost_ngn: data.renovation_cost_ngn,
         other_acquisition_costs_ngn: data.other_acquisition_costs_ngn,
-        monthly_rent_ngn: data.monthly_rent_ngn || null,
+        monthly_rent_ngn: data.annual_rent_ngn ? Math.round(data.annual_rent_ngn / 12) : null,
         airbnb_nightly_rate_ngn: data.airbnb_nightly_rate_ngn || null,
         airbnb_occupancy_rate_pct: data.airbnb_occupancy_rate_pct || null,
         annual_property_tax_ngn: data.annual_property_tax_ngn,
@@ -329,10 +329,10 @@ export function ROIForm({ open, onClose, onSuccess }: ROIFormProps) {
             {(strategy === "long_term_rental" || strategy === "compare") && (
               <FormField
                 control={form.control}
-                name="monthly_rent_ngn"
+                name="annual_rent_ngn"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Monthly Rent (₦)</FormLabel>
+                    <FormLabel>Annual Rent (₦/year)</FormLabel>
                     <FormControl>
                       <Input type="number" {...field} />
                     </FormControl>

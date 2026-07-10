@@ -317,9 +317,10 @@ const PropertyDetail = () => {
                   <div className="grid sm:grid-cols-2 gap-4">
                     {property.rental_potential_monthly_ngn && (
                       <div className="p-4 bg-muted/50 rounded-sm">
-                        <p className="text-sm text-slate mb-1">Monthly Rental Potential</p>
+                        <p className="text-sm text-slate mb-1">Annual Rental Potential</p>
                         <p className="font-display text-xl font-semibold text-ink">
-                          {formatPrice(property.rental_potential_monthly_ngn)}
+                          {formatPrice(property.rental_potential_monthly_ngn * 12)}
+                          <span className="text-xs text-slate/70 font-normal ml-1">/year</span>
                         </p>
                       </div>
                     )}

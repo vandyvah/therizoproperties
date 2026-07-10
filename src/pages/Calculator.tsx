@@ -64,7 +64,7 @@ interface FormData {
   location: string;
   purchasePrice: string;
   renovationCost: string;
-  monthlyRent: string;
+  annualRent: string;
   nightlyRate: string;
   occupancyRate: string;
 }
@@ -72,7 +72,7 @@ interface FormData {
 interface FormErrors {
   purchasePrice?: string;
   renovationCost?: string;
-  monthlyRent?: string;
+  annualRent?: string;
   nightlyRate?: string;
   occupancyRate?: string;
 }
@@ -87,10 +87,10 @@ const calculatorSchema = z.object({
     const num = parseFloat(val.replace(/,/g, ""));
     return !isNaN(num) && num >= 0;
   }, "Renovation cost must be 0 or greater"),
-  monthlyRent: z.string().refine(val => {
+  annualRent: z.string().refine(val => {
     const num = parseFloat(val.replace(/,/g, ""));
     return !isNaN(num) && num >= 0;
-  }, "Monthly rent must be 0 or greater"),
+  }, "Annual rent must be 0 or greater"),
   nightlyRate: z.string().refine(val => {
     const num = parseFloat(val.replace(/,/g, ""));
     return !isNaN(num) && num >= 0;
@@ -130,7 +130,7 @@ const Calculator_Page = () => {
     location: "Lagos - Lekki Phase 1",
     purchasePrice: "60,000,000",
     renovationCost: "10,000,000",
-    monthlyRent: "600,000",
+    annualRent: "7,200,000",
     nightlyRate: "150,000",
     occupancyRate: "65",
   };
@@ -237,15 +237,15 @@ const Calculator_Page = () => {
   const results = useMemo(() => {
     const purchasePrice = parseFormattedNumber(debouncedFormData.purchasePrice);
     const renovationCost = parseFormattedNumber(debouncedFormData.renovationCost);
-    const monthlyRent = parseFormattedNumber(debouncedFormData.monthlyRent);
+    const annualRent = parseFormattedNumber(debouncedFormData.annualRent);
     const nightlyRate = parseFormattedNumber(debouncedFormData.nightlyRate);
     const occupancyRate = parseFormattedNumber(debouncedFormData.occupancyRate);
 
     // 1) Total Investment
     const totalInvestment = purchasePrice + renovationCost;
 
-    // 2) Long-Term Rental Annual Income
-    const annualLongTermIncome = monthlyRent * 12;
+    // 2) Long-Term Rental Annual Income (entered directly as yearly)
+    const annualLongTermIncome = annualRent;
 
     // 3) Gross ROI (Long-Term)
     const roiLongTerm = totalInvestment > 0 ? (annualLongTermIncome / totalInvestment) * 100 : 0;
@@ -695,15 +695,15 @@ const Calculator_Page = () => {
                     </h3>
                     <div className="space-y-4">
                       <ROIInputField
-                        id="monthlyRent"
-                        label="Long-Term Monthly Rent (₦/month)"
-                        value={formData.monthlyRent}
-                        onChange={(value) => handleInputChange("monthlyRent", value)}
-                        onBlur={() => handleFieldBlur("monthlyRent")}
-                        placeholder="600,000"
+                        id="annualRent"
+                        label="Long-Term Annual Rent (₦/year)"
+                        value={formData.annualRent}
+                        onChange={(value) => handleInputChange("annualRent", value)}
+                        onBlur={() => handleFieldBlur("annualRent")}
+                        placeholder="7,200,000"
                         goldLabel
-                        error={errors.monthlyRent}
-                        touched={touched.monthlyRent}
+                        error={errors.annualRent}
+                        touched={touched.annualRent}
                       />
                       <ROIInputField
                         id="nightlyRate"
