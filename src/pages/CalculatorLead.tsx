@@ -109,7 +109,7 @@ export default function CalculatorLead() {
     const investment = parseNum(price) + parseNum(reno);
     if (investment <= 0) return null;
     let gross = 0;
-    if (strategy === "long-term") gross = parseNum(annualRent) * 12;
+    if (strategy === "long-term") gross = parseNum(annualRent);
     else if (strategy === "airbnb") gross = parseNum(nightly) * 365 * (parseNum(occupancy) / 100);
     else gross = parseNum(sellPrice) - investment;
 
