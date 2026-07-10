@@ -124,7 +124,7 @@ export function ROIForm({ open, onClose, onSuccess }: ROIFormProps) {
 
       let grossAnnualIncome = 0;
       if (data.strategy === "long_term_rental" || data.strategy === "compare") {
-        grossAnnualIncome = (data.monthly_rent_ngn || 0) * 12;
+        grossAnnualIncome = data.annual_rent_ngn || 0;
       }
       if (data.strategy === "airbnb") {
         grossAnnualIncome =
