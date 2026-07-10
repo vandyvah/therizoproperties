@@ -696,11 +696,11 @@ const Calculator_Page = () => {
                     <div className="space-y-4">
                       <ROIInputField
                         id="annualRent"
-                        label="Long-Term Monthly Rent (₦/month)"
+                        label="Long-Term Annual Rent (₦/year)"
                         value={formData.annualRent}
                         onChange={(value) => handleInputChange("annualRent", value)}
                         onBlur={() => handleFieldBlur("annualRent")}
-                        placeholder="600,000"
+                        placeholder="7,200,000"
                         goldLabel
                         error={errors.annualRent}
                         touched={touched.annualRent}
