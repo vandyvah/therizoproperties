@@ -330,15 +330,39 @@ export function ROIForm({ open, onClose, onSuccess }: ROIFormProps) {
               <FormField
                 control={form.control}
                 name="annual_rent_ngn"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Annual Rent (₦/year)</FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                render={({ field }) => {
+                  const rent = Number(field.value || 0);
+                  const price = Number(form.watch("purchase_price_ngn") || 0);
+                  const yieldPct = price > 0 ? (rent / price) * 100 : 0;
+                  const suspicious = rent > 0 && price > 0 && yieldPct > 25;
+                  return (
+                    <FormItem>
+                      <FormLabel>Annual Rent (₦/year)</FormLabel>
+                      <FormControl>
+                        <Input type="number" min={0} placeholder="e.g. 7,200,000" {...field} />
+                      </FormControl>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        You entered:{" "}
+                        <span className="text-gold font-semibold">
+                          ₦{rent.toLocaleString("en-NG")} / year
+                        </span>
+                        {rent > 0 && (
+                          <span>
+                            {" "}(≈ ₦{Math.round(rent / 12).toLocaleString("en-NG")} / month
+                            {price > 0 && ` • ${yieldPct.toFixed(1)}% gross yield`})
+                          </span>
+                        )}
+                      </p>
+                      {suspicious && (
+                        <p className="text-xs text-red-600 font-medium mt-1">
+                          ⚠ {yieldPct.toFixed(1)}% yield looks unusually high — did you enter a
+                          monthly amount? Multiply by 12 for the yearly figure.
+                        </p>
+                      )}
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
               />
             )}
 
