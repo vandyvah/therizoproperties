@@ -319,7 +319,7 @@ const PropertyDetail = () => {
                       <div className="p-4 bg-muted/50 rounded-sm">
                         <p className="text-sm text-slate mb-1">Annual Rental Potential</p>
                         <p className="font-display text-xl font-semibold text-ink">
-                          {formatPrice(property.rental_potential_monthly_ngn * 12)}
+                          {formatPrice(property.rental_potential_monthly_ngn)}
                           <span className="text-xs text-slate/70 font-normal ml-1">/year</span>
                         </p>
                       </div>
