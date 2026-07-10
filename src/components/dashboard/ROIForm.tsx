@@ -152,7 +152,7 @@ export function ROIForm({ open, onClose, onSuccess }: ROIFormProps) {
         purchase_price_ngn: data.purchase_price_ngn,
         renovation_cost_ngn: data.renovation_cost_ngn,
         other_acquisition_costs_ngn: data.other_acquisition_costs_ngn,
-        monthly_rent_ngn: data.monthly_rent_ngn || null,
+        monthly_rent_ngn: data.annual_rent_ngn ? Math.round(data.annual_rent_ngn / 12) : null,
         airbnb_nightly_rate_ngn: data.airbnb_nightly_rate_ngn || null,
         airbnb_occupancy_rate_pct: data.airbnb_occupancy_rate_pct || null,
         annual_property_tax_ngn: data.annual_property_tax_ngn,
