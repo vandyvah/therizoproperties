@@ -130,7 +130,7 @@ const Calculator_Page = () => {
     location: "Lagos - Lekki Phase 1",
     purchasePrice: "60,000,000",
     renovationCost: "10,000,000",
-    annualRent: "600,000",
+    annualRent: "7,200,000",
     nightlyRate: "150,000",
     occupancyRate: "65",
   };
