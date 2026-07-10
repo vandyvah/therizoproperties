@@ -311,16 +311,32 @@ export function PropertyForm({ open, onClose, onSuccess, initialData }: Property
                         </span>
                       )}
                     </p>
-                    {suspiciousMonthly && (
-                      <p className="text-xs text-red-600 font-medium mt-1">
-                        ⚠ {yieldPct.toFixed(1)}% yield looks unusually high — did you enter a
-                        monthly amount by mistake? Multiply by 12 for the yearly figure.
-                      </p>
-                    )}
-                    {tooLow && (
-                      <p className="text-xs text-amber-600 font-medium mt-1">
-                        ⚠ Below ₦200,000/year seems low for annual rent — please double-check.
-                      </p>
+                    {(suspiciousMonthly || tooLow) && rent > 0 && (
+                      <div className="mt-2 flex flex-wrap items-center gap-2 rounded-md border border-red-200 bg-red-50 p-2">
+                        <p className="text-xs text-red-700 font-medium flex-1 min-w-[200px]">
+                          {suspiciousMonthly
+                            ? `⚠ ${yieldPct.toFixed(1)}% yield looks like a MONTHLY amount.`
+                            : `⚠ ₦${rent.toLocaleString("en-NG")} looks too low for a full year.`}
+                          {" "}Convert ₦{rent.toLocaleString("en-NG")} × 12 = ₦
+                          {(rent * 12).toLocaleString("en-NG")}?
+                        </p>
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="outline"
+                          className="border-red-300 text-red-700 hover:bg-red-100"
+                          onClick={() => {
+                            form.setValue(
+                              "rental_potential_monthly_ngn",
+                              rent * 12,
+                              { shouldValidate: true, shouldDirty: true }
+                            );
+                            form.clearErrors("rental_potential_monthly_ngn");
+                          }}
+                        >
+                          Convert to yearly (×12)
+                        </Button>
+                      </div>
                     )}
                     {form.formState.errors.rental_potential_monthly_ngn && (
                       <p
