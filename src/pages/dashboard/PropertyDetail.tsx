@@ -255,7 +255,7 @@ export default function PropertyDetail() {
                   {property.rental_potential_monthly_ngn && (
                     <div>
                       <p className="text-sm text-muted-foreground">Annual Rental</p>
-                      <p className="text-lg font-semibold">{formatCurrency(property.rental_potential_monthly_ngn * 12)} <span className="text-xs text-muted-foreground font-normal">/year</span></p>
+                      <p className="text-lg font-semibold">{formatCurrency(property.rental_potential_monthly_ngn)} <span className="text-xs text-muted-foreground font-normal">/year</span></p>
                     </div>
                   )}
                   {property.airbnb_potential_nightly_ngn && (
