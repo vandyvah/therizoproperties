@@ -705,6 +705,31 @@ const Calculator_Page = () => {
                         error={errors.annualRent}
                         touched={touched.annualRent}
                       />
+                      {(() => {
+                        const rent = parseFormattedNumber(formData.annualRent);
+                        const price = parseFormattedNumber(formData.purchasePrice);
+                        const yieldPct = price > 0 ? (rent / price) * 100 : 0;
+                        const suspicious = rent > 0 && price > 0 && yieldPct > 25;
+                        if (rent === 0) return null;
+                        return (
+                          <div className="-mt-2 text-xs">
+                            <p className="text-ink/70">
+                              You entered:{" "}
+                              <span className="text-gold font-semibold">
+                                ₦{rent.toLocaleString("en-NG")} / year
+                              </span>{" "}
+                              (≈ ₦{Math.round(rent / 12).toLocaleString("en-NG")} / month
+                              {price > 0 && ` • ${yieldPct.toFixed(1)}% gross yield`})
+                            </p>
+                            {suspicious && (
+                              <p className="text-red-600 font-medium mt-1">
+                                ⚠ {yieldPct.toFixed(1)}% yield is unusually high — did you enter a
+                                monthly amount? Multiply by 12 for the yearly figure.
+                              </p>
+                            )}
+                          </div>
+                        );
+                      })()}
                       <ROIInputField
                         id="nightlyRate"
                         label="Airbnb Nightly Rate (₦/night)"
