@@ -31,22 +31,52 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 
-const roiSchema = z.object({
-  strategy: z.enum(["long_term_rental", "airbnb", "compare"]),
-  property_id: z.string().optional(),
-  client_id: z.string().optional(),
-  property_location: z.string().min(1, "Location is required"),
-  purchase_price_ngn: z.coerce.number().min(1, "Purchase price is required"),
-  renovation_cost_ngn: z.coerce.number().min(0).default(0),
-  other_acquisition_costs_ngn: z.coerce.number().min(0).default(0),
-  annual_rent_ngn: z.coerce.number().min(0).optional(),
-  airbnb_nightly_rate_ngn: z.coerce.number().min(0).optional(),
-  airbnb_occupancy_rate_pct: z.coerce.number().min(0).max(100).optional(),
-  annual_property_tax_ngn: z.coerce.number().min(0).default(0),
-  annual_insurance_ngn: z.coerce.number().min(0).default(0),
-  annual_maintenance_ngn: z.coerce.number().min(0).default(0),
-  management_fee_pct: z.coerce.number().min(0).max(100).default(10),
-});
+const roiSchema = z
+  .object({
+    strategy: z.enum(["long_term_rental", "airbnb", "compare"]),
+    property_id: z.string().optional(),
+    client_id: z.string().optional(),
+    property_location: z.string().min(1, "Location is required"),
+    purchase_price_ngn: z.coerce.number().min(1, "Purchase price is required"),
+    renovation_cost_ngn: z.coerce.number().min(0).default(0),
+    other_acquisition_costs_ngn: z.coerce.number().min(0).default(0),
+    annual_rent_ngn: z.coerce.number().min(0).optional(),
+    airbnb_nightly_rate_ngn: z.coerce.number().min(0).optional(),
+    airbnb_occupancy_rate_pct: z.coerce.number().min(0).max(100).optional(),
+    annual_property_tax_ngn: z.coerce.number().min(0).default(0),
+    annual_insurance_ngn: z.coerce.number().min(0).default(0),
+    annual_maintenance_ngn: z.coerce.number().min(0).default(0),
+    management_fee_pct: z.coerce.number().min(0).max(100).default(10),
+  })
+  .superRefine((data, ctx) => {
+    if (data.strategy === "airbnb") return;
+    const rent = Number(data.annual_rent_ngn || 0);
+    if (rent <= 0) return;
+    if (rent < 200_000) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["annual_rent_ngn"],
+        message:
+          "Enter the ANNUAL rent. ₦" +
+          rent.toLocaleString("en-NG") +
+          " looks like a monthly figure — multiply by 12.",
+      });
+      return;
+    }
+    const price = Number(data.purchase_price_ngn || 0);
+    if (price > 0) {
+      const yieldPct = (rent / price) * 100;
+      if (yieldPct > 25) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["annual_rent_ngn"],
+          message:
+            `Rent is ${yieldPct.toFixed(1)}% of purchase price — that's monthly-looking. ` +
+            "Enter the ANNUAL rent (monthly × 12).",
+        });
+      }
+    }
+  });
 
 type ROIFormData = z.infer<typeof roiSchema>;
 
