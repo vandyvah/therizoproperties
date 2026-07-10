@@ -200,13 +200,13 @@ export function MiniROICalculator() {
         {/* Conditional Fields Based on Strategy */}
         {(formData.strategy === "long-term" || formData.strategy === "combined") && (
           <div>
-            <Label className="text-gold/90 text-xs mb-1.5 block">Monthly Rent (₦)</Label>
+            <Label className="text-gold/90 text-xs mb-1.5 block">Annual Rent (₦/year)</Label>
             <Input
               type="text"
               inputMode="numeric"
               value={formData.annualRent}
               onChange={(e) => handleInputChange("annualRent", e.target.value)}
-              placeholder="600,000"
+              placeholder="7,200,000"
               className="bg-navy/60 border-ivory/20 text-ivory h-10 placeholder:text-ivory/30"
             />
           </div>
