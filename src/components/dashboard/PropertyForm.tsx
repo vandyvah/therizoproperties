@@ -250,7 +250,7 @@ export function PropertyForm({ open, onClose, onSuccess, initialData }: Property
             </div>
 
             <div>
-              <Label htmlFor="rental_potential_monthly_ngn">Rental Potential (₦/month)</Label>
+              <Label htmlFor="rental_potential_monthly_ngn">Rental Potential (₦/year)</Label>
               <Input
                 id="rental_potential_monthly_ngn"
                 type="number"
