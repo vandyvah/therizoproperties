@@ -256,16 +256,46 @@ export function PropertyForm({ open, onClose, onSuccess, initialData }: Property
               <Input
                 id="rental_potential_monthly_ngn"
                 type="number"
+                min={0}
+                step={1000}
+                placeholder="e.g. 7,200,000"
                 className="border-gold/60 focus-visible:ring-gold"
                 {...form.register("rental_potential_monthly_ngn")}
               />
-              <p className="text-xs text-muted-foreground mt-1">
-                Enter the <strong>yearly</strong> rent. Preview:{" "}
-                <span className="text-gold font-medium">
-                  ₦{Number(form.watch("rental_potential_monthly_ngn") || 0).toLocaleString("en-NG")}
-                </span>{" "}
-                / year
-              </p>
+              {(() => {
+                const rent = Number(form.watch("rental_potential_monthly_ngn") || 0);
+                const asking = Number(form.watch("asking_price_ngn") || 0);
+                const yieldPct = asking > 0 ? (rent / asking) * 100 : 0;
+                const suspiciousMonthly = rent > 0 && asking > 0 && yieldPct > 25;
+                const tooLow = rent > 0 && rent < 200_000;
+                return (
+                  <>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      You entered:{" "}
+                      <span className="text-gold font-semibold">
+                        ₦{rent.toLocaleString("en-NG")} / year
+                      </span>
+                      {rent > 0 && (
+                        <span className="text-muted-foreground/80">
+                          {" "}(≈ ₦{Math.round(rent / 12).toLocaleString("en-NG")} / month
+                          {asking > 0 && ` • ${yieldPct.toFixed(1)}% gross yield`})
+                        </span>
+                      )}
+                    </p>
+                    {suspiciousMonthly && (
+                      <p className="text-xs text-red-600 font-medium mt-1">
+                        ⚠ {yieldPct.toFixed(1)}% yield looks unusually high — did you enter a
+                        monthly amount by mistake? Multiply by 12 for the yearly figure.
+                      </p>
+                    )}
+                    {tooLow && (
+                      <p className="text-xs text-amber-600 font-medium mt-1">
+                        ⚠ Below ₦200,000/year seems low for annual rent — please double-check.
+                      </p>
+                    )}
+                  </>
+                );
+              })()}
             </div>
 
             <div>
