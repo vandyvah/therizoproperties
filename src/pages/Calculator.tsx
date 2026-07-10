@@ -90,7 +90,7 @@ const calculatorSchema = z.object({
   annualRent: z.string().refine(val => {
     const num = parseFloat(val.replace(/,/g, ""));
     return !isNaN(num) && num >= 0;
-  }, "Monthly rent must be 0 or greater"),
+  }, "Annual rent must be 0 or greater"),
   nightlyRate: z.string().refine(val => {
     const num = parseFloat(val.replace(/,/g, ""));
     return !isNaN(num) && num >= 0;
