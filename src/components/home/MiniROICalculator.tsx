@@ -73,7 +73,7 @@ export function MiniROICalculator() {
     const totalInvestment = purchasePrice + renovationCost;
     
     // Long-term calculations
-    const annualLongTermIncome = annualRent * 12;
+    const annualLongTermIncome = annualRent;
     const roiLongTerm = totalInvestment > 0 ? (annualLongTermIncome / totalInvestment) * 100 : 0;
     
     // Airbnb calculations
