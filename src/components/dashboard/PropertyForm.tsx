@@ -27,21 +27,50 @@ import { toast } from "sonner";
 import { PropertyMediaUpload } from "./PropertyMediaUpload";
 import { Globe, Star } from "lucide-react";
 
-const propertySchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  property_type: z.string().min(1, "Property type is required"),
-  city: z.string().min(1, "City is required"),
-  area: z.string().optional(),
-  asking_price_ngn: z.coerce.number().min(0, "Price must be positive"),
-  min_price_ngn: z.coerce.number().optional(),
-  rental_potential_monthly_ngn: z.coerce.number().optional(),
-  airbnb_potential_nightly_ngn: z.coerce.number().optional(),
-  owner_name: z.string().optional(),
-  owner_contact: z.string().optional(),
-  description: z.string().optional(),
-  risk_rating: z.enum(["low", "medium", "high"]),
-  status: z.enum(["draft", "under_review", "listed", "on_hold", "sold"]),
-});
+const propertySchema = z
+  .object({
+    title: z.string().min(1, "Title is required"),
+    property_type: z.string().min(1, "Property type is required"),
+    city: z.string().min(1, "City is required"),
+    area: z.string().optional(),
+    asking_price_ngn: z.coerce.number().min(0, "Price must be positive"),
+    min_price_ngn: z.coerce.number().optional(),
+    rental_potential_monthly_ngn: z.coerce.number().optional(),
+    airbnb_potential_nightly_ngn: z.coerce.number().optional(),
+    owner_name: z.string().optional(),
+    owner_contact: z.string().optional(),
+    description: z.string().optional(),
+    risk_rating: z.enum(["low", "medium", "high"]),
+    status: z.enum(["draft", "under_review", "listed", "on_hold", "sold"]),
+  })
+  .superRefine((data, ctx) => {
+    const rent = Number(data.rental_potential_monthly_ngn || 0);
+    if (rent <= 0) return;
+    if (rent > 0 && rent < 200_000) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["rental_potential_monthly_ngn"],
+        message:
+          "This is the ANNUAL rent. ₦" +
+          rent.toLocaleString("en-NG") +
+          " looks too low for a year — did you enter a monthly amount?",
+      });
+      return;
+    }
+    const price = Number(data.asking_price_ngn || 0);
+    if (price > 0) {
+      const yieldPct = (rent / price) * 100;
+      if (yieldPct > 25) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["rental_potential_monthly_ngn"],
+          message:
+            `Rent is ${yieldPct.toFixed(1)}% of the asking price — that's monthly-looking. ` +
+            "Enter the ANNUAL rent (multiply monthly × 12).",
+        });
+      }
+    }
+  });
 
 type PropertyFormData = z.infer<typeof propertySchema>;
 
