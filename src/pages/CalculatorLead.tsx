@@ -19,7 +19,7 @@ import { jsPDF } from "jspdf";
 const WHATSAPP_NUMBER = "2348034830087";
 
 const STRATEGIES = [
-  { id: "long-term", label: "Long-Term Rental", sub: "Steady annualRent cashflow" },
+  { id: "long-term", label: "Long-Term Rental", sub: "Steady yearly cashflow" },
   { id: "airbnb", label: "Short-Stay / Airbnb", sub: "Premium nightly rates" },
   { id: "flip", label: "Buy → Renovate → Sell", sub: "Capital appreciation" },
 ] as const;
