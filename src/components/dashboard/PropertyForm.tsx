@@ -250,12 +250,22 @@ export function PropertyForm({ open, onClose, onSuccess, initialData }: Property
             </div>
 
             <div>
-              <Label htmlFor="rental_potential_monthly_ngn">Rental Potential (₦/year)</Label>
+              <Label htmlFor="rental_potential_monthly_ngn" className="text-gold font-semibold">
+                Rental Potential (₦/year) — Annual
+              </Label>
               <Input
                 id="rental_potential_monthly_ngn"
                 type="number"
+                className="border-gold/60 focus-visible:ring-gold"
                 {...form.register("rental_potential_monthly_ngn")}
               />
+              <p className="text-xs text-muted-foreground mt-1">
+                Enter the <strong>yearly</strong> rent. Preview:{" "}
+                <span className="text-gold font-medium">
+                  ₦{Number(form.watch("rental_potential_monthly_ngn") || 0).toLocaleString("en-NG")}
+                </span>{" "}
+                / year
+              </p>
             </div>
 
             <div>
