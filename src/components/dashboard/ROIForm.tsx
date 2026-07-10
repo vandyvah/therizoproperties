@@ -39,7 +39,7 @@ const roiSchema = z.object({
   purchase_price_ngn: z.coerce.number().min(1, "Purchase price is required"),
   renovation_cost_ngn: z.coerce.number().min(0).default(0),
   other_acquisition_costs_ngn: z.coerce.number().min(0).default(0),
-  monthly_rent_ngn: z.coerce.number().min(0).optional(),
+  annual_rent_ngn: z.coerce.number().min(0).optional(),
   airbnb_nightly_rate_ngn: z.coerce.number().min(0).optional(),
   airbnb_occupancy_rate_pct: z.coerce.number().min(0).max(100).optional(),
   annual_property_tax_ngn: z.coerce.number().min(0).default(0),
