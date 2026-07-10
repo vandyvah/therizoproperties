@@ -19,7 +19,7 @@ interface MiniFormData {
   strategy: Strategy;
   purchasePrice: string;
   renovationCost: string;
-  monthlyRent: string;
+  annualRent: string;
   nightlyRate: string;
   occupancyRate: string;
 }
@@ -38,7 +38,7 @@ export function MiniROICalculator() {
     strategy: "long-term",
     purchasePrice: "",
     renovationCost: "",
-    monthlyRent: "",
+    annualRent: "",
     nightlyRate: "",
     occupancyRate: "",
   });
@@ -66,14 +66,14 @@ export function MiniROICalculator() {
   const results = useMemo(() => {
     const purchasePrice = parseFormattedNumber(debouncedFormData.purchasePrice);
     const renovationCost = parseFormattedNumber(debouncedFormData.renovationCost);
-    const monthlyRent = parseFormattedNumber(debouncedFormData.monthlyRent);
+    const annualRent = parseFormattedNumber(debouncedFormData.annualRent);
     const nightlyRate = parseFormattedNumber(debouncedFormData.nightlyRate);
     const occupancyRate = parseFormattedNumber(debouncedFormData.occupancyRate);
 
     const totalInvestment = purchasePrice + renovationCost;
     
     // Long-term calculations
-    const annualLongTermIncome = monthlyRent * 12;
+    const annualLongTermIncome = annualRent * 12;
     const roiLongTerm = totalInvestment > 0 ? (annualLongTermIncome / totalInvestment) * 100 : 0;
     
     // Airbnb calculations
@@ -122,12 +122,12 @@ export function MiniROICalculator() {
     if (purchasePrice <= 0) return false;
     
     if (formData.strategy === "long-term") {
-      return parseFormattedNumber(formData.monthlyRent) > 0;
+      return parseFormattedNumber(formData.annualRent) > 0;
     } else if (formData.strategy === "airbnb") {
       return parseFormattedNumber(formData.nightlyRate) > 0 && parseFormattedNumber(formData.occupancyRate) > 0;
     } else {
       return (
-        parseFormattedNumber(formData.monthlyRent) > 0 ||
+        parseFormattedNumber(formData.annualRent) > 0 ||
         (parseFormattedNumber(formData.nightlyRate) > 0 && parseFormattedNumber(formData.occupancyRate) > 0)
       );
     }
@@ -204,8 +204,8 @@ export function MiniROICalculator() {
             <Input
               type="text"
               inputMode="numeric"
-              value={formData.monthlyRent}
-              onChange={(e) => handleInputChange("monthlyRent", e.target.value)}
+              value={formData.annualRent}
+              onChange={(e) => handleInputChange("annualRent", e.target.value)}
               placeholder="600,000"
               className="bg-navy/60 border-ivory/20 text-ivory h-10 placeholder:text-ivory/30"
             />
