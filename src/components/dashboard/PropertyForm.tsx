@@ -111,7 +111,7 @@ export function PropertyForm({ open, onClose, onSuccess, initialData }: Property
             area: data.area || null,
             asking_price_ngn: data.asking_price_ngn,
             min_price_ngn: data.min_price_ngn || null,
-            rental_potential_monthly_ngn: data.rental_potential_monthly_ngn || null,
+            rental_potential_monthly_ngn: data.rental_potential_monthly_ngn ? Math.round(data.rental_potential_monthly_ngn / 12) : null,
             airbnb_potential_nightly_ngn: data.airbnb_potential_nightly_ngn || null,
             owner_name: data.owner_name || null,
             owner_contact: data.owner_contact || null,
