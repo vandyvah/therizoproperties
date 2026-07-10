@@ -185,7 +185,7 @@ export default function CalculatorLead() {
         property_location: lead.location || null,
         purchase_price_ngn: parseNum(price),
         renovation_cost_ngn: parseNum(reno),
-        monthly_rent_ngn: strategy === "long-term" ? parseNum(annualRent) : null,
+        monthly_rent_ngn: strategy === "long-term" ? Math.round(parseNum(annualRent) / 12) : null,
         airbnb_nightly_rate_ngn: strategy === "airbnb" ? parseNum(nightly) : null,
         airbnb_occupancy_rate_pct: strategy === "airbnb" ? parseNum(occupancy) : null,
         gross_annual_income_ngn: results.gross,
