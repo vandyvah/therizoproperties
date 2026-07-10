@@ -218,10 +218,14 @@ describe("PropertyForm yearly rent round-trip", () => {
 
   it("rejects ₦199,999/year (just under low boundary)", async () => {
     renderForm(basePayload);
-    await typeAndSave("199999");
-    await waitFor(() =>
-      expect(screen.getByRole("alert").textContent).toMatch(/monthly|ANNUAL/i)
-    );
+    const user = userEvent.setup();
+    const input = screen.getByLabelText(/Rental Potential/i) as HTMLInputElement;
+    await user.clear(input);
+    await user.type(input, "199999");
+    expect(input.value).toBe("199999");
+    await user.click(screen.getByRole("button", { name: /Update/i }));
+    const alert = await screen.findByRole("alert", {}, { timeout: 3000 });
+    expect(alert.textContent).toMatch(/monthly|ANNUAL/i);
     expect(updateMock).not.toHaveBeenCalled();
   });
 
