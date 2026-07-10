@@ -322,6 +322,14 @@ export function PropertyForm({ open, onClose, onSuccess, initialData }: Property
                         ⚠ Below ₦200,000/year seems low for annual rent — please double-check.
                       </p>
                     )}
+                    {form.formState.errors.rental_potential_monthly_ngn && (
+                      <p
+                        role="alert"
+                        className="text-sm text-destructive font-semibold mt-1"
+                      >
+                        {form.formState.errors.rental_potential_monthly_ngn.message as string}
+                      </p>
+                    )}
                   </>
                 );
               })()}
