@@ -97,6 +97,54 @@ describe("PropertyForm yearly rent round-trip", () => {
     expect(payload.rental_potential_monthly_ngn).toBe(1400000);
   });
 
+  it("blocks save and shows an error when yearly rent looks monthly (yield > 25%)", async () => {
+    const user = userEvent.setup();
+    renderForm({
+      id: "p1",
+      title: "Test",
+      property_type: "Detached House",
+      city: "Abuja",
+      asking_price_ngn: 100_000_000,
+      rental_potential_monthly_ngn: 0,
+      risk_rating: "low",
+      status: "listed",
+    });
+
+    const input = screen.getByLabelText(/Rental Potential/i) as HTMLInputElement;
+    await user.clear(input);
+    await user.type(input, "30000000"); // 30% yield → monthly-looking
+    await user.click(screen.getByRole("button", { name: /Update/i }));
+
+    await waitFor(() =>
+      expect(screen.getByRole("alert").textContent).toMatch(/ANNUAL rent/i)
+    );
+    expect(updateMock).not.toHaveBeenCalled();
+  });
+
+  it("blocks save when yearly rent is implausibly low (< ₦200,000)", async () => {
+    const user = userEvent.setup();
+    renderForm({
+      id: "p1",
+      title: "Test",
+      property_type: "Detached House",
+      city: "Abuja",
+      asking_price_ngn: 100_000_000,
+      rental_potential_monthly_ngn: 0,
+      risk_rating: "low",
+      status: "listed",
+    });
+
+    const input = screen.getByLabelText(/Rental Potential/i) as HTMLInputElement;
+    await user.clear(input);
+    await user.type(input, "50000");
+    await user.click(screen.getByRole("button", { name: /Update/i }));
+
+    await waitFor(() =>
+      expect(screen.getByRole("alert").textContent).toMatch(/monthly amount|too low/i)
+    );
+    expect(updateMock).not.toHaveBeenCalled();
+  });
+
   it("preserves the yearly value on a full re-render (save → reload round-trip)", () => {
     // First mount = save; second mount simulates reopening the form after refetch
     const { unmount } = renderForm({
