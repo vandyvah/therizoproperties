@@ -244,8 +244,8 @@ const Calculator_Page = () => {
     // 1) Total Investment
     const totalInvestment = purchasePrice + renovationCost;
 
-    // 2) Long-Term Rental Annual Income
-    const annualLongTermIncome = annualRent * 12;
+    // 2) Long-Term Rental Annual Income (entered directly as yearly)
+    const annualLongTermIncome = annualRent;
 
     // 3) Gross ROI (Long-Term)
     const roiLongTerm = totalInvestment > 0 ? (annualLongTermIncome / totalInvestment) * 100 : 0;
