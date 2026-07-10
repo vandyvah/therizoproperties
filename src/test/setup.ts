@@ -1,0 +1,33 @@
+import "@testing-library/jest-dom";
+
+Object.defineProperty(window, "matchMedia", {
+  writable: true,
+  value: (query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: () => {},
+    removeListener: () => {},
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    dispatchEvent: () => {},
+  }),
+});
+
+// jsdom lacks these; several Radix components use them.
+class ResizeObserverMock {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+(globalThis as any).ResizeObserver = (globalThis as any).ResizeObserver || ResizeObserverMock;
+(globalThis as any).DOMRect = (globalThis as any).DOMRect || class { static fromRect() { return {}; } };
+
+if (!(Element.prototype as any).hasPointerCapture) {
+  (Element.prototype as any).hasPointerCapture = () => false;
+  (Element.prototype as any).setPointerCapture = () => {};
+  (Element.prototype as any).releasePointerCapture = () => {};
+}
+if (!(Element.prototype as any).scrollIntoView) {
+  (Element.prototype as any).scrollIntoView = () => {};
+}
