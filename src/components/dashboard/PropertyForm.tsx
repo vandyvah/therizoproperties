@@ -83,7 +83,7 @@ export function PropertyForm({ open, onClose, onSuccess, initialData }: Property
       area: initialData?.area || "",
       asking_price_ngn: initialData?.asking_price_ngn || 0,
       min_price_ngn: initialData?.min_price_ngn || undefined,
-      rental_potential_monthly_ngn: initialData?.rental_potential_monthly_ngn || undefined,
+      rental_potential_monthly_ngn: initialData?.rental_potential_monthly_ngn ? initialData.rental_potential_monthly_ngn * 12 : undefined,
       airbnb_potential_nightly_ngn: initialData?.airbnb_potential_nightly_ngn || undefined,
       owner_name: initialData?.owner_name || "",
       owner_contact: initialData?.owner_contact || "",
