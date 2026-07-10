@@ -1,5 +1,5 @@
-import { useState, useRef } from "react";
-import { ChevronLeft, ChevronRight, Play, Pause, Maximize2, X } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { ChevronLeft, ChevronRight, Play, Maximize2, X, Video as VideoIcon, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -18,20 +18,37 @@ interface PropertyMediaCarouselProps {
 
 export function PropertyMediaCarousel({ media, propertyTitle, className }: PropertyMediaCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
+  const [videoError, setVideoError] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Sort media by sort_order, then by type (images first)
+  // Sort media by sort_order, then images before videos
   const sortedMedia = [...media].sort((a, b) => {
     const orderA = a.sort_order ?? 999;
     const orderB = b.sort_order ?? 999;
     if (orderA !== orderB) return orderA - orderB;
-    // Images before videos
     if (a.file_type === "image" && b.file_type === "video") return -1;
     if (a.file_type === "video" && b.file_type === "image") return 1;
     return 0;
   });
+
+  // Reset per-slide state when slide changes
+  useEffect(() => {
+    setHasStarted(false);
+    setVideoError(false);
+  }, [currentIndex]);
+
+  // Lock body scroll when fullscreen
+  useEffect(() => {
+    if (isFullscreen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [isFullscreen]);
 
   if (sortedMedia.length === 0) {
     return (
@@ -46,97 +63,106 @@ export function PropertyMediaCarousel({ media, propertyTitle, className }: Prope
 
   const goToPrevious = () => {
     setCurrentIndex((prev) => (prev === 0 ? sortedMedia.length - 1 : prev - 1));
-    setIsPlaying(false);
   };
 
   const goToNext = () => {
     setCurrentIndex((prev) => (prev === sortedMedia.length - 1 ? 0 : prev + 1));
-    setIsPlaying(false);
   };
 
-  const togglePlay = () => {
-    const v = videoRef.current;
-    if (!v) return;
-    if (isPlaying) {
-      v.pause();
-      setIsPlaying(false);
-    } else {
+  const startPlayback = () => {
+    setHasStarted(true);
+    // Attempt playback on next tick after <video> mounts with src
+    requestAnimationFrame(() => {
+      const v = videoRef.current;
+      if (!v) return;
       const p = v.play();
       if (p && typeof p.then === "function") {
-        p.then(() => setIsPlaying(true)).catch((err) => {
-          console.error("Video play failed:", err);
-          setIsPlaying(false);
+        p.catch((err) => {
+          // Autoplay blocked — native controls will still let user press play
+          console.warn("Video autoplay blocked:", err?.message || err);
         });
-      } else {
-        setIsPlaying(true);
       }
-    }
+    });
   };
 
-  const toggleFullscreen = () => {
-    setIsFullscreen(!isFullscreen);
-  };
+  const toggleFullscreen = () => setIsFullscreen((f) => !f);
 
-  const handleVideoEnded = () => {
-    setIsPlaying(false);
-  };
+  const renderMedia = (fullscreen: boolean) => {
+    const mediaClasses = fullscreen
+      ? "max-w-full max-h-full object-contain"
+      : "w-full h-full object-cover";
 
-  const CarouselContent = ({ fullscreen = false }) => (
-    <div className={cn(
-      "relative bg-black",
-      fullscreen ? "w-full h-full flex items-center justify-center" : "aspect-[4/3] rounded-sm overflow-hidden"
-    )}>
-      {/* Main media display */}
-      {isVideo ? (
+    if (isVideo) {
+      if (videoError) {
+        return (
+          <div className="w-full h-full flex flex-col items-center justify-center bg-navy/90 text-ivory p-6 text-center gap-2">
+            <AlertCircle className="w-8 h-8 text-gold" />
+            <p className="text-sm">This video could not be played in your browser.</p>
+            <a
+              href={currentItem.file_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gold underline text-sm"
+            >
+              Open video in new tab
+            </a>
+          </div>
+        );
+      }
+
+      if (!hasStarted && !fullscreen) {
+        // Poster/placeholder before first play — keeps page fast
+        return (
+          <button
+            type="button"
+            onClick={startPlayback}
+            className="group absolute inset-0 flex items-center justify-center bg-gradient-to-br from-navy via-navy/90 to-navy/70"
+            aria-label={`Play video for ${propertyTitle}`}
+          >
+            <div className="w-16 h-16 rounded-full bg-gold flex items-center justify-center shadow-lg transition-transform group-hover:scale-110">
+              <Play className="w-6 h-6 text-navy ml-1" fill="currentColor" />
+            </div>
+            <span className="absolute bottom-6 text-ivory/80 text-xs uppercase tracking-widest flex items-center gap-2">
+              <VideoIcon className="w-3.5 h-3.5" /> Property Video
+            </span>
+          </button>
+        );
+      }
+
+      return (
         <video
           ref={videoRef}
+          key={currentItem.file_url + (fullscreen ? "-fs" : "")}
           src={currentItem.file_url}
-          className={cn(
-            "object-contain",
-            fullscreen ? "max-w-full max-h-full" : "w-full h-full object-cover"
-          )}
+          className={mediaClasses}
           playsInline
           controls
+          controlsList="nodownload"
           preload="metadata"
-          onEnded={handleVideoEnded}
-          onPlay={() => setIsPlaying(true)}
-          onPause={() => setIsPlaying(false)}
+          autoPlay={hasStarted}
+          onError={() => setVideoError(true)}
         />
-      ) : (
-        <img
-          src={currentItem.file_url}
-          alt={`${propertyTitle} - Image ${currentIndex + 1}`}
-          className={cn(
-            "object-contain",
-            fullscreen ? "max-w-full max-h-full" : "w-full h-full object-cover"
-          )}
-          loading={currentIndex === 0 ? "eager" : "lazy"}
-        />
-      )}
+      );
+    }
 
-      {/* Video play overlay */}
-      {isVideo && !isPlaying && (
-        <button
-          onClick={togglePlay}
-          className="absolute inset-0 flex items-center justify-center bg-black/30 hover:bg-black/40 transition-colors"
-          aria-label="Play video"
-        >
-          <div className="w-16 h-16 rounded-full bg-gold flex items-center justify-center shadow-lg">
-            <Play className="w-6 h-6 text-navy ml-1" fill="currentColor" />
-          </div>
-        </button>
-      )}
+    return (
+      <img
+        src={currentItem.file_url}
+        alt={`${propertyTitle} - Image ${currentIndex + 1}`}
+        className={mediaClasses}
+        loading={currentIndex === 0 ? "eager" : "lazy"}
+      />
+    );
+  };
 
-      {/* Video controls */}
-      {isVideo && isPlaying && (
-        <button
-          onClick={togglePlay}
-          className="absolute bottom-4 left-4 p-2 rounded-full bg-black/70 hover:bg-black/90 transition-colors"
-          aria-label="Pause video"
-        >
-          <Pause className="w-5 h-5 text-white" />
-        </button>
+  const CarouselContent = ({ fullscreen = false }: { fullscreen?: boolean }) => (
+    <div
+      className={cn(
+        "relative bg-black",
+        fullscreen ? "w-full h-full flex items-center justify-center" : "aspect-[4/3] rounded-sm overflow-hidden"
       )}
+    >
+      {renderMedia(fullscreen)}
 
       {/* Navigation arrows */}
       {sortedMedia.length > 1 && (
@@ -145,8 +171,8 @@ export function PropertyMediaCarousel({ media, propertyTitle, className }: Prope
             variant="ghost"
             size="icon"
             onClick={goToPrevious}
-            className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full"
-            aria-label="Previous image"
+            className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full z-10"
+            aria-label="Previous media"
           >
             <ChevronLeft className="h-5 w-5" />
           </Button>
@@ -154,8 +180,8 @@ export function PropertyMediaCarousel({ media, propertyTitle, className }: Prope
             variant="ghost"
             size="icon"
             onClick={goToNext}
-            className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full"
-            aria-label="Next image"
+            className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full z-10"
+            aria-label="Next media"
           >
             <ChevronRight className="h-5 w-5" />
           </Button>
@@ -168,37 +194,15 @@ export function PropertyMediaCarousel({ media, propertyTitle, className }: Prope
           variant="ghost"
           size="icon"
           onClick={toggleFullscreen}
-          className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white rounded-full"
+          className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white rounded-full z-10"
           aria-label="View fullscreen"
         >
           <Maximize2 className="h-4 w-4" />
         </Button>
       )}
 
-      {/* Indicator dots */}
-      {sortedMedia.length > 1 && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
-          {sortedMedia.map((item, index) => (
-            <button
-              key={index}
-              onClick={() => {
-                setCurrentIndex(index);
-                setIsPlaying(false);
-              }}
-              className={cn(
-                "w-2 h-2 rounded-full transition-all",
-                index === currentIndex 
-                  ? "bg-white w-4" 
-                  : "bg-white/50 hover:bg-white/70"
-              )}
-              aria-label={`Go to ${item.file_type === "video" ? "video" : "image"} ${index + 1}`}
-            />
-          ))}
-        </div>
-      )}
-
       {/* Media counter */}
-      <div className="absolute top-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
+      <div className="absolute top-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded z-10">
         {currentIndex + 1} / {sortedMedia.length}
         {isVideo && " • Video"}
       </div>
@@ -217,29 +221,18 @@ export function PropertyMediaCarousel({ media, propertyTitle, className }: Prope
           {sortedMedia.map((item, index) => (
             <button
               key={index}
-              onClick={() => {
-                setCurrentIndex(index);
-                setIsPlaying(false);
-              }}
+              type="button"
+              onClick={() => setCurrentIndex(index)}
               className={cn(
                 "flex-shrink-0 w-16 h-16 rounded overflow-hidden border-2 transition-all relative",
-                index === currentIndex 
-                  ? "border-gold" 
-                  : "border-transparent hover:border-gold/50"
+                index === currentIndex ? "border-gold" : "border-transparent hover:border-gold/50"
               )}
+              aria-label={`Go to ${item.file_type === "video" ? "video" : "image"} ${index + 1}`}
             >
               {item.file_type === "video" ? (
-                <>
-                  <video
-                    src={item.file_url}
-                    className="w-full h-full object-cover"
-                    muted
-                    playsInline
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                    <Play className="w-4 h-4 text-white" />
-                  </div>
-                </>
+                <div className="w-full h-full flex items-center justify-center bg-navy">
+                  <Play className="w-5 h-5 text-gold" fill="currentColor" />
+                </div>
               ) : (
                 <img
                   src={item.file_url}
@@ -255,17 +248,19 @@ export function PropertyMediaCarousel({ media, propertyTitle, className }: Prope
 
       {/* Fullscreen modal */}
       {isFullscreen && (
-        <div 
+        <div
           className="fixed inset-0 z-50 bg-black flex items-center justify-center"
           onClick={(e) => {
             if (e.target === e.currentTarget) toggleFullscreen();
           }}
+          role="dialog"
+          aria-modal="true"
         >
           <Button
             variant="ghost"
             size="icon"
             onClick={toggleFullscreen}
-            className="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white rounded-full z-10"
+            className="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white rounded-full z-20"
             aria-label="Close fullscreen"
           >
             <X className="h-5 w-5" />
