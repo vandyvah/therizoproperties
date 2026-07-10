@@ -139,13 +139,22 @@ const Properties = () => {
                 key={property.id}
                 className="group bg-warm-white rounded-sm overflow-hidden border border-sand hover:shadow-lg transition-all duration-300"
               >
-                <div className="relative aspect-[4/3] overflow-hidden">
+                <div className="relative aspect-[4/3] overflow-hidden bg-navy">
                   {coverImage ? (
                     <img
                       src={coverImage}
                       alt={property.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       loading="lazy"
+                    />
+                  ) : hasVideo ? (
+                    <video
+                      src={media.find((m) => m.file_type === "video")?.file_url}
+                      className="w-full h-full object-cover"
+                      muted
+                      playsInline
+                      preload="metadata"
+                      // Load first frame as poster
                     />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-navy/10 via-sand to-navy/5 flex items-center justify-center">
