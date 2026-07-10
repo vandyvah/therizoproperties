@@ -83,7 +83,7 @@ export function ROIForm({ open, onClose, onSuccess }: ROIFormProps) {
       purchase_price_ngn: 0,
       renovation_cost_ngn: 0,
       other_acquisition_costs_ngn: 0,
-      monthly_rent_ngn: 0,
+      annual_rent_ngn: 0,
       airbnb_nightly_rate_ngn: 0,
       airbnb_occupancy_rate_pct: 70,
       annual_property_tax_ngn: 0,
