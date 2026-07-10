@@ -329,10 +329,10 @@ export function ROIForm({ open, onClose, onSuccess }: ROIFormProps) {
             {(strategy === "long_term_rental" || strategy === "compare") && (
               <FormField
                 control={form.control}
-                name="monthly_rent_ngn"
+                name="annual_rent_ngn"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Monthly Rent (₦)</FormLabel>
+                    <FormLabel>Annual Rent (₦/year)</FormLabel>
                     <FormControl>
                       <Input type="number" {...field} />
                     </FormControl>
