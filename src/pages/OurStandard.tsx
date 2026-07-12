@@ -87,6 +87,7 @@ const OurStandard = () => {
         canonicalUrl="/our-standard"
         ogImage="https://therizoproperties.com/og/og-standard.jpg"
       />
+      <JsonLd data={createOrganizationSchema()} />
       <JsonLd data={createFAQSchema(standardFAQs)} />
       
       {/* Hero */}
