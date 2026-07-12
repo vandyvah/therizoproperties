@@ -40,7 +40,7 @@ const Index = () => {
     <Layout>
       <SEOHead
         title="Verified Nigerian Properties for Diaspora Investors | Therizo"
-        description="Verified Nigerian properties with clean titles and documented ownership. Therizo serves diaspora investors across Lagos, Abuja, and Port Harcourt with transparent numbers and disciplined due diligence."
+        description="Verified Nigerian properties with clean titles for diaspora investors across Lagos, Abuja, and Port Harcourt. Transparent numbers, disciplined due diligence."
         keywords="verified Nigerian properties, diaspora investors, Nigerian real estate, clean title Nigeria, documented ownership, diaspora property investment, Lagos property, Abuja real estate, Port Harcourt property"
         canonicalUrl="/"
         ogImage="https://therizoproperties.com/og/og-home.jpg"

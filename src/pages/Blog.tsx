@@ -57,7 +57,7 @@ export default function Blog() {
         title="Blog - Nigerian Real Estate Insights | Therizo Properties"
         description="Expert insights on Nigerian real estate investment, property due diligence, title verification, and market analysis for serious buyers and diaspora investors."
         canonical="/blog"
-        ogImage="/og/og-standard.jpg"
+        ogImage="https://therizoproperties.com/og/og-standard.jpg"
       />
       <JsonLd data={createOrganizationSchema()} />
 

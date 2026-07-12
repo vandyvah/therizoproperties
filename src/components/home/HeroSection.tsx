@@ -103,7 +103,7 @@ export function HeroSection() {
                 <Newspaper className="text-gold w-6 h-6 drop-shadow-lg" />
                 <h3 className="font-display text-xl font-bold text-primary-foreground drop-shadow-sm">Therizo News</h3>
               </div>
-              <button onClick={() => setShowNews(false)} className="text-primary-foreground/70 hover:text-primary-foreground transition-colors relative z-10">
+              <button aria-label="Close news" onClick={() => setShowNews(false)} className="text-primary-foreground/70 hover:text-primary-foreground transition-colors relative z-10">
                 <X className="w-6 h-6" />
               </button>
             </div>
