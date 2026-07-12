@@ -68,7 +68,7 @@ Deno.serve(async (req) => {
     const { data: properties, error } = await supabase
       .from("properties")
       .select("id, slug, updated_at, title")
-      .eq("status", "published")
+      .eq("status", "listed")
       .not("slug", "is", null)
       .order("updated_at", { ascending: false });
 
