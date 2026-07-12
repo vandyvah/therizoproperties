@@ -11,7 +11,7 @@ import {
   Heart,
 } from "lucide-react";
 import { SEOHead } from "@/components/seo/SEOHead";
-import { JsonLd, createFAQSchema } from "@/components/seo/JsonLd";
+import { JsonLd, createFAQSchema, createOrganizationSchema } from "@/components/seo/JsonLd";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 

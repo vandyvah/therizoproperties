@@ -26,6 +26,14 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+
+  <!-- Advanced Calculator -->
+  <url>
+    <loc>https://therizoproperties.com/calculator/advanced</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
   
   <!-- Our Standard -->
   <url>
