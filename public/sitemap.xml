@@ -1,145 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-  <!-- Homepage -->
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://therizoproperties.com/</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
-  
-  <!-- Properties Listing -->
   <url>
     <loc>https://therizoproperties.com/properties</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-  
-  <!-- ROI Calculator -->
-  <url>
-    <loc>https://therizoproperties.com/calculator</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- Advanced Calculator -->
-  <url>
-    <loc>https://therizoproperties.com/calculator/advanced</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <!-- Our Standard -->
-  <url>
-    <loc>https://therizoproperties.com/our-standard</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <!-- Team -->
-  <url>
-    <loc>https://therizoproperties.com/team</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <!-- Contact -->
-  <url>
-    <loc>https://therizoproperties.com/contact</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <!-- Blog -->
   <url>
     <loc>https://therizoproperties.com/blog</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  
-  <!-- Guides -->
+  <url>
+    <loc>https://therizoproperties.com/calculator</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://therizoproperties.com/calculator/advanced</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://therizoproperties.com/our-standard</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://therizoproperties.com/team</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://therizoproperties.com/contact</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://therizoproperties.com/materials-supply</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <url>
     <loc>https://therizoproperties.com/guides/title-verification</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://therizoproperties.com/guides/buyer-guide</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://therizoproperties.com/guides/roi-methodology</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
-  <!-- Materials Supply -->
-  <url>
-    <loc>https://therizoproperties.com/materials-supply</loc>
-    <lastmod>2026-04-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <!-- Press -->
   <url>
     <loc>https://therizoproperties.com/press</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
-  
-  <!-- Location Pages -->
   <url>
     <loc>https://therizoproperties.com/locations/lagos</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://therizoproperties.com/locations/abuja</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://therizoproperties.com/locations/port-harcourt</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
-
-  <!-- Abuja Diaspora Starter Kit -->
-  <url>
-    <loc>https://therizoproperties.com/abuja-starter-kit</loc>
-    <lastmod>2026-04-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- Submit Property (Owner Funnel) -->
   <url>
     <loc>https://therizoproperties.com/submit-property</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-
-  <!-- Property Detail Pages -->
+  <url>
+    <loc>https://therizoproperties.com/abuja-starter-kit</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
   <url>
     <loc>https://therizoproperties.com/properties/detached-house-bwari-abuja-abuja-189d3989</loc>
     <lastmod>2026-07-10</lastmod>
@@ -163,25 +132,80 @@
     <lastmod>2026-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://nvpxoxlnculbkmzkpstn.supabase.co/storage/v1/object/public/property-media/temp/image/1780358597804-2nd_p.jpg</image:loc>
+      <image:title>Own a Cash-Flow Ready Dutsen Property: 3 Self-Con Units in FCT for Only N11M</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://nvpxoxlnculbkmzkpstn.supabase.co/storage/v1/object/public/property-media/temp/image/1780358594901-image_1.jpg</image:loc>
+      <image:title>Own a Cash-Flow Ready Dutsen Property: 3 Self-Con Units in FCT for Only N11M</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://therizoproperties.com/properties/land-garba-2-after-veritas-university-bwari-abuja</loc>
     <lastmod>2026-06-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://nvpxoxlnculbkmzkpstn.supabase.co/storage/v1/object/public/property-media/cf539275-0a20-4179-8075-db7a152bed01/image/1780274010035-1_scree.jpg</image:loc>
+      <image:title>Urgent !!! Rare Abuja Property Investment Opportunity : 100x50 Plot + 2BR + 4 Self-Con Going for Only N9M&quot;</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://nvpxoxlnculbkmzkpstn.supabase.co/storage/v1/object/public/property-media/cf539275-0a20-4179-8075-db7a152bed01/image/1780274018791-2_.jpg</image:loc>
+      <image:title>Urgent !!! Rare Abuja Property Investment Opportunity : 100x50 Plot + 2BR + 4 Self-Con Going for Only N9M&quot;</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://nvpxoxlnculbkmzkpstn.supabase.co/storage/v1/object/public/property-media/cf539275-0a20-4179-8075-db7a152bed01/image/1780274025933-3.jpg</image:loc>
+      <image:title>Urgent !!! Rare Abuja Property Investment Opportunity : 100x50 Plot + 2BR + 4 Self-Con Going for Only N9M&quot;</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://therizoproperties.com/properties/commercial-apapa-oshodi-tincan-lagos-a2774430</loc>
     <lastmod>2026-02-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://nvpxoxlnculbkmzkpstn.supabase.co/storage/v1/object/public/property-media/temp/image/1771742262927-plot_15_5.jpg</image:loc>
+      <image:title>FOR SALE : 3 Commercial Plots on Apapa–Oshodi Expressway, Opposite Oil Depots, Coconut Bus Stop, Olodi-Apapa</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://nvpxoxlnculbkmzkpstn.supabase.co/storage/v1/object/public/property-media/temp/image/1771742263334-Plot_15_6.jpg</image:loc>
+      <image:title>FOR SALE : 3 Commercial Plots on Apapa–Oshodi Expressway, Opposite Oil Depots, Coconut Bus Stop, Olodi-Apapa</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://nvpxoxlnculbkmzkpstn.supabase.co/storage/v1/object/public/property-media/temp/image/1771742264825-plot_15_4.jpg</image:loc>
+      <image:title>FOR SALE : 3 Commercial Plots on Apapa–Oshodi Expressway, Opposite Oil Depots, Coconut Bus Stop, Olodi-Apapa</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://nvpxoxlnculbkmzkpstn.supabase.co/storage/v1/object/public/property-media/temp/image/1771742265336-Plot_is_Property.jpg</image:loc>
+      <image:title>FOR SALE : 3 Commercial Plots on Apapa–Oshodi Expressway, Opposite Oil Depots, Coconut Bus Stop, Olodi-Apapa</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://nvpxoxlnculbkmzkpstn.supabase.co/storage/v1/object/public/property-media/temp/image/1771742265817-Plot_15_3.jpg</image:loc>
+      <image:title>FOR SALE : 3 Commercial Plots on Apapa–Oshodi Expressway, Opposite Oil Depots, Coconut Bus Stop, Olodi-Apapa</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://nvpxoxlnculbkmzkpstn.supabase.co/storage/v1/object/public/property-media/temp/image/1771742266301-Plot_15_1.jpg</image:loc>
+      <image:title>FOR SALE : 3 Commercial Plots on Apapa–Oshodi Expressway, Opposite Oil Depots, Coconut Bus Stop, Olodi-Apapa</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://nvpxoxlnculbkmzkpstn.supabase.co/storage/v1/object/public/property-media/temp/image/1771742266711-Plot_15_2.jpg</image:loc>
+      <image:title>FOR SALE : 3 Commercial Plots on Apapa–Oshodi Expressway, Opposite Oil Depots, Coconut Bus Stop, Olodi-Apapa</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://nvpxoxlnculbkmzkpstn.supabase.co/storage/v1/object/public/property-media/temp/image/1771742261740-Plot_15_7.jpg</image:loc>
+      <image:title>FOR SALE : 3 Commercial Plots on Apapa–Oshodi Expressway, Opposite Oil Depots, Coconut Bus Stop, Olodi-Apapa</image:title>
+    </image:image>
   </url>
-
-  <!-- Blog Posts -->
   <url>
     <loc>https://therizoproperties.com/blog/verify-property-ownership-nigeria-diaspora-guide</loc>
     <lastmod>2025-12-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200</image:loc>
+      <image:title>How to Verify Property Ownership in Nigeria: A Diaspora Investor&apos;s Guide</image:title>
+      <image:caption>Property documents and title verification in Nigeria - essential for diaspora investors</image:caption>
+    </image:image>
   </url>
 </urlset>
