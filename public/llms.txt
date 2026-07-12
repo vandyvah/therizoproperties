@@ -1,0 +1,37 @@
+# Therizo Property and Development Corporation
+
+> Boutique Nigerian real estate firm serving diaspora investors with verified titles, transparent numbers, and disciplined due diligence across Lagos, Abuja, and Port Harcourt.
+
+Therizo curates residential and commercial properties in Nigeria, prioritising documented ownership and defensible pricing. We publish investment guides, an ROI calculator, and location intelligence for serious buyers.
+
+## Pages
+
+- [Home](/): Overview of Therizo's verified property offering for diaspora investors.
+- [Properties](/properties): Curated listings with verified titles across Lagos, Abuja, and Port Harcourt.
+- [ROI Calculator](/calculator): Estimate rental yield, cap rate, and payback for Nigerian properties.
+- [Our Standard](/our-standard): How Therizo vets titles, ownership, and pricing before listing.
+- [Team](/team): Leadership and consultants across Nigerian and diaspora markets.
+- [Contact](/contact): Speak with a Therizo consultant.
+- [Materials Supply](/materials-supply): Building materials supply for contractors and developers.
+- [Abuja Diaspora Starter Kit](/abuja-starter-kit): Playbook for diaspora investors buying in Abuja.
+- [Submit Property](/submit-property): Owner funnel to list a property with Therizo.
+
+## Locations
+
+- [Lagos](/locations/lagos): Lekki, Victoria Island, Ikoyi, and growth corridors.
+- [Abuja](/locations/abuja): Maitama, Asokoro, Wuse, and FCT growth areas.
+- [Port Harcourt](/locations/port-harcourt): GRA, Trans Amadi, and Rivers State.
+
+## Guides
+
+- [Title Verification](/guides/title-verification): How Nigerian property titles are verified.
+- [Buyer Guide](/guides/buyer-guide): End-to-end diaspora buyer guide.
+- [ROI Methodology](/guides/roi-methodology): How Therizo models Nigerian rental returns.
+
+## Blog
+
+- [Blog](/blog): Insights on Nigerian real estate, due diligence, and market trends.
+
+## Optional
+
+- [Press](/press): Press mentions and media resources.

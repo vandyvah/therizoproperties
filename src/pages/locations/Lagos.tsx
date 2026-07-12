@@ -92,8 +92,8 @@ export default function Lagos() {
   return (
     <Layout>
       <SEOHead
-        title="Lagos Real Estate | Property Investment in Lekki, Victoria Island & Ikoyi"
-        description="Invest in Lagos property with verified titles and strong ROI. Premium real estate in Lekki, Victoria Island, Ikoyi, and emerging areas. Expert guidance for local and diaspora buyers."
+        title="Lagos Real Estate | Lekki, Victoria Island & Ikoyi"
+        description="Invest in Lagos property with verified titles and strong ROI. Premium real estate in Lekki, Victoria Island, Ikoyi, and emerging growth areas."
         canonical="/locations/lagos"
         ogImage="https://therizoproperties.com/og/og-lagos.jpg"
         keywords={[

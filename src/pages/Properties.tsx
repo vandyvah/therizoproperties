@@ -79,7 +79,7 @@ const Properties = () => {
   return (
     <Layout>
       <SEOHead
-        title="Nigerian Properties for Sale | Verified Listings in Lagos & Abuja"
+        title="Verified Nigerian Properties | Lagos & Abuja"
         description="Browse verified Nigerian properties with clean titles. Luxury homes, investment apartments, and development opportunities in Lagos, Abuja, and key growth markets."
         keywords="Nigerian properties for sale, Lagos real estate listings, Abuja property investment, Lekki homes for sale, Ikoyi luxury apartments, verified Nigerian property"
         canonicalUrl="/properties"
@@ -111,8 +111,10 @@ const Properties = () => {
       </section>
 
       {/* Properties Grid */}
-      <section className="section-padding bg-ivory">
+      <section className="section-padding bg-ivory" aria-labelledby="properties-grid-heading">
         <div className="container-wide">
+          <h2 id="properties-grid-heading" className="sr-only">Available Properties</h2>
+
           {isLoading ? (
             <div className="flex items-center justify-center py-16">
               <Loader2 className="h-6 w-6 animate-spin text-gold" />
