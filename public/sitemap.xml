@@ -138,4 +138,50 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+
+  <!-- Property Detail Pages -->
+  <url>
+    <loc>https://therizoproperties.com/properties/detached-house-bwari-abuja-abuja-189d3989</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://therizoproperties.com/properties/land-kubwa-fo1-abuja-8470ec3d</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://therizoproperties.com/properties/detached-house-bwari-area-council-abuja-bf50e6a0</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://therizoproperties.com/properties/detached-house-dutsen-abuja-abuja-a8fc6c53</loc>
+    <lastmod>2026-06-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://therizoproperties.com/properties/land-garba-2-after-veritas-university-bwari-abuja</loc>
+    <lastmod>2026-06-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://therizoproperties.com/properties/commercial-apapa-oshodi-tincan-lagos-a2774430</loc>
+    <lastmod>2026-02-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog Posts -->
+  <url>
+    <loc>https://therizoproperties.com/blog/verify-property-ownership-nigeria-diaspora-guide</loc>
+    <lastmod>2025-12-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>
