@@ -2,7 +2,7 @@ import { Layout } from "@/components/layout/Layout";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FAQSection } from "@/components/seo/FAQSection";
-import { JsonLd, createArticleSchema } from "@/components/seo/JsonLd";
+import { JsonLd, createArticleSchema, createBreadcrumbSchema } from "@/components/seo/JsonLd";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { 
@@ -148,6 +148,11 @@ export default function BuyerGuide() {
         datePublished: "2025-01-15",
         dateModified: "2026-07-20",
       })} />
+      <JsonLd data={createBreadcrumbSchema([
+        { name: "Home", url: "https://therizoproperties.com/" },
+        { name: "Guides", url: "https://therizoproperties.com/guides" },
+        { name: "Buyer's Guide", url: "https://therizoproperties.com/guides/buyer-guide" },
+      ])} />
 
       {/* Hero */}
       <section className="pt-32 pb-16 bg-navy">

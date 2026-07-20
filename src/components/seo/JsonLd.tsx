@@ -284,6 +284,20 @@ export function createArticleSchema(data: ArticleSchema) {
   };
 }
 
+// Helper function to create Breadcrumb schema (usable with generic <JsonLd data=...>)
+export function createBreadcrumbSchema(items: BreadcrumbItem[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  };
+}
+
 // FAQ Schema component (for backward compatibility)
 export function FAQJsonLd({ items }: { items: FAQItem[] }) {
   useEffect(() => {

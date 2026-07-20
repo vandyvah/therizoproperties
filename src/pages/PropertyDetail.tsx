@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Layout } from "@/components/layout/Layout";
 import { SEOHead } from "@/components/seo/SEOHead";
-import { JsonLd } from "@/components/seo/JsonLd";
+import { JsonLd, createBreadcrumbSchema } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -233,6 +233,11 @@ const PropertyDetail = () => {
         ].filter(Boolean)}
       />
       <JsonLd data={propertySchema} />
+      <JsonLd data={createBreadcrumbSchema([
+        { name: "Home", url: "https://therizoproperties.com/" },
+        { name: "Properties", url: "https://therizoproperties.com/properties" },
+        { name: property.title, url: `https://therizoproperties.com/properties/${property.slug || property.id}` },
+      ])} />
 
       {/* Hero */}
       <section className="pt-32 pb-8 bg-navy">

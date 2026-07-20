@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/layout/Layout";
 import { SEOHead } from "@/components/seo/SEOHead";
-import { JsonLd, createOrganizationSchema } from "@/components/seo/JsonLd";
+import { JsonLd, createOrganizationSchema, createBreadcrumbSchema } from "@/components/seo/JsonLd";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -60,6 +60,10 @@ export default function Blog() {
         ogImage="https://therizoproperties.com/og/og-standard.jpg"
       />
       <JsonLd data={createOrganizationSchema()} />
+      <JsonLd data={createBreadcrumbSchema([
+        { name: "Home", url: "https://therizoproperties.com/" },
+        { name: "Blog", url: "https://therizoproperties.com/blog" },
+      ])} />
 
       {/* Hero */}
       <section className="bg-primary text-primary-foreground py-16 lg:py-24">

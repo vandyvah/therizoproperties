@@ -1,6 +1,6 @@
 import { Layout } from "@/components/layout/Layout";
 import { SEOHead } from "@/components/seo/SEOHead";
-import { JsonLd, createRealEstateAgentSchema } from "@/components/seo/JsonLd";
+import { JsonLd, createRealEstateAgentSchema, createBreadcrumbSchema } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { Button } from "@/components/ui/button";
@@ -109,6 +109,11 @@ export default function Lagos() {
         ]}
       />
       <JsonLd data={lagosSchema} />
+      <JsonLd data={createBreadcrumbSchema([
+        { name: "Home", url: "https://therizoproperties.com/" },
+        { name: "Locations", url: "https://therizoproperties.com/locations" },
+        { name: "Lagos", url: "https://therizoproperties.com/locations/lagos" },
+      ])} />
 
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-charcoal via-charcoal to-charcoal/95 text-ivory overflow-hidden">
