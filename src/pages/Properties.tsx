@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { MapPin, ArrowRight, Building, Loader2, Video } from "lucide-react";
 import { SEOHead } from "@/components/seo/SEOHead";
-import { JsonLd, createFAQSchema } from "@/components/seo/JsonLd";
+import { JsonLd, createFAQSchema, createBreadcrumbSchema } from "@/components/seo/JsonLd";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { useQuery } from "@tanstack/react-query";
