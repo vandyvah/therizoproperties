@@ -86,6 +86,10 @@ const Properties = () => {
         ogImage="https://therizoproperties.com/og/og-properties.jpg"
       />
       <JsonLd data={createFAQSchema(propertyFAQs)} />
+      <JsonLd data={createBreadcrumbSchema([
+        { name: "Home", url: "https://therizoproperties.com/" },
+        { name: "Properties", url: "https://therizoproperties.com/properties" },
+      ])} />
       
       {/* Hero */}
       <section className="pt-32 pb-16 bg-navy">
