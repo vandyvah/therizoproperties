@@ -66,6 +66,7 @@ const App = () => (
             <Sonner />
           <BrowserRouter>
             <ScrollManager />
+            <URLNormalizer />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/calculator" element={<CalculatorLead />} />
