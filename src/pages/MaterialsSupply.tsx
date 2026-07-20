@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Layout } from "@/components/layout/Layout";
 import { SEOHead } from "@/components/seo/SEOHead";
+import { FraudWarning } from "@/components/trust/FraudWarning";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { Button } from "@/components/ui/button";
@@ -383,6 +384,9 @@ BOQ attached / Items listed: ____`;
       {/* Quote Form Section - Prominent placement */}
       <section id="quote-form" className="bg-background section-padding">
         <div className="container-wide">
+          <div className="mb-8">
+            <FraudWarning compact />
+          </div>
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
             {/* Form */}
             <div className="order-2 lg:order-1">

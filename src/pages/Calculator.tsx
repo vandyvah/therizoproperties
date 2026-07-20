@@ -33,6 +33,7 @@ import {
 } from "recharts";
 import { z } from "zod";
 import { SEOHead } from "@/components/seo/SEOHead";
+import { FraudWarning } from "@/components/trust/FraudWarning";
 import { JsonLd, createFAQSchema } from "@/components/seo/JsonLd";
 
 const calculatorFAQs = [
@@ -570,6 +571,9 @@ const Calculator_Page = () => {
       {/* Calculator Tools Tabs */}
       <section className="pb-16 bg-ivory" ref={contentRef}>
         <div className="container-wide">
+          <div className="mb-8 max-w-3xl mx-auto">
+            <FraudWarning compact />
+          </div>
           <Tabs defaultValue="roi" className="space-y-8" onValueChange={handleTabChange}>
             <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto gap-2 bg-transparent p-0">
               <TabsTrigger 
