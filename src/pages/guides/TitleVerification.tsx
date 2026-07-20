@@ -136,6 +136,11 @@ export default function TitleVerification() {
         datePublished: "2025-01-15",
         dateModified: "2026-07-20",
       })} />
+      <JsonLd data={createBreadcrumbSchema([
+        { name: "Home", url: "https://therizoproperties.com/" },
+        { name: "Guides", url: "https://therizoproperties.com/guides" },
+        { name: "Title Verification", url: "https://therizoproperties.com/guides/title-verification" },
+      ])} />
 
       {/* Hero */}
       <section className="pt-32 pb-16 bg-navy">
