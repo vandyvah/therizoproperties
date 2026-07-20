@@ -122,7 +122,7 @@ export default function ROIMethodology() {
         description: "How we calculate and present property investment returns - cap rates, yields, and payback periods explained.",
         author: "Therizo Property and Development Corporation",
         datePublished: "2025-01-15",
-        dateModified: "2025-12-15",
+        dateModified: "2026-07-20",
       })} />
 
       {/* Hero */}
@@ -153,7 +153,7 @@ export default function ROIMethodology() {
             <div className="flex items-center gap-4 mt-6 text-sm text-ivory/60">
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
-                <span>Updated: December 2025</span>
+                <span>Last reviewed: July 2026</span>
               </div>
               <span>•</span>
               <span>8 min read</span>
