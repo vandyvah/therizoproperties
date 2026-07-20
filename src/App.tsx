@@ -4,57 +4,84 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
+import { lazy, Suspense } from "react";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CurrencyProvider } from "@/components/currency/CurrencySwitcher";
 import { ScrollManager } from "@/components/ScrollManager";
 import { URLNormalizer } from "@/components/URLNormalizer";
+
+// Eager routes: high-traffic public pages (fast first paint on nav)
 import Index from "./pages/Index";
-import Calculator from "./pages/Calculator";
-import CalculatorLead from "./pages/CalculatorLead";
-import OurStandard from "./pages/OurStandard";
-import Team from "./pages/Team";
-import Contact from "./pages/Contact";
 import Properties from "./pages/Properties";
 import PropertyDetailPage from "./pages/PropertyDetail";
-import Vault from "./pages/Vault";
-import StyleGuide from "./pages/StyleGuide";
+import Contact from "./pages/Contact";
+import CalculatorLead from "./pages/CalculatorLead";
 import NotFound from "./pages/NotFound";
-import ReportFraud from "./pages/ReportFraud";
-import Press from "./pages/Press";
-import TitleVerification from "./pages/guides/TitleVerification";
-import BuyerGuide from "./pages/guides/BuyerGuide";
-import ROIMethodology from "./pages/guides/ROIMethodology";
-import Lagos from "./pages/locations/Lagos";
-import Abuja from "./pages/locations/Abuja";
-import PortHarcourt from "./pages/locations/PortHarcourt";
-import DashboardAuth from "./pages/dashboard/DashboardAuth";
-import DashboardHome from "./pages/dashboard/DashboardHome";
-import PropertiesList from "./pages/dashboard/PropertiesList";
-import PropertyDetail from "./pages/dashboard/PropertyDetail";
-import LeadsList from "./pages/dashboard/LeadsList";
-import ClientsList from "./pages/dashboard/ClientsList";
-import ViewingsList from "./pages/dashboard/ViewingsList";
-import DealsList from "./pages/dashboard/DealsList";
-import ROIList from "./pages/dashboard/ROIList";
-import Settings from "./pages/dashboard/Settings";
-import UserManagement from "./pages/dashboard/UserManagement";
-import BlogPostsList from "./pages/dashboard/BlogPostsList";
-import BlogPostEdit from "./pages/dashboard/BlogPostEdit";
-import BlogClustersList from "./pages/dashboard/BlogClustersList";
-import MaterialRequestsList from "./pages/dashboard/MaterialRequestsList";
-import Blog from "./pages/Blog";
-import BlogPost from "./pages/BlogPost";
-import BlogCluster from "./pages/BlogCluster";
-import SEOHealth from "./pages/SEOHealth";
-import MaterialsSupply from "./pages/MaterialsSupply";
-import AbujaStarterKit from "./pages/AbujaStarterKit";
-import OwnerBrief from "./pages/owner/OwnerBrief";
-import SubmitProperty from "./pages/owner/SubmitProperty";
-import OwnerAdmin from "./pages/owner/OwnerAdmin";
-import OwnerPrivacy from "./pages/owner/OwnerPrivacy";
-import OwnerTerms from "./pages/owner/OwnerTerms";
+
+// Lazy routes: split into separate chunks to shrink initial bundle
+const Calculator = lazy(() => import("./pages/Calculator"));
+const OurStandard = lazy(() => import("./pages/OurStandard"));
+const Team = lazy(() => import("./pages/Team"));
+const Vault = lazy(() => import("./pages/Vault"));
+const StyleGuide = lazy(() => import("./pages/StyleGuide"));
+const ReportFraud = lazy(() => import("./pages/ReportFraud"));
+const Press = lazy(() => import("./pages/Press"));
+const TitleVerification = lazy(() => import("./pages/guides/TitleVerification"));
+const BuyerGuide = lazy(() => import("./pages/guides/BuyerGuide"));
+const ROIMethodology = lazy(() => import("./pages/guides/ROIMethodology"));
+const Lagos = lazy(() => import("./pages/locations/Lagos"));
+const Abuja = lazy(() => import("./pages/locations/Abuja"));
+const PortHarcourt = lazy(() => import("./pages/locations/PortHarcourt"));
+const Blog = lazy(() => import("./pages/Blog"));
+const BlogPost = lazy(() => import("./pages/BlogPost"));
+const BlogCluster = lazy(() => import("./pages/BlogCluster"));
+const SEOHealth = lazy(() => import("./pages/SEOHealth"));
+const MaterialsSupply = lazy(() => import("./pages/MaterialsSupply"));
+const AbujaStarterKit = lazy(() => import("./pages/AbujaStarterKit"));
+const OwnerBrief = lazy(() => import("./pages/owner/OwnerBrief"));
+const SubmitProperty = lazy(() => import("./pages/owner/SubmitProperty"));
+const OwnerAdmin = lazy(() => import("./pages/owner/OwnerAdmin"));
+const OwnerPrivacy = lazy(() => import("./pages/owner/OwnerPrivacy"));
+const OwnerTerms = lazy(() => import("./pages/owner/OwnerTerms"));
+
+// Dashboard bundle (staff-only; heavy, deferred)
+const DashboardAuth = lazy(() => import("./pages/dashboard/DashboardAuth"));
+const DashboardHome = lazy(() => import("./pages/dashboard/DashboardHome"));
+const PropertiesList = lazy(() => import("./pages/dashboard/PropertiesList"));
+const PropertyDetail = lazy(() => import("./pages/dashboard/PropertyDetail"));
+const LeadsList = lazy(() => import("./pages/dashboard/LeadsList"));
+const ClientsList = lazy(() => import("./pages/dashboard/ClientsList"));
+const ViewingsList = lazy(() => import("./pages/dashboard/ViewingsList"));
+const DealsList = lazy(() => import("./pages/dashboard/DealsList"));
+const ROIList = lazy(() => import("./pages/dashboard/ROIList"));
+const Settings = lazy(() => import("./pages/dashboard/Settings"));
+const UserManagement = lazy(() => import("./pages/dashboard/UserManagement"));
+const BlogPostsList = lazy(() => import("./pages/dashboard/BlogPostsList"));
+const BlogPostEdit = lazy(() => import("./pages/dashboard/BlogPostEdit"));
+const BlogClustersList = lazy(() => import("./pages/dashboard/BlogClustersList"));
+const MaterialRequestsList = lazy(() => import("./pages/dashboard/MaterialRequestsList"));
 
 const queryClient = new QueryClient();
+
+const RouteFallback = () => (
+  <div
+    role="status"
+    aria-label="Loading"
+    style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center" }}
+  >
+    <div
+      style={{
+        width: 32,
+        height: 32,
+        border: "3px solid rgba(8,26,47,0.15)",
+        borderTopColor: "#081A2F",
+        borderRadius: "50%",
+        animation: "spin 0.8s linear infinite",
+      }}
+    />
+    <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+  </div>
+);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -67,6 +94,7 @@ const App = () => (
           <BrowserRouter>
             <ScrollManager />
             <URLNormalizer />
+            <Suspense fallback={<RouteFallback />}>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/calculator" element={<CalculatorLead />} />
@@ -99,8 +127,6 @@ const App = () => (
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/blog/cluster/:slug" element={<BlogCluster />} />
 
-
-              
               {/* Owner Briefing Routes */}
               <Route path="/owner-brief" element={<OwnerBrief />} />
               <Route path="/submit-property" element={<SubmitProperty />} />
@@ -130,6 +156,7 @@ const App = () => (
               
               <Route path="*" element={<NotFound />} />
             </Routes>
+            </Suspense>
           </BrowserRouter>
         </TooltipProvider>
       </CurrencyProvider>
