@@ -96,7 +96,8 @@ const App = () => (
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/blog/cluster/:slug" element={<BlogCluster />} />
-              <Route path="/locations/port-harcourt" element={<PortHarcourt />} />
+
+
               
               {/* Owner Briefing Routes */}
               <Route path="/owner-brief" element={<OwnerBrief />} />
