@@ -233,6 +233,11 @@ const PropertyDetail = () => {
         ].filter(Boolean)}
       />
       <JsonLd data={propertySchema} />
+      <JsonLd data={createBreadcrumbSchema([
+        { name: "Home", url: "https://therizoproperties.com/" },
+        { name: "Properties", url: "https://therizoproperties.com/properties" },
+        { name: property.title, url: `https://therizoproperties.com/properties/${property.slug || property.id}` },
+      ])} />
 
       {/* Hero */}
       <section className="pt-32 pb-8 bg-navy">
