@@ -10,6 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
 import { useCurrency } from "@/components/currency/CurrencySwitcher";
 import { PropertyMediaCarousel } from "@/components/property/PropertyMediaCarousel";
+import { FraudWarning } from "@/components/trust/FraudWarning";
 import { 
   MapPin, 
   Home, 
