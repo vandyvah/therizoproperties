@@ -109,6 +109,11 @@ export default function Abuja() {
         ]}
       />
       <JsonLd data={abujaSchema} />
+      <JsonLd data={createBreadcrumbSchema([
+        { name: "Home", url: "https://therizoproperties.com/" },
+        { name: "Locations", url: "https://therizoproperties.com/locations" },
+        { name: "Abuja", url: "https://therizoproperties.com/locations/abuja" },
+      ])} />
 
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-charcoal via-charcoal to-charcoal/95 text-ivory overflow-hidden">
