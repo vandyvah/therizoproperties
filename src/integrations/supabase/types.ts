@@ -636,6 +636,60 @@ export type Database = {
           },
         ]
       }
+      fraud_reports: {
+        Row: {
+          admin_notes: string | null
+          amount_requested_ngn: number | null
+          created_at: string
+          id: string
+          incident_details: string
+          ip_address: string | null
+          reporter_email: string | null
+          reporter_name: string | null
+          reporter_phone: string | null
+          screenshot_urls: string[] | null
+          status: string
+          suspicious_channel: string | null
+          suspicious_sender: string | null
+          updated_at: string
+          user_agent: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          amount_requested_ngn?: number | null
+          created_at?: string
+          id?: string
+          incident_details: string
+          ip_address?: string | null
+          reporter_email?: string | null
+          reporter_name?: string | null
+          reporter_phone?: string | null
+          screenshot_urls?: string[] | null
+          status?: string
+          suspicious_channel?: string | null
+          suspicious_sender?: string | null
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          amount_requested_ngn?: number | null
+          created_at?: string
+          id?: string
+          incident_details?: string
+          ip_address?: string | null
+          reporter_email?: string | null
+          reporter_name?: string | null
+          reporter_phone?: string | null
+          screenshot_urls?: string[] | null
+          status?: string
+          suspicious_channel?: string | null
+          suspicious_sender?: string | null
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           assigned_consultant_id: string | null
