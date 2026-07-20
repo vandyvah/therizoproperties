@@ -142,6 +142,11 @@ export default function BlogPost() {
       />
       <JsonLd data={articleSchema} />
       {faqSchema && <JsonLd data={faqSchema} />}
+      <JsonLd data={createBreadcrumbSchema([
+        { name: "Home", url: "https://therizoproperties.com/" },
+        { name: "Blog", url: "https://therizoproperties.com/blog" },
+        { name: post.title, url: `https://therizoproperties.com/blog/${post.slug}` },
+      ])} />
 
       <article>
         {/* Hero */}
