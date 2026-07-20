@@ -109,6 +109,11 @@ export default function PortHarcourt() {
         ]}
       />
       <JsonLd data={phSchema} />
+      <JsonLd data={createBreadcrumbSchema([
+        { name: "Home", url: "https://therizoproperties.com/" },
+        { name: "Locations", url: "https://therizoproperties.com/locations" },
+        { name: "Port Harcourt", url: "https://therizoproperties.com/locations/port-harcourt" },
+      ])} />
 
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-charcoal via-charcoal to-charcoal/95 text-ivory overflow-hidden">
