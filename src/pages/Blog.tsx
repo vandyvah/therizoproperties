@@ -60,6 +60,10 @@ export default function Blog() {
         ogImage="https://therizoproperties.com/og/og-standard.jpg"
       />
       <JsonLd data={createOrganizationSchema()} />
+      <JsonLd data={createBreadcrumbSchema([
+        { name: "Home", url: "https://therizoproperties.com/" },
+        { name: "Blog", url: "https://therizoproperties.com/blog" },
+      ])} />
 
       {/* Hero */}
       <section className="bg-primary text-primary-foreground py-16 lg:py-24">
