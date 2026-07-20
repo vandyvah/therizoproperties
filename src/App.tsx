@@ -7,6 +7,7 @@ import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CurrencyProvider } from "@/components/currency/CurrencySwitcher";
 import { ScrollManager } from "@/components/ScrollManager";
+import { URLNormalizer } from "@/components/URLNormalizer";
 import Index from "./pages/Index";
 import Calculator from "./pages/Calculator";
 import CalculatorLead from "./pages/CalculatorLead";
