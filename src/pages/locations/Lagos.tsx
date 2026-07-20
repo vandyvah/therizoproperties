@@ -1,6 +1,6 @@
 import { Layout } from "@/components/layout/Layout";
 import { SEOHead } from "@/components/seo/SEOHead";
-import { JsonLd, createRealEstateAgentSchema } from "@/components/seo/JsonLd";
+import { JsonLd, createRealEstateAgentSchema, createBreadcrumbSchema } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { Button } from "@/components/ui/button";
