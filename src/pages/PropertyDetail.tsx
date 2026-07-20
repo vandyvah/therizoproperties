@@ -435,9 +435,10 @@ const PropertyDetail = () => {
         </div>
       </section>
 
-      {/* Back to Properties */}
+      {/* Fraud warning + Back to Properties */}
       <section className="py-8 bg-muted/50">
-        <div className="container-wide">
+        <div className="container-wide space-y-6">
+          <FraudWarning />
           <Button variant="ghost" asChild>
             <Link to="/properties">
               <ArrowLeft className="mr-2" size={16} />
