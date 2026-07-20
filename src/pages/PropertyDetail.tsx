@@ -10,6 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
 import { useCurrency } from "@/components/currency/CurrencySwitcher";
 import { PropertyMediaCarousel } from "@/components/property/PropertyMediaCarousel";
+import { FraudWarning } from "@/components/trust/FraudWarning";
 import { 
   MapPin, 
   Home, 
@@ -435,9 +436,10 @@ const PropertyDetail = () => {
         </div>
       </section>
 
-      {/* Back to Properties */}
+      {/* Fraud warning + Back to Properties */}
       <section className="py-8 bg-muted/50">
-        <div className="container-wide">
+        <div className="container-wide space-y-6">
+          <FraudWarning />
           <Button variant="ghost" asChild>
             <Link to="/properties">
               <ArrowLeft className="mr-2" size={16} />

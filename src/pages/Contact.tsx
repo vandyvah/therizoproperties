@@ -19,6 +19,7 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { JsonLd, createOrganizationSchema, createLocalBusinessSchema, createFAQSchema } from "@/components/seo/JsonLd";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { FraudWarning } from "@/components/trust/FraudWarning";
 
 const contactFAQs = [
   {
@@ -151,6 +152,9 @@ const Contact = () => {
       {/* Contact Form & Info - Mobile optimized */}
       <section className="py-12 sm:section-padding bg-ivory">
         <div className="container-wide px-4 sm:px-6">
+          <div className="mb-8">
+            <FraudWarning />
+          </div>
           <div className="grid lg:grid-cols-3 gap-8 lg:gap-12">
             {/* Form */}
             <div className="lg:col-span-2 order-2 lg:order-1">

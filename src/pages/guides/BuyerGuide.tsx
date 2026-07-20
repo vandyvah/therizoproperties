@@ -126,8 +126,8 @@ export default function BuyerGuide() {
   return (
     <Layout>
       <SEOHead
-        title="Diaspora Buyer's Guide: How to Buy Property in Nigeria (2025)"
-        description="Complete step-by-step guide for diaspora investors buying verified Nigerian properties. Learn due diligence, title verification, transaction costs, and how to avoid common pitfalls."
+        title="How to Buy Property in Nigeria: Complete Diaspora Buyer's Guide"
+        description="Evergreen step-by-step guide for diaspora investors buying verified Nigerian properties. Due diligence, title verification, transaction costs, and how to avoid common pitfalls. Last reviewed July 2026."
         canonical="/guides/buyer-guide"
         keywords={[
           "diaspora property investment Nigeria",
@@ -142,11 +142,11 @@ export default function BuyerGuide() {
         pinterestImage="https://therizoproperties.com/pinterest/pin-buyer-guide.jpg"
       />
       <JsonLd data={createArticleSchema({
-        headline: "Diaspora Buyer's Guide: How to Buy Property in Nigeria",
-        description: "Complete guide for diaspora investors purchasing verified Nigerian properties with clean titles.",
+        headline: "How to Buy Property in Nigeria: Complete Diaspora Buyer's Guide",
+        description: "Evergreen guide for diaspora investors purchasing verified Nigerian properties. Due diligence, title verification, and transaction discipline.",
         author: "Therizo Property and Development Corporation",
         datePublished: "2025-01-15",
-        dateModified: "2025-12-15",
+        dateModified: "2026-07-20",
       })} />
 
       {/* Hero */}
@@ -177,7 +177,7 @@ export default function BuyerGuide() {
             <div className="flex items-center gap-4 mt-6 text-sm text-ivory/60">
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
-                <span>Updated: December 2025</span>
+                <span>Last reviewed: July 2026</span>
               </div>
               <span>•</span>
               <span>15 min read</span>
