@@ -82,10 +82,15 @@ export function SEOHead({
     }
     
     // Robots meta - comprehensive directives for both Google and Bing
-    if (noindex) {
-      updateMeta("robots", "noindex, nofollow");
-      updateMeta("googlebot", "noindex, nofollow");
-      updateMeta("bingbot", "noindex, nofollow");
+    // Phase 0 P0: noindex any URL that arrives with query parameters so
+    // parameterised variants (e.g. /contact?type=airport-pickup) do not
+    // enter the index alongside the canonical clean path.
+    const hasQueryParams =
+      typeof window !== "undefined" && window.location.search.length > 0;
+    if (noindex || hasQueryParams) {
+      updateMeta("robots", "noindex, follow");
+      updateMeta("googlebot", "noindex, follow");
+      updateMeta("bingbot", "noindex, follow");
     } else {
       updateMeta("robots", "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1");
       updateMeta("googlebot", "index, follow");
