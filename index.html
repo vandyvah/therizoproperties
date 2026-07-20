@@ -57,6 +57,50 @@
     <!-- Theme color for mobile browsers -->
     <meta name="theme-color" content="#081A2F">
     <meta name="msapplication-TileColor" content="#081A2F">
+
+    <!-- Sitewide Organization JSON-LD (visible to non-JS crawlers: LinkedIn, Slack, Facebook) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Therizo Property and Development Corporation",
+      "alternateName": "Therizo Properties",
+      "description": "Premium Nigerian real estate firm serving serious buyers, diaspora investors, and developers with verified properties and disciplined due diligence.",
+      "url": "https://therizoproperties.com",
+      "logo": "https://therizoproperties.com/favicon.png",
+      "telephone": "+234 803 483 0087",
+      "email": "hello@therizoproperties.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Suite C1, Plot 759, Kubwa Extension, F15",
+        "addressLocality": "Abuja",
+        "addressRegion": "FCT",
+        "addressCountry": "NG"
+      },
+      "areaServed": ["Lagos", "Abuja", "Port Harcourt", "Ogun State"],
+      "sameAs": [
+        "https://x.com/TherizoProperty",
+        "https://www.facebook.com/therizoproperties",
+        "https://www.linkedin.com/company/therizoproperties",
+        "https://www.youtube.com/@therizoproperty"
+      ]
+    }
+    </script>
+
+    <!-- WebSite JSON-LD with SearchAction -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Therizo Properties",
+      "url": "https://therizoproperties.com",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://therizoproperties.com/properties?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
   </head>
 
   <body>
