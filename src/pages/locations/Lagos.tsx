@@ -109,6 +109,11 @@ export default function Lagos() {
         ]}
       />
       <JsonLd data={lagosSchema} />
+      <JsonLd data={createBreadcrumbSchema([
+        { name: "Home", url: "https://therizoproperties.com/" },
+        { name: "Locations", url: "https://therizoproperties.com/locations" },
+        { name: "Lagos", url: "https://therizoproperties.com/locations/lagos" },
+      ])} />
 
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-charcoal via-charcoal to-charcoal/95 text-ivory overflow-hidden">
