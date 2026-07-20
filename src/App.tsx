@@ -7,6 +7,7 @@ import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CurrencyProvider } from "@/components/currency/CurrencySwitcher";
 import { ScrollManager } from "@/components/ScrollManager";
+import { URLNormalizer } from "@/components/URLNormalizer";
 import Index from "./pages/Index";
 import Calculator from "./pages/Calculator";
 import CalculatorLead from "./pages/CalculatorLead";
@@ -65,6 +66,7 @@ const App = () => (
             <Sonner />
           <BrowserRouter>
             <ScrollManager />
+            <URLNormalizer />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/calculator" element={<CalculatorLead />} />
@@ -96,7 +98,8 @@ const App = () => (
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/blog/cluster/:slug" element={<BlogCluster />} />
-              <Route path="/locations/port-harcourt" element={<PortHarcourt />} />
+
+
               
               {/* Owner Briefing Routes */}
               <Route path="/owner-brief" element={<OwnerBrief />} />
