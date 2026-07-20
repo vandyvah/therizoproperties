@@ -18,6 +18,7 @@ import PropertyDetailPage from "./pages/PropertyDetail";
 import Vault from "./pages/Vault";
 import StyleGuide from "./pages/StyleGuide";
 import NotFound from "./pages/NotFound";
+import ReportFraud from "./pages/ReportFraud";
 import Press from "./pages/Press";
 import TitleVerification from "./pages/guides/TitleVerification";
 import BuyerGuide from "./pages/guides/BuyerGuide";
@@ -79,6 +80,7 @@ const App = () => (
               <Route path="/abuja-starter-kit" element={<AbujaStarterKit />} />
               <Route path="/style-guide" element={<StyleGuide />} />
               <Route path="/seo-health" element={<SEOHealth />} />
+              <Route path="/report-fraud" element={<ReportFraud />} />
               
               {/* Guide Pages */}
               <Route path="/guides/title-verification" element={<TitleVerification />} />

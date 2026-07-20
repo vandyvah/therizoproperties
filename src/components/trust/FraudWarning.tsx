@@ -1,4 +1,5 @@
 import { ShieldAlert } from "lucide-react";
+import { Link } from "react-router-dom";
 
 /**
  * Anti-fraud warning strip.
@@ -27,7 +28,14 @@ export function FraudWarning({ compact = false }: { compact?: boolean }) {
               personal account. Always confirm every payment instruction through
               our official transaction team, using the phone number and email
               published on this website, before transferring any money. If you
-              receive a suspicious message claiming to be from Therizo, email{" "}
+              receive a suspicious message claiming to be from Therizo,{" "}
+              <Link
+                to="/report-fraud"
+                className="underline font-medium text-navy hover:text-gold"
+              >
+                report it here
+              </Link>{" "}
+              or email{" "}
               <a
                 href="mailto:hello@therizoproperties.com"
                 className="underline text-navy hover:text-gold"
@@ -42,3 +50,4 @@ export function FraudWarning({ compact = false }: { compact?: boolean }) {
     </aside>
   );
 }
+
