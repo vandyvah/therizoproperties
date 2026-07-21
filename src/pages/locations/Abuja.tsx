@@ -304,6 +304,9 @@ export default function Abuja() {
       {/* Case Studies */}
       <CaseStudies city="Abuja" studies={abujaCaseStudies} />
 
+      {/* Programmatic playbooks: /invest/:location/:strategy */}
+      <InvestComboCards city="Abuja" />
+
       {/* FAQ Section */}
       <FAQSection
         title="Abuja Real Estate FAQs"
