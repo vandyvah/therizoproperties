@@ -11,6 +11,7 @@ import { CurrencyProvider } from "@/components/currency/CurrencySwitcher";
 import { ScrollManager } from "@/components/ScrollManager";
 import { URLNormalizer } from "@/components/URLNormalizer";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { ExitIntentGate } from "@/components/marketing/ExitIntentGate";
 
 // Eager routes: high-traffic public pages (fast first paint on nav)
 import Index from "./pages/Index";
@@ -137,6 +138,7 @@ const App = () => (
           <BrowserRouter>
             <ScrollManager />
             <URLNormalizer />
+            <ExitIntentGate />
             <ErrorBoundary>
               <Suspense fallback={<RouteFallback />}>
               <Routes>
