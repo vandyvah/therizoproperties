@@ -120,9 +120,26 @@ export default function ROIMethodology() {
       <JsonLd data={createArticleSchema({
         headline: "ROI Calculation Methodology for Nigerian Real Estate Investments",
         description: "How we calculate and present property investment returns - cap rates, yields, and payback periods explained.",
-        author: "Therizo Property and Development Corporation",
+        author: {
+          name: "Ugo Uzoukwu",
+          jobTitle: "Founder & Principal, Therizo Property and Development Corporation",
+          url: "https://therizoproperties.com/team",
+        },
+        reviewedBy: {
+          name: "Aisha Bello",
+          jobTitle: "Head of Investment Analytics",
+          url: "https://therizoproperties.com/team",
+        },
         datePublished: "2025-01-15",
         dateModified: "2026-07-20",
+        url: "https://therizoproperties.com/guides/roi-methodology",
+        articleSection: "Investment Analysis",
+        keywords: ["Nigeria real estate ROI", "cap rate Nigeria", "rental yield Lagos", "property investment returns", "payback period"],
+        citations: [
+          "https://www.cbn.gov.ng/",
+          "https://www.nigerianstat.gov.ng/",
+          "https://www.imf.org/en/Countries/NGA",
+        ],
       })} />
       <JsonLd data={createBreadcrumbSchema([
         { name: "Home", url: "https://therizoproperties.com/" },
