@@ -16,6 +16,7 @@ import {
   ShieldCheck,
   FileText,
   Package,
+  BarChart3,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -32,6 +33,7 @@ const baseNavItems = [
 ];
 
 const adminNavItems = [
+  { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/dashboard/blog", label: "Blog", icon: FileText },
   { href: "/dashboard/material-requests", label: "Materials Supply", icon: Package },
 ];

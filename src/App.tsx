@@ -64,6 +64,7 @@ const BlogPostsList = lazy(() => import("./pages/dashboard/BlogPostsList"));
 const BlogPostEdit = lazy(() => import("./pages/dashboard/BlogPostEdit"));
 const BlogClustersList = lazy(() => import("./pages/dashboard/BlogClustersList"));
 const MaterialRequestsList = lazy(() => import("./pages/dashboard/MaterialRequestsList"));
+const AnalyticsDashboard = lazy(() => import("./pages/dashboard/AnalyticsDashboard"));
 
 /**
  * Global query/mutation defaults:
@@ -198,6 +199,7 @@ const App = () => (
                 <Route path="/dashboard/blog/:id/edit" element={<BlogPostEdit />} />
                 <Route path="/dashboard/blog/clusters" element={<BlogClustersList />} />
                 <Route path="/dashboard/material-requests" element={<MaterialRequestsList />} />
+                <Route path="/dashboard/analytics" element={<AnalyticsDashboard />} />
 
                 <Route path="/dashboard/users" element={<UserManagement />} />
                 <Route path="/dashboard/settings" element={<Settings />} />
