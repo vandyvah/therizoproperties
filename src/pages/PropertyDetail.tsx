@@ -11,15 +11,16 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCurrency } from "@/components/currency/CurrencySwitcher";
 import { PropertyMediaCarousel } from "@/components/property/PropertyMediaCarousel";
 import { FraudWarning } from "@/components/trust/FraudWarning";
-import { 
-  MapPin, 
-  Home, 
-  Shield, 
-  TrendingUp, 
-  Calendar, 
+import {
+  MapPin,
+  Home,
+  Shield,
+  TrendingUp,
+  Calendar,
   ArrowLeft,
   Phone,
-  Mail
+  Mail,
+  MessageCircle,
 } from "lucide-react";
 
 
@@ -397,13 +398,25 @@ const PropertyDetail = () => {
                 </p>
                 <div className="space-y-3">
                   <Button variant="gold" className="w-full" asChild>
+                    <a
+                      href={`https://wa.me/2348034830087?text=${encodeURIComponent(
+                        `Hello Therizo, I'd like to enquire about "${property.title}" (${formatPrice(property.asking_price_ngn)}) — ${typeof window !== "undefined" ? window.location.origin : "https://therizoproperties.com"}${canonicalPath}`
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <MessageCircle className="mr-2" size={16} />
+                      WhatsApp Enquiry
+                    </a>
+                  </Button>
+                  <Button variant="outline" className="w-full border-ivory/30 text-ivory hover:bg-ivory/10" asChild>
                     <Link to={`/contact?property=${property.id}`}>
                       <Mail className="mr-2" size={16} />
                       Send Enquiry
                     </Link>
                   </Button>
                   <Button variant="outline" className="w-full border-ivory/30 text-ivory hover:bg-ivory/10" asChild>
-                    <a href="tel:+2348000000000">
+                    <a href="tel:+2348034830087">
                       <Phone className="mr-2" size={16} />
                       Call Us
                     </a>
@@ -453,6 +466,36 @@ const PropertyDetail = () => {
           </Button>
         </div>
       </section>
+      {/* Sticky mobile CTA bar */}
+      <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-navy/95 backdrop-blur border-t border-ivory/10 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+        <div className="flex items-center gap-2">
+          <div className="flex-1 min-w-0">
+            <p className="text-[10px] uppercase tracking-widest text-ivory/60">Asking</p>
+            <p className="font-display text-sm font-semibold text-ivory truncate">
+              {formatPrice(property.asking_price_ngn)}
+            </p>
+          </div>
+          <Button variant="gold" size="sm" asChild>
+            <a
+              href={`https://wa.me/2348034830087?text=${encodeURIComponent(
+                `Hello Therizo, I'd like to enquire about "${property.title}" (${formatPrice(property.asking_price_ngn)}) — ${typeof window !== "undefined" ? window.location.origin : "https://therizoproperties.com"}${canonicalPath}`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp enquiry about this property"
+            >
+              <MessageCircle size={16} className="mr-1" />
+              WhatsApp
+            </a>
+          </Button>
+          <Button variant="outline" size="sm" className="border-ivory/30 text-ivory hover:bg-ivory/10" asChild>
+            <a href="tel:+2348034830087" aria-label="Call Therizo">
+              <Phone size={16} />
+            </a>
+          </Button>
+        </div>
+      </div>
+      <div className="lg:hidden h-20" aria-hidden="true" />
     </Layout>
   );
 };
