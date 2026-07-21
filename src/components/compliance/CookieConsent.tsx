@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const STORAGE_KEY = "therizo_cookie_consent_v1";
+const OPEN_EVENT = "therizo:open-cookie-settings";
 
 type Choice = "accepted" | "essential";
 
@@ -14,21 +15,24 @@ export const CookieConsent = () => {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (!stored) setVisible(true);
     } catch {
-      // ignore storage errors (private mode)
+      /* ignore */
     }
+    const open = () => setVisible(true);
+    window.addEventListener(OPEN_EVENT, open);
+    return () => window.removeEventListener(OPEN_EVENT, open);
   }, []);
 
-  const persist = (choice: Choice) => {
+  const persist = useCallback((choice: Choice) => {
     try {
       localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify({ choice, ts: new Date().toISOString() })
       );
     } catch {
-      // ignore
+      /* ignore */
     }
     setVisible(false);
-  };
+  }, []);
 
   if (!visible) return null;
 
@@ -76,8 +80,16 @@ export const getCookieConsent = (): Choice | null => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
-    return JSON.parse(raw).choice ?? null;
+    return (JSON.parse(raw).choice as Choice) ?? null;
   } catch {
     return null;
+  }
+};
+
+export const openCookieSettings = () => {
+  try {
+    window.dispatchEvent(new Event(OPEN_EVENT));
+  } catch {
+    /* ignore */
   }
 };
