@@ -6,6 +6,7 @@ import { Layout } from "@/components/layout/Layout";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { FraudWarning } from "@/components/trust/FraudWarning";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { analytics } from "@/lib/analytics";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -283,6 +284,7 @@ BOQ attached / Items listed: ____`;
                     href={`https://wa.me/2348034830087?text=${encodeURIComponent(whatsappSummary)}`}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => analytics.whatsappClick({ surface: "materials_share_summary" })}
                   >
                     <MessageCircle className="mr-2 h-4 w-4" />
                     Share via WhatsApp
@@ -355,6 +357,7 @@ BOQ attached / Items listed: ____`;
                   href={`https://wa.me/2348034830087?text=${whatsappPrefilledMessage}`}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => analytics.whatsappClick({ surface: "materials_hero" })}
                 >
                   <MessageCircle className="mr-2 h-4 w-4" />
                   WhatsApp a BOQ
@@ -879,6 +882,7 @@ BOQ attached / Items listed: ____`;
               href={`https://wa.me/2348034830087?text=${whatsappPrefilledMessage}`}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => analytics.whatsappClick({ surface: "materials_strip" })}
             >
               <MessageCircle className="mr-2 h-4 w-4" />
               WhatsApp Us
