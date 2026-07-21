@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCurrency } from "@/components/currency/CurrencySwitcher";
 import { PropertyMediaCarousel } from "@/components/property/PropertyMediaCarousel";
 import { FraudWarning } from "@/components/trust/FraudWarning";
+import { TrustBadgesStrip } from "@/components/trust/TrustBadgesStrip";
 import { analytics } from "@/lib/analytics";
 import { useEffect } from "react";
 import {
@@ -290,6 +291,8 @@ const PropertyDetail = () => {
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Property Details */}
             <div className="lg:col-span-2 space-y-8">
+              {/* Trust badges */}
+              <TrustBadgesStrip />
               {/* Media Carousel */}
               {hasMedia ? (
                 <div className="bg-warm-white border border-sand rounded-sm p-4">
