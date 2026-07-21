@@ -18,13 +18,13 @@ export default function Saved() {
     queryKey: ["shortlist-properties", ids.slice().sort().join(",")],
     enabled: ids.length > 0,
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("properties")
         .select("id, slug, title, city, area, asking_price_ngn, risk_rating, property_type, property_media(file_url, file_type, sort_order)")
         .in("id", ids)
         .eq("is_listed", true);
       if (error) throw error;
-      return data ?? [];
+      return (data ?? []) as any[];
     },
     staleTime: 30_000,
   });
