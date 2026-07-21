@@ -159,6 +159,7 @@ export function FeaturedPropertiesSection() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`WhatsApp enquiry about ${property.title}`}
+                    onClick={() => analytics.whatsappClick({ surface: "home_featured", property_id: property.id })}
                   >
                     <MessageCircle size={12} className="mr-1.5" />
                     WhatsApp Enquiry

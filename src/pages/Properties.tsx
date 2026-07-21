@@ -211,6 +211,7 @@ const Properties = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`WhatsApp enquiry about ${property.title}`}
+                      onClick={() => analytics.whatsappClick({ surface: "properties_grid", property_id: property.id })}
                     >
                       <MessageCircle size={14} className="mr-1.5" />
                       WhatsApp Enquiry
