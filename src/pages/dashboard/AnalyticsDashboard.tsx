@@ -92,6 +92,8 @@ export default function AnalyticsDashboard() {
       topUtm: [] as [string, number][],
       topReferrers: [] as [string, number][],
       byDay: [] as { day: string; count: number }[],
+      errors: [] as ErrorGroup[],
+      errorTotal: 0,
     };
     if (!rows) return empty;
 
@@ -100,6 +102,7 @@ export default function AnalyticsDashboard() {
     const utmMap = new Map<string, number>();
     const refMap = new Map<string, number>();
     const dayMap = new Map<string, number>();
+    const errMap = new Map<string, ErrorGroup & { sessionSet: Set<string> }>();
     let pageViews = 0,
       whatsapp = 0,
       calls = 0,
@@ -107,7 +110,8 @@ export default function AnalyticsDashboard() {
       leads = 0,
       exitShown = 0,
       exitSubmit = 0,
-      propertyView = 0;
+      propertyView = 0,
+      errorTotal = 0;
 
     for (const r of rows) {
       if (r.session_id) sessions.add(r.session_id);
