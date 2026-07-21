@@ -132,9 +132,26 @@ export default function TitleVerification() {
       <JsonLd data={createArticleSchema({
         headline: "How We Verify Nigerian Property Titles: A Complete Guide",
         description: "Comprehensive guide to property title verification in Nigeria, including document requirements, verification process, and common red flags.",
-        author: "Therizo Property and Development Corporation",
+        author: {
+          name: "Ugo Uzoukwu",
+          jobTitle: "Founder & Principal, Therizo Property and Development Corporation",
+          url: "https://therizoproperties.com/team",
+        },
+        reviewedBy: {
+          name: "Kelly Anagor",
+          jobTitle: "Head of Legal & Compliance",
+          url: "https://therizoproperties.com/team",
+        },
         datePublished: "2025-01-15",
         dateModified: "2026-07-20",
+        url: "https://therizoproperties.com/guides/title-verification",
+        articleSection: "Due Diligence",
+        keywords: ["Nigerian property title", "C of O", "Governor's Consent", "title verification", "land registry Nigeria"],
+        citations: [
+          "https://lagosstate.gov.ng/ministries/lands/",
+          "https://fcta.gov.ng/",
+          "https://www.nigeria-law.org/LandUseAct.htm",
+        ],
       })} />
       <JsonLd data={createBreadcrumbSchema([
         { name: "Home", url: "https://therizoproperties.com/" },
