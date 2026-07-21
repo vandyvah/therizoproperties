@@ -162,7 +162,7 @@ export default function DashboardAuth() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="min-h-dvh flex items-center justify-center bg-background">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
@@ -171,7 +171,7 @@ export default function DashboardAuth() {
   // Password reset form (after clicking email link)
   if (showResetForm) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-muted/30 p-4">
+      <div className="min-h-dvh flex items-center justify-center bg-muted/30 p-4">
         <SEOHead title="Reset Password" description="Reset your password" noindex={true} />
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
@@ -228,7 +228,7 @@ export default function DashboardAuth() {
   // Forgot password form
   if (showForgotPassword) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-muted/30 p-4">
+      <div className="min-h-dvh flex items-center justify-center bg-muted/30 p-4">
         <SEOHead title="Forgot Password" description="Reset your password" noindex={true} />
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
@@ -280,7 +280,7 @@ export default function DashboardAuth() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted/30 p-4">
+    <div className="min-h-dvh flex items-center justify-center bg-muted/30 p-4">
       <SEOHead title="Staff Login" description="Therizo staff dashboard login" noindex={true} />
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">

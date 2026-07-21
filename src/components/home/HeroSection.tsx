@@ -60,7 +60,7 @@ export function HeroSection() {
         return 'bg-muted text-foreground';
     }
   };
-  return <section className="relative min-h-screen flex flex-col overflow-hidden">
+  return <section className="relative min-h-dvh flex flex-col overflow-hidden">
       {/* Background Video/Image with Parallax */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 w-full h-[120%] -top-[10%]" style={{

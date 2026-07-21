@@ -121,7 +121,7 @@ export default function OwnerAdmin() {
 
   if (!authed) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0E1626] px-4">
+      <div className="min-h-dvh flex items-center justify-center bg-[#0E1626] px-4">
         <div className="w-full max-w-md space-y-6 text-center">
           <Lock className="mx-auto h-10 w-10 text-[#C8A24A]" />
           <h1 className="font-display text-2xl font-bold text-white">Admin Access</h1>
@@ -153,7 +153,7 @@ export default function OwnerAdmin() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F3EA]">
+    <div className="min-h-dvh bg-[#F7F3EA]">
       <header className="bg-white border-b border-[#D8D1C5]/50 px-4 py-3">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <h1 className="font-display text-lg font-bold text-[#0E1626]">Property Submissions</h1>
