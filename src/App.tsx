@@ -1,7 +1,8 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider, QueryCache, MutationCache } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { lazy, Suspense } from "react";
@@ -62,7 +63,48 @@ const BlogPostEdit = lazy(() => import("./pages/dashboard/BlogPostEdit"));
 const BlogClustersList = lazy(() => import("./pages/dashboard/BlogClustersList"));
 const MaterialRequestsList = lazy(() => import("./pages/dashboard/MaterialRequestsList"));
 
-const queryClient = new QueryClient();
+/**
+ * Global query/mutation defaults:
+ * - Retry transient failures (network/5xx) up to 2x with exponential backoff.
+ * - Skip retries on 4xx (auth, RLS, validation) — those won't self-heal.
+ * - Surface unexpected failures via toast so users aren't left with blank UI.
+ */
+const isRetryable = (error: unknown): boolean => {
+  const status = (error as any)?.status ?? (error as any)?.code;
+  if (typeof status === "number") return status >= 500;
+  const msg = (error as any)?.message?.toLowerCase?.() ?? "";
+  return msg.includes("network") || msg.includes("fetch") || msg.includes("timeout");
+};
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: (failureCount, error) => isRetryable(error) && failureCount < 2,
+      retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 8000),
+      staleTime: 30_000,
+      refetchOnWindowFocus: false,
+    },
+    mutations: {
+      retry: (failureCount, error) => isRetryable(error) && failureCount < 1,
+    },
+  },
+  queryCache: new QueryCache({
+    onError: (error, query) => {
+      // Silent for background refetches — only toast on first-load failures the user is waiting on.
+      if (query.state.data !== undefined) return;
+      const msg = (error as any)?.message || "Something went wrong loading this data.";
+      console.error("[query]", { key: query.queryKey, error });
+      toast.error("Couldn't load", { description: msg });
+    },
+  }),
+  mutationCache: new MutationCache({
+    onError: (error) => {
+      const msg = (error as any)?.message || "Action failed. Please try again.";
+      console.error("[mutation]", error);
+      toast.error("Action failed", { description: msg });
+    },
+  }),
+});
 
 const RouteFallback = () => (
   <div
