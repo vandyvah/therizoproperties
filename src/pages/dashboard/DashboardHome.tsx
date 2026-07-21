@@ -146,13 +146,13 @@ export default function DashboardHome() {
           </div>
           <div className="flex gap-3">
             <Button asChild>
-              <Link to="/dashboard/leads/new">
+              <Link to="/dashboard/leads?new=true">
                 <Plus size={16} className="mr-2" />
                 New Lead
               </Link>
             </Button>
             <Button variant="outline" asChild>
-              <Link to="/dashboard/properties/new">
+              <Link to="/dashboard/properties?new=true">
                 <Plus size={16} className="mr-2" />
                 New Property
               </Link>
