@@ -180,12 +180,23 @@ export function Footer() {
             Corporation. A subsidiary of Therizo Group. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
+            <Link to="/privacy" className="text-xs text-ivory/40 hover:text-gold transition-colors">
+              Privacy
+            </Link>
+            <Link to="/terms" className="text-xs text-ivory/40 hover:text-gold transition-colors">
+              Terms
+            </Link>
+            <button
+              type="button"
+              onClick={openCookieSettings}
+              className="text-xs text-ivory/40 hover:text-gold transition-colors"
+              aria-label="Manage cookie preferences"
+            >
+              Manage cookies
+            </button>
             <Link to="/press" className="text-xs text-ivory/40 hover:text-gold transition-colors">
               Press
             </Link>
-            <span className="text-xs text-ivory/40">
-              Nigerian Real Estate
-            </span>
           </div>
         </div>
       </div>
