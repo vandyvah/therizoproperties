@@ -1065,6 +1065,8 @@ const Calculator_Page = () => {
           </div>
         </div>
       </section>
+
+      <ProgrammaticCrossLinks variant="calculator" />
     </Layout>
   );
 };
