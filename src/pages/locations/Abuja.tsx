@@ -3,6 +3,37 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { JsonLd, createBreadcrumbSchema } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FAQSection } from "@/components/seo/FAQSection";
+import { CaseStudies, type CaseStudy } from "@/components/locations/CaseStudies";
+
+const abujaCaseStudies: CaseStudy[] = [
+  {
+    neighborhood: "Maitama",
+    assetType: "5-bed detached, R of O verified at AGIS",
+    closedOn: "Q1 2026",
+    entryPriceNgn: "₦420M",
+    currentValueNgn: "~₦470M",
+    grossYieldPct: "5.4% (diplomatic lease)",
+    outcome: "Diaspora family office (UAE). Leased to embassy tenant on 2-year lease within 8 weeks of closing.",
+  },
+  {
+    neighborhood: "Jabi",
+    assetType: "3-bed apartment, Certificate of Occupancy",
+    closedOn: "Q3 2025",
+    entryPriceNgn: "₦95M",
+    currentValueNgn: "~₦112M",
+    grossYieldPct: "7.5% (long-let)",
+    outcome: "Diaspora investor (UK). Fully managed; net rent remitted quarterly in USD equivalent.",
+  },
+  {
+    neighborhood: "Lugbe",
+    assetType: "Serviced land, 800sqm, R of O",
+    closedOn: "Q2 2026",
+    entryPriceNgn: "₦38M",
+    currentValueNgn: "~₦46M",
+    grossYieldPct: "n/a (land bank)",
+    outcome: "First-time buyer (Nigeria). Boundary walled and titled within 90 days as a hold-and-develop play.",
+  },
+];
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
@@ -268,6 +299,9 @@ export default function Abuja() {
           </div>
         </div>
       </section>
+
+      {/* Case Studies */}
+      <CaseStudies city="Abuja" studies={abujaCaseStudies} />
 
       {/* FAQ Section */}
       <FAQSection
