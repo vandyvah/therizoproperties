@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { Shield } from "lucide-react";
-import { analytics } from "@/lib/analytics";
+import { analytics, getUtm } from "@/lib/analytics";
 
 const DISMISS_KEY = "therizo_exit_intent_dismissed_v1";
 
@@ -62,11 +62,16 @@ export function ExitIntent() {
     }
     setSubmitting(true);
     try {
+      const utm = getUtm();
       const { error } = await supabase.from("contact_submissions").insert({
         name: "Diaspora Briefing (exit intent)",
         email,
         message: `Requested the Therizo diaspora briefing from ${location.pathname}. Please send verified off-market opportunities and next-step guidance.`,
         page: `exit-intent:${location.pathname}`,
+        utm_source: utm.utm_source || null,
+        utm_medium: utm.utm_medium || null,
+        utm_campaign: utm.utm_campaign || null,
+        referrer: utm.referrer || null,
       });
       if (error) throw error;
       analytics.exitIntentSubmit({ path: location.pathname });

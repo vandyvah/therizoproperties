@@ -51,6 +51,19 @@ function captureUtm(): UtmParams {
   }
 }
 
+/**
+ * Returns the current session's UTM attribution (from URL or session cache).
+ * Safe to call from any component; never throws.
+ */
+export function getUtm(): UtmParams & { referrer?: string } {
+  const utm = captureUtm();
+  const referrer =
+    typeof document !== "undefined" && document.referrer
+      ? document.referrer.slice(0, 300)
+      : undefined;
+  return { ...utm, referrer };
+}
+
 const HIGH_INTENT_EVENTS = new Set([
   "lead_submit",
   "exit_intent_submit",

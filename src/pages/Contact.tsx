@@ -15,7 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, Phone, MapPin, Send, MessageSquare } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { analytics } from "@/lib/analytics";
+import { analytics, getUtm } from "@/lib/analytics";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { JsonLd, createOrganizationSchema, createLocalBusinessSchema, createFAQSchema } from "@/components/seo/JsonLd";
 import { FAQSection } from "@/components/seo/FAQSection";
@@ -82,6 +82,7 @@ const Contact = () => {
     const message = formData.get("message") as string;
 
     try {
+      const utm = getUtm();
       const { error } = await supabase.from("contact_submissions").insert({
         name,
         email,
@@ -91,6 +92,10 @@ const Contact = () => {
         preferred_location: preferredLocation || null,
         message,
         page: "contact",
+        utm_source: utm.utm_source || null,
+        utm_medium: utm.utm_medium || null,
+        utm_campaign: utm.utm_campaign || null,
+        referrer: utm.referrer || null,
       });
 
       if (error) throw error;
