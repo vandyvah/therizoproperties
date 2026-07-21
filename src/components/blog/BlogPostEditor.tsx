@@ -645,6 +645,7 @@ export function BlogPostEditor({ postId, onSave }: BlogPostEditorProps) {
                   <Button
                     variant="destructive"
                     size="icon"
+                    aria-label="Remove featured image"
                     className="absolute top-2 right-2"
                     onClick={() => setFeaturedImageUrl("")}
                   >
