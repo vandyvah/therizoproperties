@@ -1381,6 +1381,48 @@ export type Database = {
           },
         ]
       }
+      saved_searches: {
+        Row: {
+          active: boolean
+          created_at: string
+          email: string
+          filters: Json
+          frequency: string
+          id: string
+          last_sent_at: string | null
+          name: string | null
+          unsubscribe_token: string
+          updated_at: string
+          utm: Json | null
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          email: string
+          filters?: Json
+          frequency?: string
+          id?: string
+          last_sent_at?: string | null
+          name?: string | null
+          unsubscribe_token?: string
+          updated_at?: string
+          utm?: Json | null
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          email?: string
+          filters?: Json
+          frequency?: string
+          id?: string
+          last_sent_at?: string | null
+          name?: string | null
+          unsubscribe_token?: string
+          updated_at?: string
+          utm?: Json | null
+        }
+        Relationships: []
+      }
       testimonials: {
         Row: {
           created_at: string
