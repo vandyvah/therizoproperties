@@ -304,6 +304,9 @@ export default function Lagos() {
       {/* Case Studies */}
       <CaseStudies city="Lagos" studies={lagosCaseStudies} />
 
+      {/* Programmatic playbooks: /invest/:location/:strategy */}
+      <InvestComboCards city="Lagos" />
+
       {/* FAQ Section */}
       <FAQSection
         title="Lagos Real Estate FAQs"
