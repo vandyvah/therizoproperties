@@ -15,6 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, Phone, MapPin, Send, MessageSquare } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { analytics } from "@/lib/analytics";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { JsonLd, createOrganizationSchema, createLocalBusinessSchema, createFAQSchema } from "@/components/seo/JsonLd";
 import { FAQSection } from "@/components/seo/FAQSection";

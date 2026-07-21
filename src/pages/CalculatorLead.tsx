@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { jsPDF } from "jspdf";
+import { analytics } from "@/lib/analytics";
 
 const WHATSAPP_NUMBER = "2348034830087";
 
