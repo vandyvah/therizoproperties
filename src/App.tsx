@@ -153,6 +153,7 @@ const App = () => (
             <URLNormalizer />
             <ExitIntentGate />
             <PageViewTracker />
+            <CookieConsent />
             <ErrorBoundary>
               <Suspense fallback={<RouteFallback />}>
               <Routes>
