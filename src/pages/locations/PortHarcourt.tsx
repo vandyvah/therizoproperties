@@ -3,6 +3,37 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { JsonLd, createBreadcrumbSchema } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FAQSection } from "@/components/seo/FAQSection";
+import { CaseStudies, type CaseStudy } from "@/components/locations/CaseStudies";
+
+const phCaseStudies: CaseStudy[] = [
+  {
+    neighborhood: "GRA Phase 2",
+    assetType: "4-bed detached, C of O verified",
+    closedOn: "Q4 2025",
+    entryPriceNgn: "₦140M",
+    currentValueNgn: "~₦158M",
+    grossYieldPct: "6.2% (expat lease)",
+    outcome: "Diaspora investor (US). Leased to oil-services expat family on 2-year corporate lease.",
+  },
+  {
+    neighborhood: "Trans Amadi",
+    assetType: "Commercial warehouse, 1,200sqm",
+    closedOn: "Q1 2026",
+    entryPriceNgn: "₦180M",
+    currentValueNgn: "~₦205M",
+    grossYieldPct: "11.4% (industrial let)",
+    outcome: "HNW investor (Nigeria). Let to logistics operator; multi-year contract with annual escalation.",
+  },
+  {
+    neighborhood: "Rukpokwu",
+    assetType: "3-bed semi-detached, Deed of Assignment + registered survey",
+    closedOn: "Q2 2026",
+    entryPriceNgn: "₦52M",
+    currentValueNgn: "~₦63M",
+    grossYieldPct: "8.1% (long-let)",
+    outcome: "Diaspora buyer (Canada). Title regularised pre-purchase; tenanted within 6 weeks.",
+  },
+];
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
@@ -268,6 +299,9 @@ export default function PortHarcourt() {
           </div>
         </div>
       </section>
+
+      {/* Case Studies */}
+      <CaseStudies city="Port Harcourt" studies={phCaseStudies} />
 
       {/* FAQ Section */}
       <FAQSection

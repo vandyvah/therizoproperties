@@ -3,6 +3,37 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { JsonLd, createRealEstateAgentSchema, createBreadcrumbSchema } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FAQSection } from "@/components/seo/FAQSection";
+import { CaseStudies, type CaseStudy } from "@/components/locations/CaseStudies";
+
+const lagosCaseStudies: CaseStudy[] = [
+  {
+    neighborhood: "Lekki Phase 1",
+    assetType: "4-bed terrace, freehold, C of O verified",
+    closedOn: "Q1 2026",
+    entryPriceNgn: "₦185M",
+    currentValueNgn: "~₦215M",
+    grossYieldPct: "6.8% (long-let)",
+    outcome: "Diaspora client (UK). Tenanted within 5 weeks of closing; managed end-to-end by our Lagos team.",
+  },
+  {
+    neighborhood: "Ikoyi",
+    assetType: "3-bed serviced apartment, Governor's Consent",
+    closedOn: "Q4 2025",
+    entryPriceNgn: "₦240M",
+    currentValueNgn: "~₦268M",
+    grossYieldPct: "9.2% (short-let)",
+    outcome: "HNW investor (US). Short-let programme launched; averaging 74% occupancy across two quarters.",
+  },
+  {
+    neighborhood: "Ajah / Sangotedo",
+    assetType: "Off-plan 3-bed detached, staged payment",
+    closedOn: "Q2 2026",
+    entryPriceNgn: "₦72M",
+    currentValueNgn: "~₦88M (on-completion comparable)",
+    grossYieldPct: "n/a (capital play)",
+    outcome: "First-time diaspora buyer (Canada). Milestone payments escrowed; independent build inspections at each draw.",
+  },
+];
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
@@ -268,6 +299,9 @@ export default function Lagos() {
           </div>
         </div>
       </section>
+
+      {/* Case Studies */}
+      <CaseStudies city="Lagos" studies={lagosCaseStudies} />
 
       {/* FAQ Section */}
       <FAQSection
