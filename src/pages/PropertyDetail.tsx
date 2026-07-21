@@ -108,6 +108,18 @@ const PropertyDetail = () => {
     enabled: !!id,
   });
 
+  useEffect(() => {
+    if (property) {
+      analytics.propertyView({
+        property_id: property.id,
+        slug: property.slug,
+        city: property.city,
+        price_ngn: property.asking_price_ngn,
+      });
+    }
+  }, [property]);
+
+
   if (isLoading) {
     return (
       <Layout>
