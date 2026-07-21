@@ -138,7 +138,7 @@ export default function OwnerBrief() {
   /* ── Password Gate ── */
   if (!isUnlocked) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0E1626] px-4">
+      <div className="min-h-dvh flex items-center justify-center bg-[#0E1626] px-4">
         <div className="w-full max-w-md space-y-6 text-center">
           <div className="space-y-2">
             <Lock className="mx-auto h-10 w-10 text-[#C8A24A]" />
