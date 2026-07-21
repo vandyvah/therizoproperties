@@ -49,6 +49,12 @@ const OwnerAdmin = lazy(() => import("./pages/owner/OwnerAdmin"));
 const OwnerPrivacy = lazy(() => import("./pages/owner/OwnerPrivacy"));
 const OwnerTerms = lazy(() => import("./pages/owner/OwnerTerms"));
 
+// Phase 9: programmatic content engine
+const InvestIndex = lazy(() => import("./pages/programmatic/InvestIndex"));
+const InvestLocationStrategy = lazy(() => import("./pages/programmatic/InvestLocationStrategy"));
+const DiasporaIndex = lazy(() => import("./pages/programmatic/DiasporaIndex"));
+const DiasporaCountry = lazy(() => import("./pages/programmatic/DiasporaCountry"));
+
 // Dashboard bundle (staff-only; heavy, deferred)
 const DashboardAuth = lazy(() => import("./pages/dashboard/DashboardAuth"));
 const DashboardHome = lazy(() => import("./pages/dashboard/DashboardHome"));
@@ -184,6 +190,12 @@ const App = () => (
                 <Route path="/admin" element={<OwnerAdmin />} />
                 <Route path="/privacy" element={<OwnerPrivacy />} />
                 <Route path="/terms" element={<OwnerTerms />} />
+
+                {/* Programmatic content: location × strategy + diaspora pillars */}
+                <Route path="/invest" element={<InvestIndex />} />
+                <Route path="/invest/:location/:strategy" element={<InvestLocationStrategy />} />
+                <Route path="/diaspora" element={<DiasporaIndex />} />
+                <Route path="/diaspora/:country" element={<DiasporaCountry />} />
 
                 {/* Dashboard Routes */}
                 <Route path="/dashboard/auth" element={<DashboardAuth />} />

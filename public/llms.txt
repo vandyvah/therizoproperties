@@ -32,6 +32,18 @@ Therizo curates residential and commercial properties in Nigeria, prioritising d
 
 - [Blog](/blog): Insights on Nigerian real estate, due diligence, and market trends.
 
+## Invest by neighborhood and strategy
+
+- [Invest hub](/invest): All neighborhood × strategy playbooks.
+- Lagos: [Lekki rental yield](/invest/lekki/rental-yield), [Lekki short-let](/invest/lekki/short-let), [Ikoyi capital appreciation](/invest/ikoyi/capital-appreciation), [Ikoyi buy-and-hold](/invest/ikoyi/buy-and-hold), [Victoria Island rental yield](/invest/victoria-island/rental-yield), [Ajah rental yield](/invest/ajah/rental-yield), [Ajah off-plan](/invest/ajah/off-plan).
+- Abuja: [Maitama capital appreciation](/invest/maitama/capital-appreciation), [Maitama buy-and-hold](/invest/maitama/buy-and-hold), [Asokoro buy-and-hold](/invest/asokoro/buy-and-hold), [Katampe capital appreciation](/invest/katampe/capital-appreciation), [Wuse 2 rental yield](/invest/wuse-2/rental-yield).
+- Port Harcourt: [GRA Phase 2 rental yield](/invest/gra-phase-2/rental-yield).
+
+## Diaspora country playbooks
+
+- [Diaspora hub](/diaspora): Country-by-country guides.
+- [United Kingdom](/diaspora/uk), [United States](/diaspora/usa), [Canada](/diaspora/canada), [UAE](/diaspora/uae), [Germany](/diaspora/germany), [Netherlands](/diaspora/netherlands).
+
 ## Optional
 
 - [Press](/press): Press mentions and media resources.
