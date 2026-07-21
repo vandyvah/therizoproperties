@@ -152,7 +152,7 @@ export default function AnalyticsDashboard() {
 
   return (
     <DashboardLayout>
-      <SEOHead title="Analytics — Therizo Dashboard" description="Internal analytics" noIndex />
+      <SEOHead title="Analytics — Therizo Dashboard" description="Internal analytics" noindex />
       <div className="space-y-6">
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div>
