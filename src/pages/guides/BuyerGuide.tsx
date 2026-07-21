@@ -385,6 +385,22 @@ export default function BuyerGuide() {
         </div>
       </section>
 
+      {/* Sources */}
+      <section className="bg-ivory">
+        <div className="container-wide">
+          <div className="max-w-3xl mx-auto pb-8">
+            <GuideCitations
+              items={[
+                { label: "Central Bank of Nigeria (CBN) — FX & Remittance Policy", url: "https://www.cbn.gov.ng/" },
+                { label: "Lagos State Ministry of Lands — Property Registration", url: "https://lagosstate.gov.ng/ministries/lands/" },
+                { label: "Federal Capital Territory Administration (FCTA)", url: "https://fcta.gov.ng/" },
+                { label: "Nigerian Land Use Act (1978) — Full Text", url: "https://www.nigeria-law.org/LandUseAct.htm" },
+              ]}
+            />
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="section-padding bg-navy">
         <div className="container-narrow text-center">

@@ -322,6 +322,21 @@ export default function ROIMethodology() {
         className="bg-muted/50"
       />
 
+      {/* Sources */}
+      <section className="bg-ivory">
+        <div className="container-wide">
+          <div className="max-w-3xl mx-auto pb-8">
+            <GuideCitations
+              items={[
+                { label: "Central Bank of Nigeria (CBN) — Monetary Policy & FX Rates", url: "https://www.cbn.gov.ng/" },
+                { label: "National Bureau of Statistics (NBS) — Consumer Price Index", url: "https://www.nigerianstat.gov.ng/" },
+                { label: "IMF — Nigeria Country Report", url: "https://www.imf.org/en/Countries/NGA" },
+              ]}
+            />
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="section-padding bg-navy">
         <div className="container-narrow text-center">
