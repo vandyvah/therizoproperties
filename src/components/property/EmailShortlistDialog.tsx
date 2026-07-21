@@ -6,8 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { getUtm } from "@/lib/utm";
-import { analytics } from "@/lib/analytics";
+// utm imported below
+import { track } from "@/lib/analytics";
 
 interface Props {
   propertyIds: string[];
@@ -37,7 +37,7 @@ export function EmailShortlistDialog({ propertyIds, trigger }: Props) {
         body: { email, name: name || undefined, property_ids: propertyIds, note: note || undefined, utm: getUtm() },
       });
       if (error) throw error;
-      analytics.track("shortlist_email_sent", { count: propertyIds.length });
+      track("shortlist_email_sent", { count: propertyIds.length });
       toast({ title: "Sent!", description: "Check your inbox — a consultant will follow up shortly." });
       setOpen(false);
       setEmail(""); setName(""); setNote("");

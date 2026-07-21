@@ -6,8 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { getUtm } from "@/lib/utm";
-import { analytics } from "@/lib/analytics";
+// utm imported below
+import { track } from "@/lib/analytics";
 
 interface Props {
   defaultFilters?: {
@@ -50,7 +50,7 @@ export function SavedSearchDialog({ defaultFilters = {}, trigger }: Props) {
         utm: getUtm() ?? null,
       });
       if (error) throw error;
-      analytics.track("saved_search_created", { filters, frequency });
+      track("saved_search_created", { filters, frequency });
       toast({ title: "You're subscribed", description: "We'll email you when matching listings come in." });
       setOpen(false);
       setEmail(""); setName("");
