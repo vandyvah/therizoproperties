@@ -51,6 +51,32 @@ function captureUtm(): UtmParams {
   }
 }
 
+const HIGH_INTENT_EVENTS = new Set([
+  "lead_submit",
+  "exit_intent_submit",
+  "calculator_complete",
+]);
+
+function fireAlert(eventName: string, path: string, utm: UtmParams, properties: Record<string, unknown>) {
+  if (!HIGH_INTENT_EVENTS.has(eventName)) return;
+  try {
+    void supabase.functions.invoke("analytics-alert", {
+      body: {
+        event: eventName,
+        path,
+        utm: {
+          source: utm.utm_source,
+          medium: utm.utm_medium,
+          campaign: utm.utm_campaign,
+        },
+        properties,
+      },
+    });
+  } catch {
+    /* silent */
+  }
+}
+
 /**
  * Fire-and-forget event tracker. Never throws, never blocks the UI.
  */
@@ -61,9 +87,11 @@ export function track(
   if (typeof window === "undefined") return;
   try {
     const utm = captureUtm();
+    const path = window.location.pathname.slice(0, 300);
+    const evt = eventName.slice(0, 80);
     const payload = {
-      event_name: eventName.slice(0, 80),
-      path: window.location.pathname.slice(0, 300),
+      event_name: evt,
+      path,
       referrer: (document.referrer || "").slice(0, 300) || null,
       session_id: getSessionId(),
       ...utm,
@@ -74,6 +102,9 @@ export function track(
       .from("analytics_events")
       .insert(payload)
       .then(() => undefined);
+
+    // Real-time founder alert on high-intent conversions.
+    fireAlert(evt, path, utm, properties);
   } catch {
     /* swallow — analytics never breaks UX */
   }
