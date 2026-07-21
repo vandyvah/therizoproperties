@@ -176,6 +176,20 @@ export default function AnalyticsDashboard() {
       .sort((a, b) => a[0].localeCompare(b[0]))
       .map(([day, count]) => ({ day, count }));
 
+    const errors: ErrorGroup[] = Array.from(errMap.values())
+      .map((e) => ({
+        key: e.key,
+        message: e.message,
+        source: e.source,
+        count: e.count,
+        sessions: e.sessionSet.size,
+        firstSeen: e.firstSeen,
+        lastSeen: e.lastSeen,
+        lastUrl: e.lastUrl,
+      }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 20);
+
     return {
       total: rows.length,
       sessions: sessions.size,
@@ -191,6 +205,8 @@ export default function AnalyticsDashboard() {
       topUtm: topN(utmMap, 8),
       topReferrers: topN(refMap, 8),
       byDay,
+      errors,
+      errorTotal,
     };
   }, [rows]);
 
