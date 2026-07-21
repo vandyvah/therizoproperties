@@ -32,6 +32,7 @@ const StyleGuide = lazy(() => import("./pages/StyleGuide"));
 const ReportFraud = lazy(() => import("./pages/ReportFraud"));
 const Saved = lazy(() => import("./pages/Saved"));
 const Unsubscribe = lazy(() => import("./pages/Unsubscribe"));
+const Status = lazy(() => import("./pages/Status"));
 const Press = lazy(() => import("./pages/Press"));
 const TitleVerification = lazy(() => import("./pages/guides/TitleVerification"));
 const BuyerGuide = lazy(() => import("./pages/guides/BuyerGuide"));
@@ -174,6 +175,7 @@ const App = () => (
                 <Route path="/report-fraud" element={<ReportFraud />} />
                 <Route path="/saved" element={<Saved />} />
                 <Route path="/unsubscribe" element={<Unsubscribe />} />
+                <Route path="/status" element={<Status />} />
 
                 {/* Guide Pages */}
                 <Route path="/guides/title-verification" element={<TitleVerification />} />
