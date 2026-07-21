@@ -341,14 +341,7 @@ export default function TitleVerification() {
         className="bg-muted/50"
       />
 
-      {/* CTA */}
-      <section className="section-padding bg-navy">
-        <div className="container-narrow text-center">
-          <h2 className="font-display text-3xl md:text-4xl font-semibold text-ivory mb-6">
-            Ready to Buy with Confidence?
-          </h2>
-          <p className="text-lg text-ivory/80 leading-relaxed mb-10 max-w-2xl mx-auto">
-            Every property in our portfolio has been verified using this process. 
+      {/* Sources */}
       <section className="bg-ivory">
         <div className="container-wide">
           <div className="max-w-3xl mx-auto pb-8">
