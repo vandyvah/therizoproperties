@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin } from "lucide-react";
+import { openCookieSettings } from "@/components/compliance/CookieConsent";
 
 const footerLinks = {
   company: [
