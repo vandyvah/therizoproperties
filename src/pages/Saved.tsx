@@ -1,20 +1,55 @@
-import { Link } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Heart, ArrowRight, MapPin, MessageCircle, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
-import { useShortlist } from "@/hooks/useShortlist";
+import { useShortlist, shortlistSync } from "@/hooks/useShortlist";
 import { useCurrency } from "@/components/currency/CurrencySwitcher";
 import { SaveButton } from "@/components/property/SaveButton";
 import { EmailShortlistDialog } from "@/components/property/EmailShortlistDialog";
 import { SavedSearchDialog } from "@/components/property/SavedSearchDialog";
+import { SyncShortlistDialog } from "@/components/property/SyncShortlistDialog";
 
 export default function Saved() {
-  const { ids, clear, count } = useShortlist();
+  const { ids, clear, count, setAll } = useShortlist();
   const { formatPrice } = useCurrency();
+  const [params, setParams] = useSearchParams();
+  const handledToken = useRef<string | null>(null);
+
+  // Magic-link handshake: ?sync=<token> loads the cloud shortlist and persists the token.
+  useEffect(() => {
+    const token = params.get("sync");
+    if (!token || handledToken.current === token) return;
+    handledToken.current = token;
+    (async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke("shortlist-sync", {
+          body: { action: "load", token },
+        });
+        if (error) throw error;
+        const cloudIds = (data as any)?.property_ids as string[] | undefined;
+        if (Array.isArray(cloudIds)) {
+          const merged = Array.from(new Set([...ids, ...cloudIds]));
+          setAll(merged);
+          shortlistSync.setToken(token);
+          toast.success("Shortlist synced", {
+            description: "This device is now linked to your saved list.",
+          });
+        }
+      } catch {
+        toast.error("Sync link invalid or expired");
+      } finally {
+        params.delete("sync");
+        setParams(params, { replace: true });
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params]);
 
   const { data: listings, isLoading } = useQuery({
     queryKey: ["shortlist-properties", ids.slice().sort().join(",")],
@@ -88,6 +123,7 @@ export default function Saved() {
                 </Button>
                 <EmailShortlistDialog propertyIds={ids} />
                 <SavedSearchDialog />
+                <SyncShortlistDialog propertyIds={ids} />
                 <Button asChild variant="outline">
                   <Link to="/contact">Book a strategy call</Link>
                 </Button>
