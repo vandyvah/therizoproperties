@@ -74,11 +74,11 @@ export function FloatingConcierge() {
                 href={service.href}
                 target={service.external ? "_blank" : undefined}
                 rel={service.external ? "noopener noreferrer" : undefined}
-                onClick={() =>
-                  service.external
-                    ? analytics.whatsappClick({ surface: "concierge", label: service.label })
-                    : analytics.track && undefined
-                }
+                onClick={() => {
+                  if (service.external) {
+                    analytics.whatsappClick({ surface: "concierge", label: service.label });
+                  }
+                }}
                 className="flex items-start gap-3 p-3 rounded-xl hover:bg-muted transition-colors group"
               >
                 <div className={cn("p-2 rounded-lg bg-muted group-hover:bg-background transition-colors", service.color)}>
