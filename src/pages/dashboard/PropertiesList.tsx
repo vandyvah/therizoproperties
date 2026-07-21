@@ -463,13 +463,13 @@ export default function PropertiesList() {
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
-                          <Button variant="ghost" size="icon" asChild>
+                          <Button variant="ghost" size="icon" asChild aria-label={`View ${property.title}`}>
                             <Link to={`/dashboard/properties/${property.id}`}>
                               <Eye size={16} />
                             </Link>
                           </Button>
                           {(isAdmin || property.assigned_consultant_id === profile?.id) && (
-                            <Button variant="ghost" size="icon" asChild>
+                            <Button variant="ghost" size="icon" asChild aria-label={`Edit ${property.title}`}>
                               <Link to={`/dashboard/properties/${property.id}/edit`}>
                                 <Edit size={16} />
                               </Link>

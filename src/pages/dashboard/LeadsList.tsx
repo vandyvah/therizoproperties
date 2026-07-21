@@ -330,7 +330,7 @@ export default function LeadsList() {
                                   <span className="text-xs text-muted-foreground">
                                     {lead.profiles?.full_name || "Unassigned"}
                                   </span>
-                                  <Button variant="ghost" size="icon" className="h-6 w-6" asChild>
+                                  <Button variant="ghost" size="icon" className="h-6 w-6" asChild aria-label="View lead">
                                     <Link to={`/dashboard/leads/${lead.id}`}>
                                       <Eye size={14} />
                                     </Link>

@@ -211,7 +211,7 @@ export default function ROIList() {
                         {new Date(calc.created_at).toLocaleDateString()}
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button variant="ghost" size="icon" asChild>
+                        <Button variant="ghost" size="icon" asChild aria-label="View ROI calculation">
                           <Link to={`/dashboard/roi/${calc.id}`}>
                             <Eye size={16} />
                           </Link>

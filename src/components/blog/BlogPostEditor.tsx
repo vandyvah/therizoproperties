@@ -464,6 +464,7 @@ export function BlogPostEditor({ postId, onSave }: BlogPostEditorProps) {
                     <Button
                       variant="ghost"
                       size="icon"
+                      aria-label="Remove query target"
                       onClick={() => removeQueryTarget(index)}
                     >
                       <Trash2 className="h-4 w-4" />
@@ -510,6 +511,7 @@ export function BlogPostEditor({ postId, onSave }: BlogPostEditorProps) {
                           <Button
                             variant="destructive"
                             size="icon"
+                            aria-label="Remove inline image"
                             className="absolute top-2 right-2"
                             onClick={() => setInlineImageUrl("")}
                           >
@@ -643,6 +645,7 @@ export function BlogPostEditor({ postId, onSave }: BlogPostEditorProps) {
                   <Button
                     variant="destructive"
                     size="icon"
+                    aria-label="Remove featured image"
                     className="absolute top-2 right-2"
                     onClick={() => setFeaturedImageUrl("")}
                   >
@@ -730,7 +733,7 @@ export function BlogPostEditor({ postId, onSave }: BlogPostEditorProps) {
                     placeholder="Add tag"
                     onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addTag())}
                   />
-                  <Button variant="outline" size="icon" onClick={addTag}>
+                  <Button variant="outline" size="icon" aria-label="Add tag" onClick={addTag}>
                     <Plus className="h-4 w-4" />
                   </Button>
                 </div>
