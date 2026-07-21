@@ -3,6 +3,7 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema } from "@/components/seo/JsonLd";
+import { GuideByline, GuideCitations } from "@/components/guides/GuideByline";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { 
@@ -209,8 +210,24 @@ export default function BuyerGuide() {
         </div>
       </section>
 
+      {/* Author byline */}
+      <section className="bg-ivory">
+        <div className="container-wide">
+          <div className="max-w-3xl mx-auto">
+            <GuideByline
+              author={{ name: "Ugo Uzoukwu", role: "Founder & Principal, Therizo Properties" }}
+              reviewedBy={{ name: "Solomon Adaji", role: "Head of Client Advisory" }}
+              datePublished="2025-01-15"
+              dateModified="2026-07-20"
+              readTime="15 min read"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Quick Answer Box */}
       <section className="py-8 bg-gold/10 border-b border-gold/20">
+
         <div className="container-wide">
           <div className="max-w-3xl mx-auto">
             <h2 className="font-display text-lg font-semibold text-ink mb-3 flex items-center gap-2">
@@ -364,6 +381,22 @@ export default function BuyerGuide() {
                 Calculate potential returns on your Nigerian property investment.
               </p>
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Sources */}
+      <section className="bg-ivory">
+        <div className="container-wide">
+          <div className="max-w-3xl mx-auto pb-8">
+            <GuideCitations
+              items={[
+                { label: "Central Bank of Nigeria (CBN) — FX & Remittance Policy", url: "https://www.cbn.gov.ng/" },
+                { label: "Lagos State Ministry of Lands — Property Registration", url: "https://lagosstate.gov.ng/ministries/lands/" },
+                { label: "Federal Capital Territory Administration (FCTA)", url: "https://fcta.gov.ng/" },
+                { label: "Nigerian Land Use Act (1978) — Full Text", url: "https://www.nigeria-law.org/LandUseAct.htm" },
+              ]}
+            />
           </div>
         </div>
       </section>

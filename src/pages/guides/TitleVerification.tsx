@@ -3,6 +3,7 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema } from "@/components/seo/JsonLd";
+import { GuideByline, GuideCitations } from "@/components/guides/GuideByline";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { 
@@ -196,8 +197,24 @@ export default function TitleVerification() {
         </div>
       </section>
 
+      {/* Author byline */}
+      <section className="bg-ivory">
+        <div className="container-wide">
+          <div className="max-w-3xl mx-auto">
+            <GuideByline
+              author={{ name: "Ugo Uzoukwu", role: "Founder & Principal, Therizo Properties" }}
+              reviewedBy={{ name: "Kelly Anagor", role: "Head of Legal & Compliance" }}
+              datePublished="2025-01-15"
+              dateModified="2026-07-20"
+              readTime="12 min read"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Verification Process */}
       <section className="section-padding bg-ivory">
+
         <div className="container-wide">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="font-display text-3xl md:text-4xl font-semibold text-ink mb-6">
@@ -323,6 +340,21 @@ export default function TitleVerification() {
         items={faqs}
         className="bg-muted/50"
       />
+
+      {/* Sources */}
+      <section className="bg-ivory">
+        <div className="container-wide">
+          <div className="max-w-3xl mx-auto pb-8">
+            <GuideCitations
+              items={[
+                { label: "Lagos State Ministry of Physical Planning & Urban Development — Lands Bureau", url: "https://lagosstate.gov.ng/ministries/lands/" },
+                { label: "Federal Capital Territory Administration (FCTA)", url: "https://fcta.gov.ng/" },
+                { label: "Nigerian Land Use Act (1978) — Full Text", url: "https://www.nigeria-law.org/LandUseAct.htm" },
+              ]}
+            />
+          </div>
+        </div>
+      </section>
 
       {/* CTA */}
       <section className="section-padding bg-navy">

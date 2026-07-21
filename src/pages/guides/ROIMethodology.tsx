@@ -3,6 +3,7 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema } from "@/components/seo/JsonLd";
+import { GuideByline, GuideCitations } from "@/components/guides/GuideByline";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { 
@@ -184,8 +185,24 @@ export default function ROIMethodology() {
         </div>
       </section>
 
+      {/* Author byline */}
+      <section className="bg-ivory">
+        <div className="container-wide">
+          <div className="max-w-3xl mx-auto">
+            <GuideByline
+              author={{ name: "Ugo Uzoukwu", role: "Founder & Principal, Therizo Properties" }}
+              reviewedBy={{ name: "Aisha Bello", role: "Head of Investment Analytics" }}
+              datePublished="2025-01-15"
+              dateModified="2026-07-20"
+              readTime="8 min read"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Key Metrics */}
       <section className="section-padding bg-ivory">
+
         <div className="container-wide">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="font-display text-3xl md:text-4xl font-semibold text-ink mb-6">
@@ -304,6 +321,21 @@ export default function ROIMethodology() {
         items={faqs}
         className="bg-muted/50"
       />
+
+      {/* Sources */}
+      <section className="bg-ivory">
+        <div className="container-wide">
+          <div className="max-w-3xl mx-auto pb-8">
+            <GuideCitations
+              items={[
+                { label: "Central Bank of Nigeria (CBN) — Monetary Policy & FX Rates", url: "https://www.cbn.gov.ng/" },
+                { label: "National Bureau of Statistics (NBS) — Consumer Price Index", url: "https://www.nigerianstat.gov.ng/" },
+                { label: "IMF — Nigeria Country Report", url: "https://www.imf.org/en/Countries/NGA" },
+              ]}
+            />
+          </div>
+        </div>
+      </section>
 
       {/* CTA */}
       <section className="section-padding bg-navy">
