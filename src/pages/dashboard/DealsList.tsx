@@ -204,7 +204,7 @@ export default function DealsList() {
                           : "-"}
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button variant="ghost" size="icon" asChild>
+                        <Button variant="ghost" size="icon" asChild aria-label="View deal">
                           <Link to={`/dashboard/deals/${deal.id}`}>
                             <Eye size={16} />
                           </Link>
