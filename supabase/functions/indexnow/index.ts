@@ -11,11 +11,13 @@ const HOST = "therizoproperties.com";
 const staticUrls = [
   "/",
   "/properties",
+  "/blog",
   "/calculator",
+  "/calculator/advanced",
   "/our-standard",
   "/team",
   "/contact",
-  "/vault",
+  "/materials-supply",
   "/guides/title-verification",
   "/guides/buyer-guide",
   "/guides/roi-methodology",
@@ -23,6 +25,9 @@ const staticUrls = [
   "/locations/lagos",
   "/locations/abuja",
   "/locations/port-harcourt",
+  "/submit-property",
+  "/abuja-starter-kit",
+  "/report-fraud",
 ];
 
 // IndexNow endpoints for different search engines
@@ -51,16 +56,30 @@ Deno.serve(async (req) => {
     // Build URL list starting with static pages
     const allUrls = staticUrls.map(path => `${SITE_URL}${path}`);
 
-    // Fetch listed properties from database
-    const { data: properties, error } = await supabase
+    // Fetch listed properties (slug-based routing)
+    const { data: properties } = await supabase
       .from("properties")
-      .select("id")
-      .eq("status", "listed");
+      .select("slug")
+      .eq("status", "listed")
+      .not("slug", "is", null);
 
-    if (!error && properties && properties.length > 0) {
-      properties.forEach((property) => {
-        allUrls.push(`${SITE_URL}/properties/${property.id}`);
-      });
+    if (properties) {
+      for (const p of properties as any[]) {
+        if (p.slug) allUrls.push(`${SITE_URL}/properties/${p.slug}`);
+      }
+    }
+
+    // Published blog posts
+    const { data: posts } = await supabase
+      .from("blog_posts")
+      .select("slug")
+      .eq("status", "published")
+      .not("slug", "is", null);
+
+    if (posts) {
+      for (const b of posts as any[]) {
+        if (b.slug) allUrls.push(`${SITE_URL}/blog/${b.slug}`);
+      }
     }
 
     console.log(`Submitting ${allUrls.length} URLs via IndexNow`);
