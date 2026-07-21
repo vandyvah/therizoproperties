@@ -4,7 +4,18 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2, TrendingUp, MousePointerClick, MessageCircle, Target } from "lucide-react";
+import { Loader2, TrendingUp, MousePointerClick, MessageCircle, Target, AlertTriangle } from "lucide-react";
+
+type ErrorGroup = {
+  key: string;
+  message: string;
+  source: string;
+  count: number;
+  sessions: number;
+  firstSeen: string;
+  lastSeen: string;
+  lastUrl: string;
+};
 
 type EventRow = {
   event_name: string;
