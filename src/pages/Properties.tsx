@@ -9,6 +9,7 @@ import { FAQSection } from "@/components/seo/FAQSection";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { TestimonialsSection } from "@/components/trust/TestimonialsSection";
 import { SaveButton } from "@/components/property/SaveButton";
+import { SavedSearchDialog } from "@/components/property/SavedSearchDialog";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useCurrency } from "@/components/currency/CurrencySwitcher";
@@ -121,6 +122,11 @@ const Properties = () => {
       <section className="section-padding bg-ivory" aria-labelledby="properties-grid-heading">
         <div className="container-wide">
           <h2 id="properties-grid-heading" className="sr-only">Available Properties</h2>
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-8">
+            <p className="text-sm text-slate/80">Can't find the right fit? Get notified when a match comes in.</p>
+            <SavedSearchDialog />
+          </div>
+
 
           {isLoading ? (
             <div className="flex items-center justify-center py-16">
