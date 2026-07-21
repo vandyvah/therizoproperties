@@ -304,6 +304,9 @@ export default function PortHarcourt() {
       {/* Case Studies */}
       <CaseStudies city="Port Harcourt" studies={phCaseStudies} />
 
+      {/* Programmatic playbooks: /invest/:location/:strategy */}
+      <InvestComboCards city="Port Harcourt" />
+
       {/* FAQ Section */}
       <FAQSection
         title="Port Harcourt Real Estate FAQs"
