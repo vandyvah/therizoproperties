@@ -448,6 +448,8 @@ export type Database = {
           nurture_last_sent_at: string | null
           nurture_paused: boolean
           nurture_step: number
+          nurture_track: string | null
+          nurture_variant: string | null
           page: string | null
           phone: string | null
           preferred_location: string | null
@@ -472,6 +474,8 @@ export type Database = {
           nurture_last_sent_at?: string | null
           nurture_paused?: boolean
           nurture_step?: number
+          nurture_track?: string | null
+          nurture_variant?: string | null
           page?: string | null
           phone?: string | null
           preferred_location?: string | null
@@ -496,6 +500,8 @@ export type Database = {
           nurture_last_sent_at?: string | null
           nurture_paused?: boolean
           nurture_step?: number
+          nurture_track?: string | null
+          nurture_variant?: string | null
           page?: string | null
           phone?: string | null
           preferred_location?: string | null
@@ -906,6 +912,44 @@ export type Database = {
           status?: string
         }
         Relationships: []
+      }
+      nurture_sends: {
+        Row: {
+          id: string
+          sent_at: string
+          step: number
+          subject: string
+          submission_id: string
+          track: string | null
+          variant: string | null
+        }
+        Insert: {
+          id?: string
+          sent_at?: string
+          step: number
+          subject: string
+          submission_id: string
+          track?: string | null
+          variant?: string | null
+        }
+        Update: {
+          id?: string
+          sent_at?: string
+          step?: number
+          subject?: string
+          submission_id?: string
+          track?: string | null
+          variant?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nurture_sends_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "contact_submissions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
