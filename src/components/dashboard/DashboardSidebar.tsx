@@ -17,6 +17,8 @@ import {
   FileText,
   Package,
   BarChart3,
+  Quote,
+  Activity,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -36,6 +38,8 @@ const adminNavItems = [
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/dashboard/blog", label: "Blog", icon: FileText },
   { href: "/dashboard/material-requests", label: "Materials Supply", icon: Package },
+  { href: "/dashboard/testimonials", label: "Testimonials", icon: Quote },
+  { href: "/dashboard/activity-signals", label: "Activity Signals", icon: Activity },
 ];
 const superAdminNavItems = [
   { href: "/dashboard/users", label: "User Management", icon: ShieldCheck },

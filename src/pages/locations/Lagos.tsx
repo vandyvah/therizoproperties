@@ -5,6 +5,7 @@ import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { CaseStudies, type CaseStudy } from "@/components/locations/CaseStudies";
 import { InvestComboCards } from "@/components/locations/InvestComboCards";
+import { ActivityTicker } from "@/components/trust/ActivityTicker";
 
 const lagosCaseStudies: CaseStudy[] = [
   {
@@ -306,6 +307,7 @@ export default function Lagos() {
 
       {/* Programmatic playbooks: /invest/:location/:strategy */}
       <InvestComboCards city="Lagos" />
+      <ActivityTicker />
 
       {/* FAQ Section */}
       <FAQSection
