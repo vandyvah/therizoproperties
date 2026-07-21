@@ -183,12 +183,12 @@ export default function ClientsList() {
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
-                          <Button variant="ghost" size="icon" asChild>
+                          <Button variant="ghost" size="icon" asChild aria-label="View client">
                             <Link to={`/dashboard/clients/${client.id}`}>
                               <Eye size={16} />
                             </Link>
                           </Button>
-                          <Button variant="ghost" size="icon" asChild>
+                          <Button variant="ghost" size="icon" asChild aria-label="Edit client">
                             <Link to={`/dashboard/clients/${client.id}/edit`}>
                               <Edit size={16} />
                             </Link>
