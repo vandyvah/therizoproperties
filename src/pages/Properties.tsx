@@ -182,6 +182,11 @@ const Properties = () => {
                       <span className="text-xs text-ivory">Video</span>
                     </div>
                   ) : null}
+                  <SaveButton
+                    propertyId={property.id}
+                    propertyTitle={property.title}
+                    className="absolute bottom-4 right-4"
+                  />
                 </div>
                 <div className="p-6">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
