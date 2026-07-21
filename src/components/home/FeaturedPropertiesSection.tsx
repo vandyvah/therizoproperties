@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { useCurrency } from "@/components/currency/CurrencySwitcher";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { analytics } from "@/lib/analytics";
 import {
   Tooltip,
   TooltipContent,
