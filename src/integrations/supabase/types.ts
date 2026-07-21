@@ -422,6 +422,36 @@ export type Database = {
           },
         ]
       }
+      buyer_shortlists: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          last_sent_at: string | null
+          property_ids: string[]
+          sync_token: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          last_sent_at?: string | null
+          property_ids?: string[]
+          sync_token: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          last_sent_at?: string | null
+          property_ids?: string[]
+          sync_token?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       clients: {
         Row: {
           assigned_consultant_id: string | null
