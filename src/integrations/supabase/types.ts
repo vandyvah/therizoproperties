@@ -52,6 +52,36 @@ export type Database = {
           },
         ]
       }
+      activity_signals: {
+        Row: {
+          category: string
+          city: string | null
+          created_at: string
+          headline: string
+          id: string
+          occurred_at: string
+          published: boolean
+        }
+        Insert: {
+          category?: string
+          city?: string | null
+          created_at?: string
+          headline: string
+          id?: string
+          occurred_at?: string
+          published?: boolean
+        }
+        Update: {
+          category?: string
+          city?: string | null
+          created_at?: string
+          headline?: string
+          id?: string
+          occurred_at?: string
+          published?: boolean
+        }
+        Relationships: []
+      }
       admin_notifications: {
         Row: {
           created_at: string
@@ -1347,6 +1377,62 @@ export type Database = {
             columns: ["property_id"]
             isOneToOne: false
             referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      testimonials: {
+        Row: {
+          created_at: string
+          deal_id: string | null
+          id: string
+          published: boolean
+          quote: string
+          rating: number
+          reviewer_location: string | null
+          reviewer_name: string
+          reviewer_role: string | null
+          sort_order: number
+          strategy: string | null
+          updated_at: string
+          verified: boolean
+        }
+        Insert: {
+          created_at?: string
+          deal_id?: string | null
+          id?: string
+          published?: boolean
+          quote: string
+          rating?: number
+          reviewer_location?: string | null
+          reviewer_name: string
+          reviewer_role?: string | null
+          sort_order?: number
+          strategy?: string | null
+          updated_at?: string
+          verified?: boolean
+        }
+        Update: {
+          created_at?: string
+          deal_id?: string | null
+          id?: string
+          published?: boolean
+          quote?: string
+          rating?: number
+          reviewer_location?: string | null
+          reviewer_name?: string
+          reviewer_role?: string | null
+          sort_order?: number
+          strategy?: string | null
+          updated_at?: string
+          verified?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "testimonials_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
             referencedColumns: ["id"]
           },
         ]
