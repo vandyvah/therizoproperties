@@ -8,6 +8,8 @@ import { ROITeaserSection } from "@/components/home/ROITeaserSection";
 import { OurStandardSection } from "@/components/home/OurStandardSection";
 import { TeamPreviewSection } from "@/components/home/TeamPreviewSection";
 import { CTASection } from "@/components/home/CTASection";
+import { TestimonialsSection } from "@/components/trust/TestimonialsSection";
+import { ActivityTicker } from "@/components/trust/ActivityTicker";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { JsonLd, createOrganizationSchema, createRealEstateAgentSchema, createFAQSchema, createWebSiteSchema, createSpeakableSchema } from "@/components/seo/JsonLd";
 import { FAQSection } from "@/components/seo/FAQSection";
@@ -54,10 +56,12 @@ const Index = () => {
       <HeroSection />
       <WhoWeServeSection />
       <WhyTherizoSection />
+      <ActivityTicker />
       <ElitePropertyCarousel />
       <FeaturedPropertiesSection />
       <ROITeaserSection />
       <OurStandardSection />
+      <TestimonialsSection variant="cream" />
       <TeamPreviewSection />
       
       {/* FAQ Section for SEO */}
