@@ -733,7 +733,7 @@ export function BlogPostEditor({ postId, onSave }: BlogPostEditorProps) {
                     placeholder="Add tag"
                     onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addTag())}
                   />
-                  <Button variant="outline" size="icon" onClick={addTag}>
+                  <Button variant="outline" size="icon" aria-label="Add tag" onClick={addTag}>
                     <Plus className="h-4 w-4" />
                   </Button>
                 </div>
