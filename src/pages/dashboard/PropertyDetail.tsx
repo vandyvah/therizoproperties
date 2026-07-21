@@ -185,7 +185,7 @@ export default function PropertyDetail() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard/properties")}>
+            <Button variant="ghost" size="icon" aria-label="Back to properties" onClick={() => navigate("/dashboard/properties")}>
               <ArrowLeft className="h-4 w-4" />
             </Button>
             <div>
