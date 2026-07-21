@@ -422,6 +422,8 @@ const Contact = () => {
           </p>
         </div>
       </section>
+
+      <ProgrammaticCrossLinks variant="contact" />
     </Layout>
   );
 };
