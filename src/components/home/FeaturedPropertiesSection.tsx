@@ -35,46 +35,25 @@ export function FeaturedPropertiesSection() {
 
   const { data: listings } = useQuery({
     queryKey: ["public-properties", "home-featured"],
+    staleTime: 60_000,
     queryFn: async () => {
-      // First try to get featured properties
-      const { data: featured, error: fErr } = await supabase
+      // Single query: fetch 3 listed properties ordered by is_featured DESC then updated_at DESC.
+      // The new composite index (status, is_featured DESC, updated_at DESC) makes this an index scan.
+      const { data, error } = await supabase
         .from("properties")
         .select(
           "id, title, slug, city, area, status, asking_price_ngn, risk_rating, property_type, description, is_featured, property_media(file_url, file_type, sort_order)",
         )
         .eq("status", "listed")
-        .eq("is_featured", true)
+        .order("is_featured", { ascending: false })
         .order("updated_at", { ascending: false })
         .limit(3);
-      if (fErr) throw fErr;
 
-      // If we have 3+ featured, use those; otherwise backfill with latest listed
-      if (featured && featured.length >= 3) {
-        return featured.slice(0, 3) as PublicProperty[];
-      }
-
-      const remaining = 3 - (featured?.length || 0);
-      const featuredIds = (featured || []).map((p) => p.id);
-      
-      let query = supabase
-        .from("properties")
-        .select(
-          "id, title, slug, city, area, status, asking_price_ngn, risk_rating, property_type, description, is_featured, property_media(file_url, file_type, sort_order)",
-        )
-        .eq("status", "listed")
-        .order("updated_at", { ascending: false })
-        .limit(remaining);
-      
-      if (featuredIds.length > 0) {
-        query = query.not("id", "in", `(${featuredIds.join(",")})`);
-      }
-
-      const { data: backfill, error: bErr } = await query;
-      if (bErr) throw bErr;
-
-      return [...(featured || []), ...(backfill || [])].slice(0, 3) as PublicProperty[];
+      if (error) throw error;
+      return (data || []) as PublicProperty[];
     },
   });
+
 
   const properties = (listings || []).map((p) => {
     const media = (p.property_media || [])
