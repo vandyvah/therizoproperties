@@ -137,6 +137,7 @@ const App = () => (
           <BrowserRouter>
             <ScrollManager />
             <URLNormalizer />
+            <ExitIntentGate />
             <ErrorBoundary>
               <Suspense fallback={<RouteFallback />}>
               <Routes>
