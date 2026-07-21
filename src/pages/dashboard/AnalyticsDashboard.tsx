@@ -126,6 +126,37 @@ export default function AnalyticsDashboard() {
       if (r.event_name === "exit_intent_shown") exitShown++;
       if (r.event_name === "exit_intent_submit") exitSubmit++;
       if (r.event_name === "property_view") propertyView++;
+      if (r.event_name === "client_error") {
+        errorTotal++;
+        const p = (r.properties || {}) as Record<string, unknown>;
+        const msg = String(p.message || "Unknown error").slice(0, 200);
+        const src = String(p.source || "unknown");
+        const key = `${src}::${msg}`;
+        const existing = errMap.get(key);
+        if (existing) {
+          existing.count++;
+          if (r.session_id) existing.sessionSet.add(r.session_id);
+          if (r.created_at < existing.firstSeen) existing.firstSeen = r.created_at;
+          if (r.created_at > existing.lastSeen) {
+            existing.lastSeen = r.created_at;
+            existing.lastUrl = String(p.url || r.path || "");
+          }
+        } else {
+          const sSet = new Set<string>();
+          if (r.session_id) sSet.add(r.session_id);
+          errMap.set(key, {
+            key,
+            message: msg,
+            source: src,
+            count: 1,
+            sessions: 0,
+            firstSeen: r.created_at,
+            lastSeen: r.created_at,
+            lastUrl: String(p.url || r.path || ""),
+            sessionSet: sSet,
+          });
+        }
+      }
 
       const utm = r.utm_source || "(direct)";
       utmMap.set(utm, (utmMap.get(utm) || 0) + 1);
