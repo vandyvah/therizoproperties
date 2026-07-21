@@ -3,6 +3,7 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { JsonLd, createArticleSchema, createBreadcrumbSchema } from "@/components/seo/JsonLd";
+import { GuideByline, GuideCitations } from "@/components/guides/GuideByline";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { 
