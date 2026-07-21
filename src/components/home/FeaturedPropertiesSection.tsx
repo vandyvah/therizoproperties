@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, MapPin, Shield, CheckCircle } from "lucide-react";
+import { ArrowRight, MapPin, Shield, CheckCircle, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCurrency } from "@/components/currency/CurrencySwitcher";
@@ -139,18 +139,31 @@ export function FeaturedPropertiesSection() {
                 <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4 line-clamp-2">
                   {property.description || `${property.property_type} in ${property.location}.`}
                 </p>
-                <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center justify-between gap-2 mb-2">
                   <span className="font-display text-base sm:text-xl font-semibold text-primary">
                     {formatPrice(property.asking_price_ngn)}
                   </span>
                   <Button variant="outline" size="sm" className="text-xs px-2 sm:px-3" asChild>
-                    <Link to={`/properties/${property.slug || property.id}`}>
+                    <Link to={`/properties/${property.slug || property.id}`} aria-label={`View ${property.title}`}>
                       <span className="hidden sm:inline">View & ROI</span>
                       <span className="sm:hidden">View</span>
                       <ArrowRight size={12} className="ml-1" />
                     </Link>
                   </Button>
                 </div>
+                <Button variant="gold" size="sm" className="w-full text-xs" asChild>
+                  <a
+                    href={`https://wa.me/2348034830087?text=${encodeURIComponent(
+                      `Hello Therizo, I'd like to enquire about "${property.title}" (${formatPrice(property.asking_price_ngn)}) — https://therizoproperties.com/properties/${property.slug || property.id}`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`WhatsApp enquiry about ${property.title}`}
+                  >
+                    <MessageCircle size={12} className="mr-1.5" />
+                    WhatsApp Enquiry
+                  </a>
+                </Button>
               </div>
             </article>
           ))}
