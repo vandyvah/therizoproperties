@@ -4,6 +4,18 @@
  * No cookies, no external network calls, no PII.
  */
 import { supabase } from "@/integrations/supabase/client";
+import { getCookieConsent } from "@/components/compliance/CookieConsent";
+
+// Events that record user-initiated business actions (leads, conversions).
+// These fire regardless of cookie consent because they capture the user's
+// own submission, not passive browsing behaviour.
+const ESSENTIAL_EVENTS = new Set([
+  "lead_submit",
+  "exit_intent_submit",
+  "calculator_complete",
+  "whatsapp_click",
+  "call_click",
+]);
 
 const SESSION_KEY = "trz_session_id";
 const UTM_KEY = "trz_utm";
