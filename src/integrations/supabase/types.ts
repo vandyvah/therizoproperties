@@ -445,11 +445,15 @@ export type Database = {
           id: string
           message: string
           name: string
+          nurture_last_sent_at: string | null
+          nurture_paused: boolean
+          nurture_step: number
           page: string | null
           phone: string | null
           preferred_location: string | null
           referrer: string | null
           status: string
+          unsubscribe_token: string
           utm_campaign: string | null
           utm_content: string | null
           utm_medium: string | null
@@ -465,11 +469,15 @@ export type Database = {
           id?: string
           message: string
           name: string
+          nurture_last_sent_at?: string | null
+          nurture_paused?: boolean
+          nurture_step?: number
           page?: string | null
           phone?: string | null
           preferred_location?: string | null
           referrer?: string | null
           status?: string
+          unsubscribe_token?: string
           utm_campaign?: string | null
           utm_content?: string | null
           utm_medium?: string | null
@@ -485,11 +493,15 @@ export type Database = {
           id?: string
           message?: string
           name?: string
+          nurture_last_sent_at?: string | null
+          nurture_paused?: boolean
+          nurture_step?: number
           page?: string | null
           phone?: string | null
           preferred_location?: string | null
           referrer?: string | null
           status?: string
+          unsubscribe_token?: string
           utm_campaign?: string | null
           utm_content?: string | null
           utm_medium?: string | null
