@@ -506,7 +506,7 @@ const PropertyDetail = () => {
             </a>
           </Button>
           <Button variant="outline" size="sm" className="border-ivory/30 text-ivory hover:bg-ivory/10" asChild>
-            <a href="tel:+2348034830087" aria-label="Call Therizo">
+            <a href="tel:+2348034830087" aria-label="Call Therizo" onClick={() => analytics.callClick({ surface: "detail_sticky", property_id: property.id })}>
               <Phone size={16} />
             </a>
           </Button>
