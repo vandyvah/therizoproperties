@@ -6,8 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-// utm imported below
-import { track } from "@/lib/analytics";
+import { track, getUtm } from "@/lib/analytics";
 
 interface Props {
   propertyIds: string[];

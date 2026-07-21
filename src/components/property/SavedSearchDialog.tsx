@@ -6,8 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-// utm imported below
-import { track } from "@/lib/analytics";
+import { track, getUtm } from "@/lib/analytics";
 
 interface Props {
   defaultFilters?: {
