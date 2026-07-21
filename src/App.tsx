@@ -13,6 +13,7 @@ import { URLNormalizer } from "@/components/URLNormalizer";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { ExitIntentGate } from "@/components/marketing/ExitIntentGate";
 import { PageViewTracker } from "@/components/analytics/PageViewTracker";
+import { CookieConsent } from "@/components/compliance/CookieConsent";
 
 // Eager routes: high-traffic public pages (fast first paint on nav)
 import Index from "./pages/Index";
