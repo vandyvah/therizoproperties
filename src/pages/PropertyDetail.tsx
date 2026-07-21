@@ -56,6 +56,7 @@ const PropertyDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { formatPrice } = useCurrency();
 
+
   // Fetch property by ID or slug
   const { data: property, isLoading, error } = useQuery({
     queryKey: ["public-property", id],
