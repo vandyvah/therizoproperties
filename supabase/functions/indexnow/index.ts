@@ -11,11 +11,13 @@ const HOST = "therizoproperties.com";
 const staticUrls = [
   "/",
   "/properties",
+  "/blog",
   "/calculator",
+  "/calculator/advanced",
   "/our-standard",
   "/team",
   "/contact",
-  "/vault",
+  "/materials-supply",
   "/guides/title-verification",
   "/guides/buyer-guide",
   "/guides/roi-methodology",
@@ -23,6 +25,9 @@ const staticUrls = [
   "/locations/lagos",
   "/locations/abuja",
   "/locations/port-harcourt",
+  "/submit-property",
+  "/abuja-starter-kit",
+  "/report-fraud",
 ];
 
 // IndexNow endpoints for different search engines
