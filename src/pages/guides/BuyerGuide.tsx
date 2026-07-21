@@ -210,8 +210,24 @@ export default function BuyerGuide() {
         </div>
       </section>
 
+      {/* Author byline */}
+      <section className="bg-ivory">
+        <div className="container-wide">
+          <div className="max-w-3xl mx-auto">
+            <GuideByline
+              author={{ name: "Ugo Uzoukwu", role: "Founder & Principal, Therizo Properties" }}
+              reviewedBy={{ name: "Solomon Adaji", role: "Head of Client Advisory" }}
+              datePublished="2025-01-15"
+              dateModified="2026-07-20"
+              readTime="15 min read"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Quick Answer Box */}
       <section className="py-8 bg-gold/10 border-b border-gold/20">
+
         <div className="container-wide">
           <div className="max-w-3xl mx-auto">
             <h2 className="font-display text-lg font-semibold text-ink mb-3 flex items-center gap-2">

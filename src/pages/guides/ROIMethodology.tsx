@@ -185,8 +185,24 @@ export default function ROIMethodology() {
         </div>
       </section>
 
+      {/* Author byline */}
+      <section className="bg-ivory">
+        <div className="container-wide">
+          <div className="max-w-3xl mx-auto">
+            <GuideByline
+              author={{ name: "Ugo Uzoukwu", role: "Founder & Principal, Therizo Properties" }}
+              reviewedBy={{ name: "Aisha Bello", role: "Head of Investment Analytics" }}
+              datePublished="2025-01-15"
+              dateModified="2026-07-20"
+              readTime="8 min read"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Key Metrics */}
       <section className="section-padding bg-ivory">
+
         <div className="container-wide">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="font-display text-3xl md:text-4xl font-semibold text-ink mb-6">
