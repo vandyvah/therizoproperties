@@ -5,13 +5,24 @@ export interface FAQItem {
   answer: string;
 }
 
+export interface ArticleAuthor {
+  name: string;
+  jobTitle?: string;
+  url?: string;
+}
+
 interface ArticleSchema {
   headline: string;
   description: string;
-  author: string;
+  author: string | ArticleAuthor;
+  reviewedBy?: ArticleAuthor;
   datePublished: string;
   dateModified?: string;
   image?: string;
+  citations?: string[];
+  keywords?: string[];
+  articleSection?: string;
+  url?: string;
 }
 
 interface RealEstateListingSchema {
@@ -261,15 +272,39 @@ export function createFAQSchema(faqs: FAQItem[]) {
 
 // Helper function to create Article schema
 export function createArticleSchema(data: ArticleSchema) {
+  const author =
+    typeof data.author === "string"
+      ? { "@type": "Organization" as const, name: data.author }
+      : {
+          "@type": "Person" as const,
+          name: data.author.name,
+          ...(data.author.jobTitle && { jobTitle: data.author.jobTitle }),
+          ...(data.author.url && { url: data.author.url }),
+          worksFor: {
+            "@type": "Organization",
+            name: "Therizo Property and Development Corporation",
+            url: "https://therizoproperties.com",
+          },
+        };
+
+  const reviewedBy = data.reviewedBy && {
+    "@type": "Person",
+    name: data.reviewedBy.name,
+    ...(data.reviewedBy.jobTitle && { jobTitle: data.reviewedBy.jobTitle }),
+    ...(data.reviewedBy.url && { url: data.reviewedBy.url }),
+    worksFor: {
+      "@type": "Organization",
+      name: "Therizo Property and Development Corporation",
+    },
+  };
+
   return {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: data.headline,
     description: data.description,
-    author: {
-      "@type": "Organization",
-      name: data.author,
-    },
+    author,
+    ...(reviewedBy && { reviewedBy }),
     publisher: {
       "@type": "Organization",
       name: "Therizo Property and Development Corporation",
@@ -280,7 +315,13 @@ export function createArticleSchema(data: ArticleSchema) {
     },
     datePublished: data.datePublished,
     dateModified: data.dateModified || data.datePublished,
-    image: data.image,
+    ...(data.image && { image: data.image }),
+    ...(data.url && { mainEntityOfPage: { "@type": "WebPage", "@id": data.url } }),
+    ...(data.articleSection && { articleSection: data.articleSection }),
+    ...(data.keywords?.length && { keywords: data.keywords.join(", ") }),
+    ...(data.citations?.length && {
+      citation: data.citations.map((c) => ({ "@type": "CreativeWork", url: c })),
+    }),
   };
 }
 
