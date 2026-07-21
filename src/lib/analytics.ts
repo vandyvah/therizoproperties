@@ -114,6 +114,15 @@ export function track(
     const utm = captureUtm();
     const path = window.location.pathname.slice(0, 300);
     const evt = eventName.slice(0, 80);
+
+    // Consent gate: passive analytics only fire when the visitor accepted all
+    // cookies. Essential business events (form submits, WhatsApp/call taps)
+    // always fire — they record the user's own action, not tracking.
+    if (!ESSENTIAL_EVENTS.has(evt)) {
+      const consent = getCookieConsent();
+      if (consent !== "accepted") return;
+    }
+
     const payload = {
       event_name: evt,
       path,
