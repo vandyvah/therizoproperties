@@ -94,6 +94,9 @@ const Contact = () => {
 
       if (error) throw error;
 
+      analytics.leadSubmit({ source: "contact-form", client_type: clientType, budget });
+
+
       toast({
         title: "Enquiry Submitted",
         description:
