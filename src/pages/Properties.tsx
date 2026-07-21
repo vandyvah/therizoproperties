@@ -8,6 +8,7 @@ import { JsonLd, createFAQSchema, createBreadcrumbSchema } from "@/components/se
 import { FAQSection } from "@/components/seo/FAQSection";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { TestimonialsSection } from "@/components/trust/TestimonialsSection";
+import { SaveButton } from "@/components/property/SaveButton";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useCurrency } from "@/components/currency/CurrencySwitcher";
@@ -182,6 +183,11 @@ const Properties = () => {
                       <span className="text-xs text-ivory">Video</span>
                     </div>
                   ) : null}
+                  <SaveButton
+                    propertyId={property.id}
+                    propertyTitle={property.title}
+                    className="absolute bottom-4 right-4"
+                  />
                 </div>
                 <div className="p-6">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">

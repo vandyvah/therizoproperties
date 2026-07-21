@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Lock } from "lucide-react";
+import { Menu, X, Lock, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CurrencySwitcher } from "@/components/currency/CurrencySwitcher";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { useShortlist } from "@/hooks/useShortlist";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -23,6 +24,7 @@ export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const { count: savedCount } = useShortlist();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -76,6 +78,18 @@ export function Header() {
         <div className="hidden lg:flex items-center gap-3">
           <ThemeToggle variant="compact" />
           <CurrencySwitcher variant="compact" />
+          <Link
+            to="/saved"
+            aria-label={`Shortlist${savedCount ? ` (${savedCount})` : ""}`}
+            className="relative inline-flex items-center justify-center h-9 w-9 rounded-full border border-ivory/20 text-ivory hover:text-gold hover:border-gold transition"
+          >
+            <Heart className={cn("h-4 w-4", savedCount > 0 && "fill-gold text-gold")} />
+            {savedCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-gold text-navy text-[10px] font-semibold rounded-full h-4 min-w-4 px-1 flex items-center justify-center">
+                {savedCount}
+              </span>
+            )}
+          </Link>
           <Button
             variant="gold"
             size="sm"

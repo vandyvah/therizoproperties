@@ -12,6 +12,7 @@ import { useCurrency } from "@/components/currency/CurrencySwitcher";
 import { PropertyMediaCarousel } from "@/components/property/PropertyMediaCarousel";
 import { FraudWarning } from "@/components/trust/FraudWarning";
 import { TrustBadgesStrip } from "@/components/trust/TrustBadgesStrip";
+import { SaveButton } from "@/components/property/SaveButton";
 import { analytics } from "@/lib/analytics";
 import { useEffect } from "react";
 import {
@@ -274,9 +275,12 @@ const PropertyDetail = () => {
                 {property.risk_rating} risk
               </Badge>
             </div>
-            <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-semibold text-ivory mb-4">
-              {property.title}
-            </h1>
+            <div className="flex items-start justify-between gap-4">
+              <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-semibold text-ivory mb-4">
+                {property.title}
+              </h1>
+              <SaveButton propertyId={property.id} propertyTitle={property.title} className="mt-2 shrink-0" />
+            </div>
             <div className="flex items-center gap-2 text-ivory/70">
               <MapPin size={18} />
               <span>{location}</span>
