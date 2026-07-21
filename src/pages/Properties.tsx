@@ -7,6 +7,7 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { JsonLd, createFAQSchema, createBreadcrumbSchema } from "@/components/seo/JsonLd";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { TestimonialsSection } from "@/components/trust/TestimonialsSection";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useCurrency } from "@/components/currency/CurrencySwitcher";
@@ -253,6 +254,8 @@ const Properties = () => {
           </Button>
         </div>
       </section>
+
+      <TestimonialsSection />
 
       {/* FAQ Section */}
       <section className="section-padding bg-muted/50">
