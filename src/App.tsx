@@ -64,6 +64,7 @@ const BlogPostsList = lazy(() => import("./pages/dashboard/BlogPostsList"));
 const BlogPostEdit = lazy(() => import("./pages/dashboard/BlogPostEdit"));
 const BlogClustersList = lazy(() => import("./pages/dashboard/BlogClustersList"));
 const MaterialRequestsList = lazy(() => import("./pages/dashboard/MaterialRequestsList"));
+const AnalyticsDashboard = lazy(() => import("./pages/dashboard/AnalyticsDashboard"));
 
 /**
  * Global query/mutation defaults:
