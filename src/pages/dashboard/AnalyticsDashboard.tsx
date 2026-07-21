@@ -4,7 +4,18 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2, TrendingUp, MousePointerClick, MessageCircle, Target } from "lucide-react";
+import { Loader2, TrendingUp, MousePointerClick, MessageCircle, Target, AlertTriangle } from "lucide-react";
+
+type ErrorGroup = {
+  key: string;
+  message: string;
+  source: string;
+  count: number;
+  sessions: number;
+  firstSeen: string;
+  lastSeen: string;
+  lastUrl: string;
+};
 
 type EventRow = {
   event_name: string;
@@ -81,6 +92,8 @@ export default function AnalyticsDashboard() {
       topUtm: [] as [string, number][],
       topReferrers: [] as [string, number][],
       byDay: [] as { day: string; count: number }[],
+      errors: [] as ErrorGroup[],
+      errorTotal: 0,
     };
     if (!rows) return empty;
 
@@ -89,6 +102,7 @@ export default function AnalyticsDashboard() {
     const utmMap = new Map<string, number>();
     const refMap = new Map<string, number>();
     const dayMap = new Map<string, number>();
+    const errMap = new Map<string, ErrorGroup & { sessionSet: Set<string> }>();
     let pageViews = 0,
       whatsapp = 0,
       calls = 0,
@@ -96,7 +110,8 @@ export default function AnalyticsDashboard() {
       leads = 0,
       exitShown = 0,
       exitSubmit = 0,
-      propertyView = 0;
+      propertyView = 0,
+      errorTotal = 0;
 
     for (const r of rows) {
       if (r.session_id) sessions.add(r.session_id);
@@ -111,6 +126,37 @@ export default function AnalyticsDashboard() {
       if (r.event_name === "exit_intent_shown") exitShown++;
       if (r.event_name === "exit_intent_submit") exitSubmit++;
       if (r.event_name === "property_view") propertyView++;
+      if (r.event_name === "client_error") {
+        errorTotal++;
+        const p = (r.properties || {}) as Record<string, unknown>;
+        const msg = String(p.message || "Unknown error").slice(0, 200);
+        const src = String(p.source || "unknown");
+        const key = `${src}::${msg}`;
+        const existing = errMap.get(key);
+        if (existing) {
+          existing.count++;
+          if (r.session_id) existing.sessionSet.add(r.session_id);
+          if (r.created_at < existing.firstSeen) existing.firstSeen = r.created_at;
+          if (r.created_at > existing.lastSeen) {
+            existing.lastSeen = r.created_at;
+            existing.lastUrl = String(p.url || r.path || "");
+          }
+        } else {
+          const sSet = new Set<string>();
+          if (r.session_id) sSet.add(r.session_id);
+          errMap.set(key, {
+            key,
+            message: msg,
+            source: src,
+            count: 1,
+            sessions: 0,
+            firstSeen: r.created_at,
+            lastSeen: r.created_at,
+            lastUrl: String(p.url || r.path || ""),
+            sessionSet: sSet,
+          });
+        }
+      }
 
       const utm = r.utm_source || "(direct)";
       utmMap.set(utm, (utmMap.get(utm) || 0) + 1);
@@ -130,6 +176,20 @@ export default function AnalyticsDashboard() {
       .sort((a, b) => a[0].localeCompare(b[0]))
       .map(([day, count]) => ({ day, count }));
 
+    const errors: ErrorGroup[] = Array.from(errMap.values())
+      .map((e) => ({
+        key: e.key,
+        message: e.message,
+        source: e.source,
+        count: e.count,
+        sessions: e.sessionSet.size,
+        firstSeen: e.firstSeen,
+        lastSeen: e.lastSeen,
+        lastUrl: e.lastUrl,
+      }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 20);
+
     return {
       total: rows.length,
       sessions: sessions.size,
@@ -145,6 +205,8 @@ export default function AnalyticsDashboard() {
       topUtm: topN(utmMap, 8),
       topReferrers: topN(refMap, 8),
       byDay,
+      errors,
+      errorTotal,
     };
   }, [rows]);
 
@@ -246,6 +308,65 @@ export default function AnalyticsDashboard() {
               <ListCard title="Traffic source (UTM)" rows={stats.topUtm} />
               <ListCard title="Top referrers" rows={stats.topReferrers} emptyLabel="No external referrers" />
             </div>
+
+            {/* Error triage */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base flex items-center gap-2">
+                  <AlertTriangle className="h-4 w-4 text-orange-500" />
+                  Client-side errors
+                  <span className="ml-2 text-xs font-normal text-muted-foreground">
+                    {stats.errorTotal.toLocaleString()} in range · {stats.errors.length} unique
+                  </span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {stats.errors.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    No client errors reported. 🎉
+                  </p>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead className="text-xs text-muted-foreground border-b">
+                        <tr>
+                          <th className="text-left py-2 pr-3 font-medium">Message</th>
+                          <th className="text-left py-2 pr-3 font-medium">Source</th>
+                          <th className="text-right py-2 pr-3 font-medium">Count</th>
+                          <th className="text-right py-2 pr-3 font-medium">Sessions</th>
+                          <th className="text-left py-2 pr-3 font-medium">First seen</th>
+                          <th className="text-left py-2 pr-3 font-medium">Last seen</th>
+                          <th className="text-left py-2 font-medium">Last URL</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {stats.errors.map((e) => (
+                          <tr key={e.key} className="border-b last:border-0 align-top">
+                            <td className="py-2 pr-3 max-w-[320px]">
+                              <span className="font-medium break-words" title={e.message}>
+                                {e.message}
+                              </span>
+                            </td>
+                            <td className="py-2 pr-3 text-muted-foreground whitespace-nowrap">{e.source}</td>
+                            <td className="py-2 pr-3 text-right font-medium tabular-nums">{e.count.toLocaleString()}</td>
+                            <td className="py-2 pr-3 text-right tabular-nums">{e.sessions.toLocaleString()}</td>
+                            <td className="py-2 pr-3 text-muted-foreground whitespace-nowrap">
+                              {new Date(e.firstSeen).toLocaleString()}
+                            </td>
+                            <td className="py-2 pr-3 text-muted-foreground whitespace-nowrap">
+                              {new Date(e.lastSeen).toLocaleString()}
+                            </td>
+                            <td className="py-2 text-muted-foreground max-w-[240px] truncate" title={e.lastUrl}>
+                              {e.lastUrl.replace(/^https?:\/\/[^/]+/, "") || "—"}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </>
         )}
       </div>
