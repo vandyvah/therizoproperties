@@ -143,7 +143,11 @@ export function ElitePropertyCarousel() {
                     src={property.image}
                     alt={property.title}
                     className="w-full h-full object-cover"
+                    loading={index === 0 ? "eager" : "lazy"}
+                    fetchPriority={index === 0 ? "high" : "auto"}
+                    decoding="async"
                   />
+
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                   
                   {/* Tag */}
