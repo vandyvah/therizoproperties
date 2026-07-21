@@ -8,6 +8,7 @@ import { JsonLd, createFAQSchema, createBreadcrumbSchema } from "@/components/se
 import { FAQSection } from "@/components/seo/FAQSection";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { TestimonialsSection } from "@/components/trust/TestimonialsSection";
+import { SaveButton } from "@/components/property/SaveButton";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useCurrency } from "@/components/currency/CurrencySwitcher";
