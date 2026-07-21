@@ -17,6 +17,7 @@ import { FloodMappingOverlay } from "@/components/calculator/FloodMappingOverlay
 import { InfrastructureTimeline } from "@/components/calculator/InfrastructureTimeline";
 import { PropertyComparison, SavedCalculation } from "@/components/calculator/PropertyComparison";
 import { ROIInputField } from "@/components/calculator/ROIInputField";
+import { ProgrammaticCrossLinks } from "@/components/marketing/ProgrammaticCrossLinks";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useDebounce, formatWithSeparators, parseFormattedNumber } from "@/hooks/useDebounce";
@@ -1064,6 +1065,8 @@ const Calculator_Page = () => {
           </div>
         </div>
       </section>
+
+      <ProgrammaticCrossLinks variant="calculator" />
     </Layout>
   );
 };

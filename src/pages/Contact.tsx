@@ -21,6 +21,7 @@ import { JsonLd, createOrganizationSchema, createLocalBusinessSchema, createFAQS
 import { FAQSection } from "@/components/seo/FAQSection";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FraudWarning } from "@/components/trust/FraudWarning";
+import { ProgrammaticCrossLinks } from "@/components/marketing/ProgrammaticCrossLinks";
 
 const contactFAQs = [
   {
@@ -421,6 +422,8 @@ const Contact = () => {
           </p>
         </div>
       </section>
+
+      <ProgrammaticCrossLinks variant="contact" />
     </Layout>
   );
 };

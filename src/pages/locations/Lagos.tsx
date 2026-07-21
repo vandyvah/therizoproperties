@@ -4,6 +4,7 @@ import { JsonLd, createRealEstateAgentSchema, createBreadcrumbSchema } from "@/c
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { CaseStudies, type CaseStudy } from "@/components/locations/CaseStudies";
+import { InvestComboCards } from "@/components/locations/InvestComboCards";
 
 const lagosCaseStudies: CaseStudy[] = [
   {
@@ -302,6 +303,9 @@ export default function Lagos() {
 
       {/* Case Studies */}
       <CaseStudies city="Lagos" studies={lagosCaseStudies} />
+
+      {/* Programmatic playbooks: /invest/:location/:strategy */}
+      <InvestComboCards city="Lagos" />
 
       {/* FAQ Section */}
       <FAQSection

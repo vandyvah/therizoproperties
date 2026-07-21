@@ -4,6 +4,7 @@ import { JsonLd, createBreadcrumbSchema } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { CaseStudies, type CaseStudy } from "@/components/locations/CaseStudies";
+import { InvestComboCards } from "@/components/locations/InvestComboCards";
 
 const abujaCaseStudies: CaseStudy[] = [
   {
@@ -302,6 +303,9 @@ export default function Abuja() {
 
       {/* Case Studies */}
       <CaseStudies city="Abuja" studies={abujaCaseStudies} />
+
+      {/* Programmatic playbooks: /invest/:location/:strategy */}
+      <InvestComboCards city="Abuja" />
 
       {/* FAQ Section */}
       <FAQSection
