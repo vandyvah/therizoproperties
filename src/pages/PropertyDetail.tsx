@@ -11,6 +11,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCurrency } from "@/components/currency/CurrencySwitcher";
 import { PropertyMediaCarousel } from "@/components/property/PropertyMediaCarousel";
 import { FraudWarning } from "@/components/trust/FraudWarning";
+import { analytics } from "@/lib/analytics";
+import { useEffect } from "react";
 import {
   MapPin,
   Home,
@@ -53,6 +55,7 @@ interface Property {
 const PropertyDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { formatPrice } = useCurrency();
+
 
   // Fetch property by ID or slug
   const { data: property, isLoading, error } = useQuery({
@@ -104,6 +107,18 @@ const PropertyDetail = () => {
     },
     enabled: !!id,
   });
+
+  useEffect(() => {
+    if (property) {
+      analytics.propertyView({
+        property_id: property.id,
+        slug: property.slug,
+        city: property.city,
+        price_ngn: property.asking_price_ngn,
+      });
+    }
+  }, [property]);
+
 
   if (isLoading) {
     return (
@@ -404,6 +419,7 @@ const PropertyDetail = () => {
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() => analytics.whatsappClick({ surface: "detail_sidebar", property_id: property.id })}
                     >
                       <MessageCircle className="mr-2" size={16} />
                       WhatsApp Enquiry
@@ -416,7 +432,7 @@ const PropertyDetail = () => {
                     </Link>
                   </Button>
                   <Button variant="outline" className="w-full border-ivory/30 text-ivory hover:bg-ivory/10" asChild>
-                    <a href="tel:+2348034830087">
+                    <a href="tel:+2348034830087" onClick={() => analytics.callClick({ surface: "detail_sidebar", property_id: property.id })}>
                       <Phone className="mr-2" size={16} />
                       Call Us
                     </a>
@@ -483,13 +499,14 @@ const PropertyDetail = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="WhatsApp enquiry about this property"
+              onClick={() => analytics.whatsappClick({ surface: "detail_sticky", property_id: property.id })}
             >
               <MessageCircle size={16} className="mr-1" />
               WhatsApp
             </a>
           </Button>
           <Button variant="outline" size="sm" className="border-ivory/30 text-ivory hover:bg-ivory/10" asChild>
-            <a href="tel:+2348034830087" aria-label="Call Therizo">
+            <a href="tel:+2348034830087" aria-label="Call Therizo" onClick={() => analytics.callClick({ surface: "detail_sticky", property_id: property.id })}>
               <Phone size={16} />
             </a>
           </Button>

@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { Shield } from "lucide-react";
+import { analytics } from "@/lib/analytics";
 
 const DISMISS_KEY = "therizo_exit_intent_dismissed_v1";
 
@@ -29,6 +30,7 @@ export function ExitIntent() {
     const trigger = () => {
       if (fired) return;
       fired = true;
+      analytics.exitIntentShown();
       setOpen(true);
     };
 
@@ -67,6 +69,7 @@ export function ExitIntent() {
         page: `exit-intent:${location.pathname}`,
       });
       if (error) throw error;
+      analytics.exitIntentSubmit({ path: location.pathname });
       sessionStorage.setItem(DISMISS_KEY, "1");
       toast.success("Briefing on its way. A senior consultant will follow up shortly.");
       setOpen(false);

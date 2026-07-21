@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { jsPDF } from "jspdf";
+import { analytics } from "@/lib/analytics";
 
 const WHATSAPP_NUMBER = "2348034830087";
 
@@ -163,6 +164,7 @@ export default function CalculatorLead() {
           whatsapp_consent: !!lead.whatsappConsent && !!lead.phone,
         });
       if (error) throw error;
+      analytics.leadSubmit({ source: "roi-calculator-step1", location: lead.location, budget: lead.budget });
       submissionIdRef.current = null;
       setStep(2);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -175,6 +177,12 @@ export default function CalculatorLead() {
 
   const handleReveal = async () => {
     if (!canAdvance || !results) return;
+    analytics.calculatorComplete({
+      strategy,
+      roi_pct: results.roi,
+      payback_years: results.payback,
+      location: lead.location,
+    });
     setStep(3);
     window.scrollTo({ top: 0, behavior: "smooth" });
 

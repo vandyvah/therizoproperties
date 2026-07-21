@@ -2,6 +2,7 @@ import { useState } from "react";
 import { MessageCircle, X, Phone, Calendar, Car, Plane } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { analytics } from "@/lib/analytics";
 
 export function FloatingConcierge() {
   const [isOpen, setIsOpen] = useState(false);
@@ -73,6 +74,11 @@ export function FloatingConcierge() {
                 href={service.href}
                 target={service.external ? "_blank" : undefined}
                 rel={service.external ? "noopener noreferrer" : undefined}
+                onClick={() => {
+                  if (service.external) {
+                    analytics.whatsappClick({ surface: "concierge", label: service.label });
+                  }
+                }}
                 className="flex items-start gap-3 p-3 rounded-xl hover:bg-muted transition-colors group"
               >
                 <div className={cn("p-2 rounded-lg bg-muted group-hover:bg-background transition-colors", service.color)}>

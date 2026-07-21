@@ -12,6 +12,7 @@ import { ScrollManager } from "@/components/ScrollManager";
 import { URLNormalizer } from "@/components/URLNormalizer";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { ExitIntentGate } from "@/components/marketing/ExitIntentGate";
+import { PageViewTracker } from "@/components/analytics/PageViewTracker";
 
 // Eager routes: high-traffic public pages (fast first paint on nav)
 import Index from "./pages/Index";
@@ -139,6 +140,7 @@ const App = () => (
             <ScrollManager />
             <URLNormalizer />
             <ExitIntentGate />
+            <PageViewTracker />
             <ErrorBoundary>
               <Suspense fallback={<RouteFallback />}>
               <Routes>
