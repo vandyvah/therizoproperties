@@ -144,9 +144,27 @@ export default function BuyerGuide() {
       <JsonLd data={createArticleSchema({
         headline: "How to Buy Property in Nigeria: Complete Diaspora Buyer's Guide",
         description: "Evergreen guide for diaspora investors purchasing verified Nigerian properties. Due diligence, title verification, and transaction discipline.",
-        author: "Therizo Property and Development Corporation",
+        author: {
+          name: "Ugo Uzoukwu",
+          jobTitle: "Founder & Principal, Therizo Property and Development Corporation",
+          url: "https://therizoproperties.com/team",
+        },
+        reviewedBy: {
+          name: "Solomon Adaji",
+          jobTitle: "Head of Client Advisory",
+          url: "https://therizoproperties.com/team",
+        },
         datePublished: "2025-01-15",
         dateModified: "2026-07-20",
+        url: "https://therizoproperties.com/guides/buyer-guide",
+        articleSection: "Diaspora Investing",
+        keywords: ["buy property Nigeria", "diaspora real estate", "Lagos property investment", "Abuja property", "Nigerian buyer's guide"],
+        citations: [
+          "https://www.cbn.gov.ng/",
+          "https://lagosstate.gov.ng/ministries/lands/",
+          "https://fcta.gov.ng/",
+          "https://www.nigeria-law.org/LandUseAct.htm",
+        ],
       })} />
       <JsonLd data={createBreadcrumbSchema([
         { name: "Home", url: "https://therizoproperties.com/" },
