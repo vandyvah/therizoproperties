@@ -308,6 +308,65 @@ export default function AnalyticsDashboard() {
               <ListCard title="Traffic source (UTM)" rows={stats.topUtm} />
               <ListCard title="Top referrers" rows={stats.topReferrers} emptyLabel="No external referrers" />
             </div>
+
+            {/* Error triage */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base flex items-center gap-2">
+                  <AlertTriangle className="h-4 w-4 text-orange-500" />
+                  Client-side errors
+                  <span className="ml-2 text-xs font-normal text-muted-foreground">
+                    {stats.errorTotal.toLocaleString()} in range · {stats.errors.length} unique
+                  </span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {stats.errors.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    No client errors reported. 🎉
+                  </p>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead className="text-xs text-muted-foreground border-b">
+                        <tr>
+                          <th className="text-left py-2 pr-3 font-medium">Message</th>
+                          <th className="text-left py-2 pr-3 font-medium">Source</th>
+                          <th className="text-right py-2 pr-3 font-medium">Count</th>
+                          <th className="text-right py-2 pr-3 font-medium">Sessions</th>
+                          <th className="text-left py-2 pr-3 font-medium">First seen</th>
+                          <th className="text-left py-2 pr-3 font-medium">Last seen</th>
+                          <th className="text-left py-2 font-medium">Last URL</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {stats.errors.map((e) => (
+                          <tr key={e.key} className="border-b last:border-0 align-top">
+                            <td className="py-2 pr-3 max-w-[320px]">
+                              <span className="font-medium break-words" title={e.message}>
+                                {e.message}
+                              </span>
+                            </td>
+                            <td className="py-2 pr-3 text-muted-foreground whitespace-nowrap">{e.source}</td>
+                            <td className="py-2 pr-3 text-right font-medium tabular-nums">{e.count.toLocaleString()}</td>
+                            <td className="py-2 pr-3 text-right tabular-nums">{e.sessions.toLocaleString()}</td>
+                            <td className="py-2 pr-3 text-muted-foreground whitespace-nowrap">
+                              {new Date(e.firstSeen).toLocaleString()}
+                            </td>
+                            <td className="py-2 pr-3 text-muted-foreground whitespace-nowrap">
+                              {new Date(e.lastSeen).toLocaleString()}
+                            </td>
+                            <td className="py-2 text-muted-foreground max-w-[240px] truncate" title={e.lastUrl}>
+                              {e.lastUrl.replace(/^https?:\/\/[^/]+/, "") || "—"}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </>
         )}
       </div>
