@@ -10,6 +10,7 @@ const PROJECT_REF = import.meta.env.VITE_SUPABASE_PROJECT_ID as string | undefin
 export default function Unsubscribe() {
   const [params] = useSearchParams();
   const token = params.get("token")?.trim() ?? "";
+  const type = params.get("type")?.trim() ?? "nurture";
   const [state, setState] = useState<State>("loading");
 
   useEffect(() => {
@@ -17,9 +18,10 @@ export default function Unsubscribe() {
       setState("invalid");
       return;
     }
+    const fn = type === "saved_search" ? "saved-search-unsubscribe" : "nurture-unsubscribe";
     const url = PROJECT_REF
-      ? `https://${PROJECT_REF}.supabase.co/functions/v1/nurture-unsubscribe?token=${encodeURIComponent(token)}`
-      : `/functions/v1/nurture-unsubscribe?token=${encodeURIComponent(token)}`;
+      ? `https://${PROJECT_REF}.supabase.co/functions/v1/${fn}?token=${encodeURIComponent(token)}`
+      : `/functions/v1/${fn}?token=${encodeURIComponent(token)}`;
     fetch(url)
       .then((r) => {
         if (r.status === 400) setState("invalid");
@@ -27,7 +29,7 @@ export default function Unsubscribe() {
         else return r.text().then((body) => setState(body.includes("Already") ? "already" : "success"));
       })
       .catch(() => setState("error"));
-  }, [token]);
+  }, [token, type]);
 
   const heading =
     state === "loading" ? "Processing your request…"

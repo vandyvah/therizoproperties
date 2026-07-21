@@ -9,6 +9,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useShortlist } from "@/hooks/useShortlist";
 import { useCurrency } from "@/components/currency/CurrencySwitcher";
 import { SaveButton } from "@/components/property/SaveButton";
+import { EmailShortlistDialog } from "@/components/property/EmailShortlistDialog";
+import { SavedSearchDialog } from "@/components/property/SavedSearchDialog";
 
 export default function Saved() {
   const { ids, clear, count } = useShortlist();
@@ -84,6 +86,8 @@ export default function Saved() {
                     Send shortlist on WhatsApp
                   </a>
                 </Button>
+                <EmailShortlistDialog propertyIds={ids} />
+                <SavedSearchDialog />
                 <Button asChild variant="outline">
                   <Link to="/contact">Book a strategy call</Link>
                 </Button>
