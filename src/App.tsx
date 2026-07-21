@@ -175,6 +175,7 @@ const App = () => (
                 <Route path="/report-fraud" element={<ReportFraud />} />
                 <Route path="/saved" element={<Saved />} />
                 <Route path="/unsubscribe" element={<Unsubscribe />} />
+                <Route path="/status" element={<Status />} />
 
                 {/* Guide Pages */}
                 <Route path="/guides/title-verification" element={<TitleVerification />} />
