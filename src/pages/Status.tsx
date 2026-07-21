@@ -65,15 +65,12 @@ const StatusPage = () => {
 
   return (
     <Layout>
-      <Helmet>
-        <title>System Status — Therizo Properties</title>
-        <meta
-          name="description"
-          content="Live status of the Therizo Properties website, API, lead intake, and email services."
-        />
-        <meta name="robots" content="noindex, follow" />
-        <link rel="canonical" href="https://therizoproperties.com/status" />
-      </Helmet>
+      <SEOHead
+        title="System Status — Therizo Properties"
+        description="Live status of the Therizo Properties website, API, lead intake, and email services."
+        canonical="https://therizoproperties.com/status"
+        noindex
+      />
 
       <section className="container-wide section-padding">
         <div className="max-w-3xl mx-auto">
