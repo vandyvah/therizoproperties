@@ -22,6 +22,21 @@ interface CapturedEvent {
 const emit = (evt: CapturedEvent) => {
   // Grouped log so DevTools + log-scrapers can identify it.
   console.error("[observability]", evt);
+  // Fire-and-forget report to analytics_events for staff visibility.
+  // Import lazily to avoid a circular dep during module init.
+  import("@/lib/analytics")
+    .then(({ track }) =>
+      track("client_error", {
+        source: evt.kind,
+        message: (evt.message || "").slice(0, 500),
+        stack: (evt.stack || "").slice(0, 1500),
+        file: evt.source ? `${evt.source}:${evt.lineno ?? "?"}:${evt.colno ?? "?"}` : null,
+        url: evt.url.slice(0, 500),
+        user_agent:
+          typeof navigator !== "undefined" ? navigator.userAgent.slice(0, 300) : null,
+      }),
+    )
+    .catch(() => undefined);
 };
 
 export const installObservability = () => {

@@ -15,6 +15,7 @@ const ESSENTIAL_EVENTS = new Set([
   "calculator_complete",
   "whatsapp_click",
   "call_click",
+  "client_error",
 ]);
 
 const SESSION_KEY = "trz_session_id";

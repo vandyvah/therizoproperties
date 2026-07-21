@@ -1,4 +1,5 @@
 import { Component, ErrorInfo, ReactNode } from "react";
+import { track } from "@/lib/analytics";
 
 interface Props {
   children: ReactNode;
@@ -13,6 +14,7 @@ interface State {
 /**
  * Route-level error boundary.
  * Catches render errors so a single broken route can't blank the whole app.
+ * Reports runtime crashes to analytics_events for staff visibility.
  */
 export class ErrorBoundary extends Component<Props, State> {
   state: State = { hasError: false, error: null };
@@ -22,13 +24,24 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    // Structured console capture — picked up by observability tooling.
     console.error("[ErrorBoundary]", {
       message: error.message,
       stack: error.stack,
       componentStack: info.componentStack,
       url: typeof window !== "undefined" ? window.location.href : undefined,
     });
+    try {
+      track("client_error", {
+        source: "react_error_boundary",
+        message: (error.message || "").slice(0, 500),
+        stack: (error.stack || "").slice(0, 1500),
+        component_stack: (info.componentStack || "").slice(0, 1500),
+        url: typeof window !== "undefined" ? window.location.href.slice(0, 500) : null,
+        user_agent: typeof navigator !== "undefined" ? navigator.userAgent.slice(0, 300) : null,
+      });
+    } catch {
+      /* never let reporting throw */
+    }
   }
 
   handleReset = () => {
