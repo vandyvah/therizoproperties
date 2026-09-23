@@ -267,8 +267,24 @@ async function sendEmail(to: string, subject: string, html: string) {
   return res.json();
 }
 
+function jwtRole(req: Request): string | null {
+  const token = req.headers.get("Authorization")?.replace(/^Bearer\s+/i, "") ?? "";
+  try {
+    const b64 = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+    return JSON.parse(atob(b64)).role ?? null;
+  } catch {
+    return null;
+  }
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+
+  // Scheduler-only. The gateway (verify_jwt) has already checked the signature;
+  // require the service role so the public anon key cannot trigger sends.
+  if (jwtRole(req) !== "service_role") {
+    return new Response("Unauthorized", { status: 401, headers: corsHeaders });
+  }
 
   const url = new URL(req.url);
   const dryRun = url.searchParams.get("dry") === "1";
@@ -317,7 +333,13 @@ Deno.serve(async (req) => {
     const html = bodyFor(track, nextStep, row);
 
     try {
-      if (!dryRun) await sendEmail(row.email, subject, html);
+      // A dry run reports what would be sent and changes nothing.
+      if (dryRun) {
+        results.push({ id: row.id, step: nextStep, track, variant, status: "dry" });
+        continue;
+      }
+
+      await sendEmail(row.email, subject, html);
 
       const patch: Record<string, unknown> = {
         nurture_step: nextStep,
@@ -333,17 +355,15 @@ Deno.serve(async (req) => {
         .eq("nurture_step", row.nurture_step); // optimistic guard
       if (upErr) throw upErr;
 
-      if (!dryRun) {
-        await admin.from("nurture_sends").insert({
-          submission_id: row.id,
-          step: nextStep,
-          track,
-          variant,
-          subject,
-        });
-      }
+      await admin.from("nurture_sends").insert({
+        submission_id: row.id,
+        step: nextStep,
+        track,
+        variant,
+        subject,
+      });
 
-      results.push({ id: row.id, step: nextStep, track, variant, status: dryRun ? "dry" : "sent" });
+      results.push({ id: row.id, step: nextStep, track, variant, status: "sent" });
     } catch (e) {
       results.push({ id: row.id, step: nextStep, track, variant, status: "error", error: String(e).slice(0, 300) });
     }

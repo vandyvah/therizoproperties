@@ -107,8 +107,24 @@ function buildHtml(rows: EventRow[], sinceIso: string) {
   </body></html>`;
 }
 
+function jwtRole(req: Request): string | null {
+  const token = req.headers.get("Authorization")?.replace(/^Bearer\s+/i, "") ?? "";
+  try {
+    const b64 = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+    return JSON.parse(atob(b64)).role ?? null;
+  } catch {
+    return null;
+  }
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+
+  // Scheduler-only. The gateway (verify_jwt) has already checked the signature;
+  // require the service role so the public anon key cannot trigger sends.
+  if (jwtRole(req) !== "service_role") {
+    return new Response("Unauthorized", { status: 401, headers: corsHeaders });
+  }
 
   try {
     const url = new URL(req.url);

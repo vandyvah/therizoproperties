@@ -1,4 +1,4 @@
-project_id = "nvpxoxlnculbkmzkpstn"
+project_id = "yiisimmsiuradpniekxs"
 
 [functions.sitemap]
 verify_jwt = false
@@ -19,4 +19,10 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.shortlist-sync]
+verify_jwt = false
+
+[functions.nurture-unsubscribe]
+verify_jwt = false
+
+[functions.saved-search-unsubscribe]
 verify_jwt = false
