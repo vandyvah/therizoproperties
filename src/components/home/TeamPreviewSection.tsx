@@ -10,7 +10,7 @@ const team = [
       "Leads strategy, capital deployment, and key relationships. Background spans cybersecurity, real estate, law, and oil and gas.",
   },
   {
-    name: "Mr. Solomon Adebayo",
+    name: "Aroyehun Adebayo",
     role: "CFO / Admin",
     description:
       "A distinguished mathematician and accounting professional overseeing financial management and administrative processes.",
