@@ -20,3 +20,6 @@ verify_jwt = false
 
 [functions.shortlist-sync]
 verify_jwt = false
+
+[functions.migration-export]
+verify_jwt = false
