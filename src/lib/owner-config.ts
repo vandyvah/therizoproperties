@@ -1,5 +1,5 @@
 export const WHATSAPP_NUMBER = "+2348034830087";
-export const OWNER_NAME = "Mr. Solomon Adebayo";
+export const OWNER_NAME = "Aroyehun Adebayo";
 
 export const getWhatsAppUrl = (message: string) =>
   `https://wa.me/${WHATSAPP_NUMBER.replace("+", "")}?text=${encodeURIComponent(message)}`;

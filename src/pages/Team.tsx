@@ -18,10 +18,10 @@ const founder = {
 
 const consultants = [
   {
-    name: "Mr. Solomon Adebayo",
+    name: "Aroyehun Adebayo",
     role: "CFO / Admin",
     location: "Lagos Island",
-    bio: "A distinguished mathematician and accounting professional, Mr. Solomon Adebayo brings analytical rigour and financial discipline to Therizo's operations. He oversees the firm's financial management, administrative processes, and ensures every transaction meets the highest standards of fiscal accountability and transparency.",
+    bio: "A distinguished mathematician and accounting professional, Aroyehun Adebayo brings analytical rigour and financial discipline to Therizo's operations. He oversees the firm's financial management, administrative processes, and ensures every transaction meets the highest standards of fiscal accountability and transparency.",
     initial: "S",
     image: null,
   },
