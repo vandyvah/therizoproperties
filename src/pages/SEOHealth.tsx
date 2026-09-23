@@ -42,7 +42,7 @@ const noindexRoutes = [
 const seoConfig = {
   canonicalDomain: "https://therizoproperties.com",
   staticSitemap: "https://therizoproperties.com/sitemap.xml",
-  dynamicSitemap: "https://nvpxoxlnculbkmzkpstn.supabase.co/functions/v1/sitemap",
+  dynamicSitemap: `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sitemap`,
   robotsTxt: "https://therizoproperties.com/robots.txt",
   protocol: "HTTPS only (HTTP redirects to HTTPS)",
   wwwHandling: "Non-www canonical (www redirects to non-www)",
@@ -415,7 +415,6 @@ export default function SEOHealth() {
                 <ol className="list-decimal list-inside space-y-2 text-sm text-slate">
                   <li>Go to Sitemaps section in GSC sidebar</li>
                   <li>Submit static sitemap: <code className="bg-muted px-1 rounded">sitemap.xml</code></li>
-                  <li>Submit dynamic sitemap: <code className="bg-muted px-1 rounded text-xs">https://nvpxoxlnculbkmzkpstn.supabase.co/functions/v1/sitemap</code></li>
                   <li>Wait for "Success" status (may take a few minutes)</li>
                 </ol>
               </div>

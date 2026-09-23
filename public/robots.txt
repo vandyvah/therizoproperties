@@ -67,7 +67,6 @@ Allow: /
 
 # Sitemaps (canonical domain)
 Sitemap: https://therizoproperties.com/sitemap.xml
-Sitemap: https://nvpxoxlnculbkmzkpstn.supabase.co/functions/v1/sitemap
 
 # Host directive (canonical domain - helps some crawlers)
 Host: https://therizoproperties.com

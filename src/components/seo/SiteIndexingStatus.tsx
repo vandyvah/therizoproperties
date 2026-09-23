@@ -99,7 +99,7 @@ export function SiteIndexingStatus() {
     // 2. Fetch dynamic sitemap (edge function) for property count
     try {
       const dyn = await fetch(
-        `https://nvpxoxlnculbkmzkpstn.supabase.co/functions/v1/sitemap`,
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sitemap`,
         { cache: "no-store" }
       );
       if (dyn.ok) {
@@ -192,7 +192,7 @@ export function SiteIndexingStatus() {
   const triggerIndexNow = async () => {
     try {
       await fetch(
-        `https://nvpxoxlnculbkmzkpstn.supabase.co/functions/v1/indexnow`,
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/indexnow`,
         { method: "POST" }
       );
       alert("IndexNow ping submitted. Check edge function logs for details.");

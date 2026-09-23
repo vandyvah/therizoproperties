@@ -128,24 +128,19 @@ Deno.serve(async (req) => {
       });
     }
 
-    const lovableKey = Deno.env.get("LOVABLE_API_KEY");
     const resendKey = Deno.env.get("RESEND_API_KEY");
-    if (!lovableKey || !resendKey) {
-      console.log("[roi-lead-email] missing gateway keys; skipping send", {
-        hasLovable: !!lovableKey,
-        hasResend: !!resendKey,
-      });
+    if (!resendKey) {
+      console.log("[roi-lead-email] RESEND_API_KEY not set; skipping send");
       return new Response(JSON.stringify({ ok: true, skipped: "no_api_key" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
     const html = buildHtml(payload);
-    const res = await fetch("https://connector-gateway.lovable.dev/resend/emails", {
+    const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${lovableKey}`,
-        "X-Connection-Api-Key": resendKey,
+        Authorization: `Bearer ${resendKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

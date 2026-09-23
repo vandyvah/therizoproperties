@@ -963,25 +963,21 @@ If deals don’t close, everyone feels it.
 
 If deals close and margins are strong, everyone earns well, and the company grows.
 
-This project was built with [Lovable](https://lovable.dev).
-
-**Live app**: https://therizoproperties.lovable.app
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/a3c7538d-9b95-4e93-bb0c-69bd156a8418).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+Requires Node.js 22+ and npm.
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+npm ci
+npm run dev        # http://localhost:8080
+npm run build      # regenerates public/sitemap.xml, then builds to dist/
+npx vitest run
 ```
+
+`.env` holds the public Supabase URL, project ID and publishable (anon) key. It contains no secrets.
+
+## Hosting
+
+- **Frontend:** Vercel (`vercel.json`: SPA rewrites, security headers, immutable asset caching).
+- **Backend:** Supabase: Postgres + RLS (`supabase/migrations/`), Auth, the `property-media` storage bucket, and the edge functions in `supabase/functions/`.
+- **Edge function secrets** (set with `supabase secrets set`): `RESEND_API_KEY`, `OWNER_ADMIN_PASSWORD`, `OWNER_BRIEF_PASSWORD`, `ROI_FROM_EMAIL`, `ROI_REPLY_TO`, `ROI_BCC_EMAIL`, `ANALYTICS_FROM_EMAIL`, `ANALYTICS_ALERT_TO`, `ANALYTICS_DIGEST_TO`, `INDEXNOW_API_KEY`, `BING_WEBMASTER_API_KEY`.

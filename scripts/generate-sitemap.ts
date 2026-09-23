@@ -5,8 +5,15 @@ import { writeFileSync } from "fs";
 import { resolve } from "path";
 import { createClient } from "@supabase/supabase-js";
 
+// Local runs read .env; on Vercel the variables are already in process.env.
+try {
+  process.loadEnvFile();
+} catch {
+  // no .env file
+}
+
 const BASE_URL = "https://therizoproperties.com";
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL || "https://nvpxoxlnculbkmzkpstn.supabase.co";
+const SUPABASE_URL = process.env.VITE_SUPABASE_URL || "";
 const SUPABASE_ANON =
   process.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
   process.env.VITE_SUPABASE_ANON_KEY ||
