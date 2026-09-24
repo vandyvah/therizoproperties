@@ -11,7 +11,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const FROM_EMAIL = Deno.env.get("ROI_FROM_EMAIL") ?? "Therizo Properties <hello@mail.therizoproperties.com>";
+const FROM_EMAIL = Deno.env.get("ROI_FROM_EMAIL") ?? "Therizo Properties <hello@therizoproperties.com>";
 const BCC = Deno.env.get("ROI_BCC_EMAIL") ?? "hello@therizoproperties.com";
 const REPLY_TO = Deno.env.get("ROI_REPLY_TO") ?? "hello@therizoproperties.com";
 

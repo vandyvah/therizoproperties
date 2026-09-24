@@ -1,7 +1,7 @@
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 
 const RESEND_KEY = Deno.env.get("RESEND_API_KEY");
-const FROM = Deno.env.get("ANALYTICS_FROM_EMAIL") ?? "Therizo Alerts <hello@mail.therizoproperties.com>";
+const FROM = Deno.env.get("ANALYTICS_FROM_EMAIL") ?? "Therizo Alerts <hello@therizoproperties.com>";
 const ALERT_TO = (Deno.env.get("ANALYTICS_ALERT_TO") ?? "hello@therizoproperties.com")
   .split(",").map((s) => s.trim()).filter(Boolean);
 

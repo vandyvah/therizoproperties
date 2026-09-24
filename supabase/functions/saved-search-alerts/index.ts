@@ -101,7 +101,7 @@ Deno.serve(async (req) => {
           method: "POST",
           headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
           body: JSON.stringify({
-            from: "Therizo Properties <hello@mail.therizoproperties.com>",
+            from: "Therizo Properties <hello@therizoproperties.com>",
             to: [s.email],
             subject: `New Therizo listings matching your saved search`,
             html,
